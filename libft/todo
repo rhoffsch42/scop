@@ -1,0 +1,53 @@
+version: 11 09 2017
+-----------------------
+
+strdup pas protege: faire le define MALLOC_FAIL
+	pb: cela implique d utiliser exit() dans strdup
+	-> faire une MACRO ou fonction ou changer errexit comme ceci:
+		CHECK_MALLOC((ptr = strdup("hi")));
+		# define CHECK_MALLOC(x)		if ((x) == NULL) { ft_errexit("Error: malloc failed\n", RED, MALLOC_FAIL); }
+	pb: define interdit par la norme?
+	-> le transformer en fonction :
+		ft_check_malloc((ptr = strdup("hi")));
+		void	ft_check_malloc(void *ptr)
+		{
+			if (ptr == NULL)
+				ft_errexit("Error: malloc failed\n", RED, MALLOC_FAIL);
+		}
+=> tester ca dans un projet
+	refaire ft_errexit pour ecrire sur la sortie erreur
+
+logs:
+	creer un fichier txt
+	ecrire dedans
+		faire ft_printf ?
+
+---------------------------------------------
+max fmax fmaxf
+---------------------------------
+strmax f" f"f
+tabmax f" f"f
+
+=> ou bien:
+
+strmax seulement grace a cette structure:
+strmax(TYPE *str, int size);
+
+#define TYPE	int
+#define TYPE	double
+#define TYPE	float
+
+typedef struct			s_itab
+{
+	TYPE				*data
+	TYPE				**tab;
+	int					w;
+	int					h;
+}						t_itab;
+tab = malloc(sizeof(TYPE*) * h);
+tab[i] = data + (i * w);
+
+attention: les pointeur dans le tableau pointent directement sur data,
+la chaine contenue ne se termine donc pas a   ptr + w   mais contient tout jusqua la fin de data.
+->Bien manipuler la chaine avec  w . 
+---------------------------------

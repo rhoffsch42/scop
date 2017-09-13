@@ -1,0 +1,56 @@
+#include <libft.h>
+
+t_str		*ft_getfile(char *filename)
+{
+	t_str	*ptr[3];
+	char	*buf;
+	int		fd;
+
+	if ((fd = open(filename, O_RDONLY)) == -1)
+		ft_errexit("Error: open", RED, OPEN_FAIL);
+	ptr[2] = NULL;
+	while (get_next_line(fd, &buf) > 0)
+	{
+		if ((ptr[0] = (t_str*)malloc(sizeof(t_str))) == NULL)
+			ft_errexit("Error: malloc", RED, MALLOC_FAIL);
+		ptr[0]->str = ft_strdup(buf);
+		ptr[0]->next = NULL;
+		if (ptr[2] == NULL)
+		{
+			ptr[1] = ptr[0];
+			ptr[2] = ptr[0];
+		}
+		else
+		{
+			ptr[1]->next = ptr[0];
+			ptr[1] = ptr[1]->next;
+		}
+	}
+	return (ptr[2]);
+}
+
+void			remove_comments(t_str *ptr, char comment_char)
+{
+	char	*ptr1;
+
+	while (ptr)
+	{
+		ptr1 = ft_strchr(ptr->str, comment_char);
+		if (ptr1)
+			ptr1[0] = 0;
+		ptr = ptr->next;
+	}
+}
+
+void	remove_white_spaces(t_str *ptr)
+{
+	char	*str;
+
+	while (ptr)
+	{
+		str = ptr->str;
+		ptr->str = ft_strtrim_extended(ptr->str, WHITESPACES);
+		free(str);
+		ptr = ptr->next;
+	}
+}
