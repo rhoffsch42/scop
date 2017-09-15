@@ -12,7 +12,7 @@
 
 
 NAME	=	libft.a
-CFLAGS	=	-Wall -Wextra -g
+CFLAGS	=	-Wall -Wextra -Werror -g
 CC		=	gcc
 INCLUDE =	-I includes
 
@@ -20,7 +20,7 @@ CFILE	=	ft_atoi.c \
 			ft_atoi_str.c \
 			ft_bigputnbr.c \
 			ft_bzero.c \
-			ft_chkmalloc.c \
+			safe_malloc.c \
 			ft_clear_tab.c \
 			ft_errexit.c \
 			ft_fabs.c \
@@ -121,8 +121,8 @@ compile:
 norm:
 	norminette $(SRC) $(HDR)
 
-clean: 
-	@rm -f $(OBJ)
+clean:
+	@rm -rf $(ODIR)
 	@echo "\033[33;33mAll objects  \033[33;31mdeleted \033[33;37m"
 
 fclean: clean

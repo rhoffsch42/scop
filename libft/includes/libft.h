@@ -60,7 +60,8 @@ typedef struct			s_str
 t_str				*ft_getfile(char *filename);
 void				remove_comments(t_str *ptr, char comment_char);
 void				remove_white_spaces(t_str *ptr);
-void				ft_chkmalloc(void *ptr);
+void				ft_chkptr(void *ptr, char *message, int code);
+void				*safe_malloc(int size);
 void				ft_errexit(const char *message, char *color, int code);
 void				ft_free_tab(char **tab);
 int					get_next_line(int const fd, char **line);

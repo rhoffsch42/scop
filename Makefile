@@ -18,9 +18,15 @@ SDL_DST			=	SDL
 INCLUDE			=	-I includes -I libft/includes
 
 CFILE			=	main.c \
+					init.c \
+					load_file.c \
+					manage_file.c \
+					manage_file2.c \
 					remove_list.c \
 					get_object.c\
-					add_data.c
+					add_data.c \
+					add_data2.c \
+					string.c
 
 HFILE			=	scop.h
 
@@ -36,7 +42,7 @@ OBJ				=	$(patsubst %.c, $(ODIR)%.o, $(CFILE))
 all: compile
 
 compile: lib
-	@mkdir -p obj/
+	@mkdir -p $(ODIR) 
 	@$(MAKE) $(NAME)
 
 lib:

@@ -1,6 +1,6 @@
 #include <scop.h>
 
-t_str	*add_mtlfile(t_obj *obj, t_str *ptr)
+t_str	*link_mtlfile(t_obj *obj, t_str *ptr)
 {
 	char	token[100];
 	char	path[500];
@@ -10,7 +10,7 @@ t_str	*add_mtlfile(t_obj *obj, t_str *ptr)
 	return (ptr->next);
 }
 
-t_str	*add_material(t_obj *obj, t_str *ptr)
+t_str	*link_material(t_obj *obj, t_str *ptr)
 {
 	char	token[100];
 	char	path[500];
@@ -20,13 +20,28 @@ t_str	*add_material(t_obj *obj, t_str *ptr)
 	return (ptr->next);
 }
 
+t_str	*add_smooth(t_obj *obj, t_str *ptr)
+{
+	char	token[20];
+	char	token2[10];
+
+	sscanf(ptr->str, "%s %s", token, token2);
+	if (ft_strcmp(token2, "on") == 0)
+		obj->smooth = 1;
+	else if (ft_strcmp(token2, "off") == 0)
+		obj->smooth = 0;
+	else
+		error_obj(ptr->str, OBJ_ERROR);
+	return (ptr->next);
+}
+
 t_str	*add_vertix(t_obj *obj, t_str *ptr)
 {
 	char		token[100];
 	t_vertix	*v;
 	int			id;
 
-	ft_chkmalloc(obj->v = (t_vertix*)malloc(sizeof(t_vertix)));
+	obj->v = (t_vertix*)safe_malloc(sizeof(t_vertix));
 	id = 0;
 	v = obj->v;
 	while (ptr)
@@ -36,7 +51,7 @@ t_str	*add_vertix(t_obj *obj, t_str *ptr)
 			break ;
 		if (++id != 1)
 		{
-			ft_chkmalloc(v->next = (t_vertix*)malloc(sizeof(t_vertix)));
+			v->next = (t_vertix*)safe_malloc(sizeof(t_vertix));
 			v = v->next;
 		}
 		ft_bzero(v, sizeof(t_vertix));
@@ -54,7 +69,7 @@ t_str	*add_face(t_obj *obj, t_str *ptr)
 	t_face		*f;
 	int			id;
 
-	ft_chkmalloc(obj->f = (t_face*)malloc(sizeof(t_face)));
+	obj->f = (t_face*)safe_malloc(sizeof(t_face));
 	id = 0;
 	f = obj->f;
 	while (ptr)
@@ -64,7 +79,7 @@ t_str	*add_face(t_obj *obj, t_str *ptr)
 			break ;
 		if (++id != 1)
 		{
-			ft_chkmalloc(f->next = (t_face*)malloc(sizeof(t_face)));
+			f->next = (t_face*)safe_malloc(sizeof(t_face));
 			f = f->next;
 		}
 		ft_bzero(f, sizeof(t_face));

@@ -42,25 +42,30 @@ void	test_sscanf(t_str *lst)
 	ft_putendl("------------------");
 }
 
-void	dump_data(t_obj *obj)
+void	dump_data_obj(t_obj *obj)
 {
 	t_vertix	*v;
 	t_face		*f;
-	ft_putendl(":::::::::::::::::::::::::::checks:");
+	ft_putendl("\tDATAS :");
 	printf("id:      \t%d\n", obj->id);
 	printf("name:    \t%s\n", obj->name);
 	if (obj->mtllib)
 		printf("mtllib:  \t%s\n", obj->mtllib);
 	if (obj->material)
 		printf("material:\t%s\n", obj->material);
-	printf("smooth: \t%d\n", obj->smooth);
+	printf("smooth: \t%s\n", obj->smooth == 0 ? "off" : "on");
 	v = obj->v;
+	if (!v)
+		printf("No vertix\n");
 	while (v)
 	{
 		printf("vertix %d:\t%f\t%f\t%f\n", v->id, v->x, v->y, v->z);
+		// printf("vertix %d:\t%f\t%f\t%f\n", v->id, v->x * 2 + 2, v->y * 2 + 2, v->z * 2 + 2);
 		v = v->next;
 	}
 	f = obj->f;
+	if (!f)
+		printf("No faces\n");
 	while (f)
 	{
 		printf("face   %d:\t%d\t%d\t%d\t%d\n", f->id, f->a, f->b, f->c, f->d);
@@ -68,14 +73,45 @@ void	dump_data(t_obj *obj)
 	}
 }
 
+void	dump_datafile(t_objfile *objfile, t_mtlfile *mtlfile)
+{
+	ft_putendl("*******************************************");
+	while (objfile)
+	{
+		printf("type:   \tobjfile\n");
+		printf("id:     \t%d\n", objfile->id);
+		printf("path:   \t%s\n", objfile->path);
+		printf("name:   \t%s\n", objfile->name);
+		// dump_data_obj(objfile->obj);
+		objfile = objfile->next;
+		ft_putendl("- - - - - - - - - - - - - - - - - - - -");
+	}
+	ft_putendl("*******************************************");
+	while (mtlfile)
+	{
+		printf("type:   \tmtlfile\n");
+		printf("id:     \t%d\n", mtlfile->id);
+		printf("path:   \t%s\n", mtlfile->path);
+		printf("name:   \t%s\n", mtlfile->name);
+		mtlfile = mtlfile->next;
+		ft_putendl("- - - - - - - - - - - - - - - - - - - -");
+	}
+	ft_putendl("*******************************************");
+}
+
 int		main(int ac, char **av)
 {
+	// exit(0);
 	(void)ac;(void)av;
 	// test_sscanf(lst);
 	ft_putendl("________________BEGIN________________");
-	t_obj	*object;
-	object = build_object("./resources/42.obj");
-	dump_data(object);
+	t_env	*e;
+	e = init_env();
+	load_file(e, ac, av);
+	dump_datafile(e->objfile, e->mtlfile);
+	exit(0);
+	e->obj = build_object("./resources/42.obj");
+	dump_data_obj(e->obj);
 	ft_putendl("________________END________________");
 	return (0);
 }
