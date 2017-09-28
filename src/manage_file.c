@@ -1,10 +1,10 @@
 #include <scop.h>
 
-t_mtlfile	*get_mtlfile(t_mtlfile *ptr, char *file)
+t_mtlfile	*get_mtlfile(t_mtlfile *ptr, char *path)
 {
 	while (ptr)
 	{
-		if (ft_strcmp(basename(file), ptr->name) == 0)
+		if (ft_strcmp(path, ptr->path) == 0)
 		{
 			ft_putendl("Found!");
 			return (ptr);
@@ -14,11 +14,11 @@ t_mtlfile	*get_mtlfile(t_mtlfile *ptr, char *file)
 	return (NULL);
 }
 
-t_objfile	*get_objfile(t_objfile *ptr, char *file)
+t_objfile	*get_objfile(t_objfile *ptr, char *path)
 {
 	while (ptr)
 	{
-		if (ft_strcmp(basename(file), ptr->name) == 0)
+		if (ft_strcmp(path, ptr->path) == 0)
 		{
 			ft_putendl("Found!");
 			return (ptr);
@@ -56,7 +56,7 @@ void	add_mtlfile(t_mtlfile **addr, char *file)
 	new_mtlfile->id = id;
 	new_mtlfile->path = ft_strdup(file);
 	new_mtlfile->name = ft_strdup(basename(file));
-	new_mtlfile->mat = NULL;// build_mat() en fait.
+	new_mtlfile->mat = build_material(file);
 	new_mtlfile->next = *addr;
 	*addr = new_mtlfile;
 	id++;

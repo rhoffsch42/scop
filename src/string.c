@@ -36,3 +36,13 @@ int		is_typefile(char *file, char *type)
 		return (1);
 	return (0);
 }
+
+char	*remove_trailing_slach(char *str)
+{
+	int		len;
+
+	len = ft_strlen(str);
+	if (len > 0 && str[len - 1] == '/')
+		str[len - 1] = 0;
+	return (str);
+}

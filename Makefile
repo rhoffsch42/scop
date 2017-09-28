@@ -22,11 +22,15 @@ CFILE			=	main.c \
 					load_file.c \
 					manage_file.c \
 					manage_file2.c \
+					link_file.c \
+					obj_build.c\
+					obj_data.c \
+					obj_data2.c \
+					mtl_build.c \
+					mtl_data.c \
+					string.c \
 					remove_list.c \
-					get_object.c\
-					add_data.c \
-					add_data2.c \
-					string.c
+					ft_free_list.c
 
 HFILE			=	scop.h
 
@@ -42,7 +46,7 @@ OBJ				=	$(patsubst %.c, $(ODIR)%.o, $(CFILE))
 all: compile
 
 compile: lib
-	@mkdir -p $(ODIR) 
+	@mkdir -p $(ODIR)
 	@$(MAKE) $(NAME)
 
 lib:

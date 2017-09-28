@@ -36,6 +36,7 @@ CFILE	=	ft_atoi.c \
 			ft_isdigit_str.c \
 			ft_isprint.c \
 			ft_itoa.c \
+			ft_listlen.c \
 			ft_lstnew.c \
 			ft_memalloc.c \
 			ft_memccpy.c \
@@ -122,7 +123,7 @@ norm:
 	norminette $(SRC) $(HDR)
 
 clean:
-	@rm -rf $(ODIR)
+	@rm -f $(OBJ)
 	@echo "\033[33;33mAll objects  \033[33;31mdeleted \033[33;37m"
 
 fclean: clean

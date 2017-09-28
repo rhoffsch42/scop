@@ -1,7 +1,6 @@
 parsing fait:
 	le pgm n accepte que des .obj ou .mtl ou -d dir_path
 		si les fichiers ne sont pas valides, ils sont ignores
-	fichier mtl
 	gestion error
 	charger autant de fichier qu'on veut et creer chaque objet et materiaux
 		- un materiaux d'un fichier peut avoir le meme nom qu un autre dans un fichier different
@@ -11,9 +10,13 @@ parsing fait:
 			ex: resources/42.mtl
 				assets/42.mtl
 			-> cas args: ignorer les suivants
-parsing a faire:
+	checker si les numeros des vertix dans les faces (f 1 2 3) indiquees existent
+	fichier mtl
+	link mtl dans les objets
+	! attention si on charge des fichier ayant le meme nom (ou 2 fois le meme)
 		! pour mtllib -> cas -d : dabord chercher dans les args puis dans le dir -d
-	transformer les liste chainees en tableau (garder les memes zones memoire : pas possible ?)
+parsing a faire:
+	vertix et faces: transformer les liste chainees en tableau (garder les memes zones memoire : pas possible ?)
 
 un objet peut il etre defini sans faces ?
 on peut voir 2 fichiers .obj pour la teapot:
@@ -37,3 +40,4 @@ bonus a faire:
 			-> prendre les deux
 				! si ya le fichier .mtl dans les 2 ?
 					-> prendre le premier dossier de la liste (ordre des args) ou bien ordre du stock
+						- va chercher le materiaux dans tous les fichiers ayant le nom demande (mtllib)

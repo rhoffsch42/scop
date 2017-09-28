@@ -37,29 +37,35 @@
 # define MALLOC_FAIL	3
 
 
+typedef struct		s_void
+{
+	struct s_void	*next;
+}					t_void;
+
 typedef struct		s_istr
 {
+	struct s_istr	*next;
 	int				*istr;
 	int				size;
-	struct s_istr	*next;
 }					t_istr;
 
 typedef struct		s_list
 {
+	struct s_list	*next;
 	void			*content;
 	size_t			content_size;
-	struct s_list	*next;
 }					t_list;
 
 typedef struct			s_str
 {
-	char				*str;
 	struct s_str		*next;
+	char				*str;
 }						t_str;
 
 t_str				*ft_getfile(char *filename);
 void				remove_comments(t_str *ptr, char comment_char);
 void				remove_white_spaces(t_str *ptr);
+int					ft_listlen(void *list);
 void				ft_chkptr(void *ptr, char *message, int code);
 void				*safe_malloc(int size);
 void				ft_errexit(const char *message, char *color, int code);

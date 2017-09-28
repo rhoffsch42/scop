@@ -7,12 +7,11 @@ t_str		*ft_getfile(char *filename)
 	int		fd;
 
 	if ((fd = open(filename, O_RDONLY)) == -1)
-		ft_errexit("Error: open", RED, OPEN_FAIL);
+		ft_errexit("Error: open failed", RED, OPEN_FAIL);
 	ptr[2] = NULL;
 	while (get_next_line(fd, &buf) > 0)
 	{
-		if ((ptr[0] = (t_str*)malloc(sizeof(t_str))) == NULL)
-			ft_errexit("Error: malloc", RED, MALLOC_FAIL);
+		ptr[0] = (t_str*)safe_malloc(sizeof(t_str));
 		ptr[0]->str = ft_strdup(buf);
 		ptr[0]->next = NULL;
 		if (ptr[2] == NULL)
@@ -26,6 +25,7 @@ t_str		*ft_getfile(char *filename)
 			ptr[1] = ptr[1]->next;
 		}
 	}
+	close(fd);
 	return (ptr[2]);
 }
 

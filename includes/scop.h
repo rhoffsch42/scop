@@ -46,11 +46,16 @@
 # define SCREEN_DIST	1.0f
 # define FOV			90.0f
 
-# define SCOP_DIR		"-d"
-# define OBJ_BAD_FORMAT	100
-# define OBJ_ERROR		"Error : bad obj format"
-# define SCOP_DIR_ERR	"option -d : missing argument\nUsage: scop file.obj [file.mtl] [-d path]"
-# define SCOP_BAD_ARG	" : invalid argument\nUsage: scop file.obj [file.mtl] [-d path]"
+# define SCOP_DIR			"-d"
+# define OBJ_BAD_FORMAT		100
+# define DATA_CORRUPT		101
+# define MTL_BAD_FORMAT		102
+# define OBJ_ERROR			"Error : bad obj format"
+# define MTL_ERROR			"Error : bad mtl format"
+# define MTL_USED			"Error : name already in use"
+# define DATA_CORRUPT_MSG	"Error : data corrupt"
+# define SCOP_DIR_ERR		"option -d : missing argument\nUsage: scop file.obj [file.mtl] [-d path]"
+# define SCOP_BAD_ARG		" : invalid argument\nUsage: scop file.obj [file.mtl] [-d path]"
 
 # define COMMENT_CHAR	'#'
 
@@ -64,89 +69,99 @@
 # define OBJ_SMOOTH		"s"
 
 # define MTL_MAT		"newmtl"
-# define MTL_COLOR		"Kd"
-# define MTL_xxxx1		"Ka"
-# define MTL_xxxx2		"Ks"
-# define MTL_xxxx3		"Ns"
-# define MTL_xxxx4		"Ni"
-# define MTL_TRANSP		"d"
-# define MTL_xxxx5		"illum"
+# define MTL_AMBIANT	"Ka"
+# define MTL_DIFFUSE	"Kd"
+# define MTL_SPECULAR	"Ks"
+# define MTL_SPEC_EXP	"Ns"
+# define MTL_DENSITY	"Ni"
+# define MTL_OPACITY	"d"
+# define MTL_ILLUM		"illum"
 
 typedef struct			s_vertix
 {
+	struct s_vertix		*next;
 	int					id;
 	float				x;
 	float				y;
 	float				z;
-	struct s_vertix		*next;
 }						t_vertix;
 
 typedef struct			s_face
 {
+	struct s_face		*next;
 	int					id;
 	int					a;
 	int					b;
 	int					c;
 	int					d;
-	struct s_face		*next;
 }						t_face;
-
-typedef struct			s_obj
-{
-	int					id;
-	char				*name;
-	char				*mtllib;// changer aussi
-	char				*material;//changer en struct material
-	int					smooth;
-	t_vertix			*v;
-	t_face				*f;
-	struct s_obj		*next;
-}						t_obj;
-
-//un object d'un fichier peut avoir le meme nom qu un autre dans un fichier different ?
-typedef struct			s_objfile
-{
-	int					id;
-	char				*path;
-	char				*name;
-	t_obj				*obj;
-	struct s_objfile	*next;
-}						t_objfile;
 
 typedef struct			s_mat
 {
+	struct s_mat		*next;
 	int					id;
 	char				*name;
-	float				ns;
-	float				c1[3];
-	float				c2[3];
-	float				c3[3];
-	float				ni;
-	float				d;
-	int					illum;
-	struct s_mat		*next;
+	float				ka[3];// color ambiant (0.0 - 1.0) x3
+	float				kd[3];// color diffuse (0.0 - 1.0) x3
+	float				ks[3];// color specular (0.0 - 1.0) x3
+	float				ns;// specular exponent (0 - 100)
+	float				ni;// densite optique
+	float				d;// opacite (0.0 - 1.0)
+	int					illum;// lumiere param
 }						t_mat;
 
 //un materiaux d'un fichier peut avoir le meme nom qu un autre dans un fichier different
 typedef struct			s_mtlfile
 {
+	struct s_mtlfile	*next;
 	int					id;
 	char				*path;
 	char				*name;
 	t_mat				*mat;
-	struct s_mtlfile	*next;
 }						t_mtlfile;
+
+typedef struct			s_obj
+{
+	struct s_obj		*next;
+	int					id;
+	char				*name;
+	char				*mtllib;
+	t_mtlfile			*mtlfile;
+	char				*mat_name;
+	t_mat				*mat;
+	int					smooth;
+	t_vertix			*v;
+	t_face				*f;
+	int					v_amount;
+	int					f_amount;
+}						t_obj;
+
+//un object d'un fichier peut avoir le meme nom qu un autre dans un fichier different ?
+typedef struct			s_objfile
+{
+	struct s_objfile	*next;
+	int					id;
+	char				*path;
+	char				*name;
+	t_obj				*obj;
+}						t_objfile;
 
 typedef struct			s_env
 {
 	t_obj				*obj;// faire pareil que .mtl? ie. struct .obj
 	t_objfile			*objfile;
 	t_mtlfile			*mtlfile;
+	t_str				*dir;
 }						t_env;
 
 ////debug, a delete apres
 
-//
+// libft
+void		ft_free_list(void *list, void (custom_free)(void*));
+void		free_t_str(void	*list);
+
+
+// file manipulation
 int			is_empty(T_LIST ptr);
 T_LIST		del(T_LIST ptr);
 T_LIST		remove_list(T_LIST ptr, int (condition)(T_LIST), T_LIST (del)(T_LIST));
@@ -154,8 +169,13 @@ char		*basename(char *path);
 int			is_dir(void);
 int			is_readable(char *path);
 int			is_typefile(char *file, char *type);
+char		*remove_trailing_slach(char *str);
 
 t_env		*init_env(void);
+t_obj		*init_obj(void);
+t_mat		*init_mat(void);
+
+//parsing args
 void		load_file(t_env *e, int ac, char **av);
 int			is_typefile(char *file, char *type);
 void		add_objfile(t_objfile **addr, char *file);
@@ -164,14 +184,24 @@ t_objfile	*get_objfile(t_objfile *ptr, char *file);
 t_mtlfile	*get_mtlfile(t_mtlfile *ptr, char *file);
 int			chk_objfile(t_objfile *objfile, char *path);
 int			chk_mtlfile(t_mtlfile *mtlfile, char *path);
+void		link_file(t_env *e);
 
+//parsing .obj
 t_obj		*build_object(char *path);
 void		error_obj(char *s1, char *s2);
 t_str		*add_vertix(t_obj *obj, t_str *ptr);
 t_str		*add_face(t_obj *obj, t_str *ptr);
-t_str		*link_mtlfile(t_obj *obj, t_str *ptr);
-t_str		*link_material(t_obj *obj, t_str *ptr);
+t_str		*add_mtlfile_name(t_obj *obj, t_str *ptr);
+t_str		*add_material_name(t_obj *obj, t_str *ptr);
 t_str		*add_smooth(t_obj *obj, t_str *ptr);
-t_str		*add_name(t_obj *obj, t_str *ptr);
+t_str		*add_objname(t_obj *obj, t_str *ptr);
+
+//parsing .mtl
+t_mat		*build_material(char *path);
+t_str		*add_mtlname(t_mat **mat, t_str *ptr);
+t_str		*add_color(t_str *ptr, float *color);
+t_str		*add_value(t_str *ptr, int *var);
+t_str		*add_value_f(t_str *ptr, float *var);
+void		error_mtl(char *s1, char *s2);
 
 #endif

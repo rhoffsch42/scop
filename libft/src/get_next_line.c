@@ -55,10 +55,13 @@ static int		ft_read(char **tab, int bytes, int const fd)
 	s = tab[0];
 	tab[1] = (char*)malloc(sizeof(char) * BUFF_SIZE + 1);
 	bytes = read(fd, tab[1], BUFF_SIZE);
+	if (bytes == -1)
+		ft_putendl("fuck");
 	tab[1][bytes] = 0;
 	tab[0] = ft_strjoin(tab[0], tab[1]);
 	if (s)
 	{
+		ft_strclr(s);
 		free(s);
 		s = NULL;
 	}
@@ -70,8 +73,8 @@ static int		ft_read(char **tab, int bytes, int const fd)
 int				get_next_line(int const fd, char **line)
 {
 	static char	**tmp;
-	static int	count;
-	static int	bytes;
+	static int	count = 0;
+	static int	bytes = 0;
 
 	if (BUFF_SIZE < 1 || count == -1 || fd < 0)
 		return (-1);
@@ -80,13 +83,16 @@ int				get_next_line(int const fd, char **line)
 	{
 		tmp = (char**)malloc(sizeof(char*) * 3);
 		tmp[0] = (char*)malloc(sizeof(char) * 1);
+		tmp[0][0] = 0;
 		bytes = 1;
 	}
 	if (bytes == 0)
 	{
+		ft_strclr(tmp[0]);
 		free(tmp[0]);
 		free(tmp);
-		count = -1;
+		// count = -1;
+		count = 0;
 		return (0);
 	}
 	while (ft_strchr(tmp[0], '\n') == NULL && bytes != 0)

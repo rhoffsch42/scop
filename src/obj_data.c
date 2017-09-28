@@ -1,6 +1,6 @@
 #include <scop.h>
 
-t_str	*link_mtlfile(t_obj *obj, t_str *ptr)
+t_str	*add_mtlfile_name(t_obj *obj, t_str *ptr)
 {
 	char	token[100];
 	char	path[500];
@@ -10,13 +10,13 @@ t_str	*link_mtlfile(t_obj *obj, t_str *ptr)
 	return (ptr->next);
 }
 
-t_str	*link_material(t_obj *obj, t_str *ptr)
+t_str	*add_material_name(t_obj *obj, t_str *ptr)
 {
 	char	token[100];
 	char	path[500];
 
 	sscanf(ptr->str, "%s %s", token, path);
-	obj->material = ft_strdup(path);
+	obj->mat_name = ft_strdup(path);
 	return (ptr->next);
 }
 
@@ -59,6 +59,7 @@ t_str	*add_vertix(t_obj *obj, t_str *ptr)
 		sscanf(ptr->str, "%s %f %f %f", token, &(v->x), &(v->y), &(v->z));
 		v->next = NULL;
 		ptr = ptr->next;
+		obj->v_amount++;
 	}
 	return (ptr);
 }
@@ -88,6 +89,7 @@ t_str	*add_face(t_obj *obj, t_str *ptr)
 		sscanf(ptr->str, "%s %d %d %d %d", token, \
 			&(f->a), &(f->b), &(f->c), &(f->d));
 		ptr = ptr->next;
+		obj->f_amount++;
 	}
 	return (ptr);
 }

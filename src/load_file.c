@@ -19,36 +19,51 @@ static int		check_perm(char *path)
 	return (0);
 }
 
-static int		add_directory(char **av, int i)
+static void		add_directory(char **av, int i, t_str **dir)
 {
+	t_str	*new_dir;
+	t_str	*ptr;
+
 	if (av[i + 1] == NULL)
 		ft_errexit(SCOP_DIR_ERR, RED, BAD_ARGS);
 	if (check_perm(av[i + 1]) && is_dir())
-		return (1);
-	return (0);
+	{
+		new_dir = (t_str*)safe_malloc(sizeof(t_str));
+		new_dir->next = NULL;
+		new_dir->str = ft_strdup(av[i + 1]);
+		remove_trailing_slach(new_dir->str);
+		ptr = *dir;
+		if (ptr)
+		{
+			while (ptr->next != NULL)
+				ptr = ptr->next;
+			ptr->next = new_dir;
+		}
+		else
+			*dir = new_dir;
+	}
 }
 
 void	load_file(t_env *e, int ac, char **av)
 {
 	int		i;
-	int		dir[ac];
 
-	ft_bzero(dir, sizeof(int) * ac);
 	i = 1;
 	while (av[i])
 	{
-		// ft_putendl(av[i]);
 		if (ft_strcmp(av[i], SCOP_DIR) == 0)
 		{
-			dir[i + 1] = add_directory(av, i);
+			add_directory(av, i, &(e->dir));
 			i++;
 		}
-		else if (is_typefile(av[i], ".obj"))
+		else if (is_typefile(av[i], ".obj") && is_readable(av[i]))
 			add_objfile(&(e->objfile), av[i]);
-		else if (is_typefile(av[i], ".mtl"))
+		else if (is_typefile(av[i], ".mtl") && is_readable(av[i]))
 			add_mtlfile(&(e->mtlfile), av[i]);
 		else
 			error_arg(av[i], SCOP_BAD_ARG);
 		i++;
 	}
+	link_file(e);
+	(void)ac;
 }
