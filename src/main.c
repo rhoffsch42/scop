@@ -134,8 +134,8 @@ int		main(int ac, char **av)
 	e = init_env();
 	load_file(e, ac, av);
 	dump_datafile(e->objfile, e->mtlfile, e->dir);
+	obj_checks(e->objfile);
+	mtl_checks(e->mtlfile);
 	ft_putendl("________________END________________");
-	ft_putnbrendl(ft_listlen(e->objfile->obj->v));
-	ft_putnbrendl(ft_listlen(e->objfile->obj->f));
 	return (0);
 }

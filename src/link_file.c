@@ -39,6 +39,7 @@ static void		link_material(t_obj *obj, t_mtlfile *mtlf)
 			{
 				if (ft_strcmp(mat->name, obj->mat_name) == 0)
 				{
+					obj->mtlfile = mtlf;
 					obj->mat = mat;
 					break ;
 				}

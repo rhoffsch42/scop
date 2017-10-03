@@ -5,8 +5,11 @@ t_str	*add_mtlfile_name(t_obj *obj, t_str *ptr)
 	char	token[100];
 	char	path[500];
 
+	ft_bzero(token, 100);
+	ft_bzero(path, 500);
 	sscanf(ptr->str, "%s %s", token, path);
-	obj->mtllib = ft_strdup(path);
+	if (ft_strlen(path) > 0)
+		obj->mtllib = ft_strdup(path);
 	return (ptr->next);
 }
 
@@ -15,8 +18,11 @@ t_str	*add_material_name(t_obj *obj, t_str *ptr)
 	char	token[100];
 	char	path[500];
 
+	ft_bzero(token, 100);
+	ft_bzero(path, 500);
 	sscanf(ptr->str, "%s %s", token, path);
-	obj->mat_name = ft_strdup(path);
+	if (ft_strlen(path) > 0)
+		obj->mat_name = ft_strdup(path);
 	return (ptr->next);
 }
 
@@ -25,6 +31,8 @@ t_str	*add_smooth(t_obj *obj, t_str *ptr)
 	char	token[20];
 	char	token2[10];
 
+	ft_bzero(token, 20);
+	ft_bzero(token2, 10);
 	sscanf(ptr->str, "%s %s", token, token2);
 	if (ft_strcmp(token2, "on") == 0)
 		obj->smooth = 1;
@@ -78,16 +86,15 @@ t_str	*add_face(t_obj *obj, t_str *ptr)
 		sscanf(ptr->str, "%s", token);
 		if (ft_strcmp(token, OBJ_FACE) != 0)
 			break ;
-		if (++id != 1)
-		{
-			f->next = (t_face*)safe_malloc(sizeof(t_face));
+		if (++id != 1 && (f->next = (t_face*)safe_malloc(sizeof(t_face))))
 			f = f->next;
-		}
 		ft_bzero(f, sizeof(t_face));
 		f->id = id;
 		f->next = NULL;
 		sscanf(ptr->str, "%s %d %d %d %d", token, \
 			&(f->a), &(f->b), &(f->c), &(f->d));
+		if (f->a == 0 || f->b == 0 || f->c == 0)
+			error_obj(ptr->str, OBJ_ERROR);
 		ptr = ptr->next;
 		obj->f_amount++;
 	}

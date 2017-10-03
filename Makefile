@@ -26,11 +26,14 @@ CFILE			=	main.c \
 					obj_build.c\
 					obj_data.c \
 					obj_data2.c \
+					obj_checks.c \
 					mtl_build.c \
 					mtl_data.c \
+					mtl_checks.c \
 					string.c \
 					remove_list.c \
-					ft_free_list.c
+					ft_free_list.c \
+					for_list.c
 
 HFILE			=	scop.h
 

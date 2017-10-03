@@ -15,11 +15,12 @@ t_env	*init_env(void)
 t_obj	*init_obj(void)
 {
 	static int	id = 0;
-	t_obj	*object;
+	t_obj		*object;
 
 	object = (t_obj*)safe_malloc(sizeof(t_obj));
 	object->id = id;
-	object->name = ft_strdup("\'N/D\'");
+	object->id_char = ft_itoa(id);
+	object->name = ft_strjoin("Object #", object->id_char);
 	object->mtllib = NULL;
 	object->mtlfile = NULL;
 	object->mat_name = NULL;
@@ -37,11 +38,12 @@ t_obj	*init_obj(void)
 t_mat	*init_mat(void)
 {
 	static int	id = 0;
-	t_mat	*material;
+	t_mat		*material;
 
 	material = (t_mat*)safe_malloc(sizeof(t_mat));
 	material->id = id;
-	material->name = ft_strdup("\'N/D\'");
+	material->id_char = ft_itoa(id);
+	material->name = ft_strjoin("Material #", material->id_char);
 	material->ns = 0.0f;
 	material->ka[0] = 0.0f;
 	material->ka[1] = 0.0f;

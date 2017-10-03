@@ -51,6 +51,8 @@
 # define DATA_CORRUPT		101
 # define MTL_BAD_FORMAT		102
 # define OBJ_ERROR			"Error : bad obj format"
+# define OBJF_NO_OBJ		"Error : This file has no valid object"
+# define MTLF_NO_MAT		"Error : This file has no valid material"
 # define MTL_ERROR			"Error : bad mtl format"
 # define MTL_USED			"Error : name already in use"
 # define DATA_CORRUPT_MSG	"Error : data corrupt"
@@ -100,6 +102,7 @@ typedef struct			s_mat
 {
 	struct s_mat		*next;
 	int					id;
+	char				*id_char;
 	char				*name;
 	float				ka[3];// color ambiant (0.0 - 1.0) x3
 	float				kd[3];// color diffuse (0.0 - 1.0) x3
@@ -124,6 +127,7 @@ typedef struct			s_obj
 {
 	struct s_obj		*next;
 	int					id;
+	char				*id_char;
 	char				*name;
 	char				*mtllib;
 	t_mtlfile			*mtlfile;
@@ -170,6 +174,7 @@ int			is_dir(void);
 int			is_readable(char *path);
 int			is_typefile(char *file, char *type);
 char		*remove_trailing_slach(char *str);
+void		*for_list(void *list, void* (*func)(void*));
 
 t_env		*init_env(void);
 t_obj		*init_obj(void);
@@ -195,6 +200,7 @@ t_str		*add_mtlfile_name(t_obj *obj, t_str *ptr);
 t_str		*add_material_name(t_obj *obj, t_str *ptr);
 t_str		*add_smooth(t_obj *obj, t_str *ptr);
 t_str		*add_objname(t_obj *obj, t_str *ptr);
+void		obj_checks(t_objfile *objfile);
 
 //parsing .mtl
 t_mat		*build_material(char *path);
@@ -203,5 +209,6 @@ t_str		*add_color(t_str *ptr, float *color);
 t_str		*add_value(t_str *ptr, int *var);
 t_str		*add_value_f(t_str *ptr, float *var);
 void		error_mtl(char *s1, char *s2);
+void		mtl_checks(t_mtlfile *mtlfile);
 
 #endif
