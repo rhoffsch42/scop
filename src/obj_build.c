@@ -7,6 +7,33 @@ void		error_obj(char *s1, char *s2)
 	ft_errexit(s2, RED, OBJ_BAD_FORMAT);
 }
 
+static void		*link_vertix(void *f, t_arg args)
+{
+	t_face		*face;
+	t_vertix	*vertix;
+
+	face = (t_face*)f;
+	vertix = (t_vertix*)(args.ptr[0]);
+	face->v1 = (t_vertix*)get_link((t_void*)vertix, face->a - 1);
+	face->v2 = (t_vertix*)get_link((t_void*)vertix, face->b - 1);
+	face->v3 = (t_vertix*)get_link((t_void*)vertix, face->c - 1);
+	face->v4 = (t_vertix*)get_link((t_void*)vertix, face->d - 1);
+	if ((!(face->v1) && face->a != 0) || (!(face->v2) && face->b != 0) \
+		|| (!(face->v3) && face->c != 0) || (!(face->v4) && face->d != 0))
+	{
+		ft_putstr("f ");
+		ft_putnbr(face->a);
+		ft_putchar(32);
+		ft_putnbr(face->b);
+		ft_putchar(32);
+		ft_putnbr(face->c);
+		ft_putchar(32);
+		ft_putnbrendl(face->d);
+		error_obj(OBJ_FACE_ERROR, OBJ_ERROR);
+	}
+	return (NULL);
+}
+
 static void		build_data(t_obj *obj, t_str *ptr)
 {
 	char	keyword[100];
@@ -47,8 +74,9 @@ t_obj		*build_object(char *path)
 	if (ft_listlen(new_obj->v) != new_obj->v_amount || \
 		ft_listlen(new_obj->f) != new_obj->f_amount)
 		ft_errexit(DATA_CORRUPT_MSG, RED, DATA_CORRUPT);
-	// free(lst);// faire ca correctement : free tout les str
 	ft_free_list(lst, free_t_str);
 	lst = NULL;
+	for_list_args(new_obj->f, \
+		init_args((void*)(new_obj->v), NULL, NULL, NULL), link_vertix);
 	return (new_obj);
 }

@@ -1,3 +1,7 @@
+------------------------------------
+lets go openGL
+
+------------------------------------
 parsing fait:
 	le pgm n accepte que des .obj ou .mtl ou -d dir_path
 		si les fichiers ne sont pas valides, ils sont ignores
@@ -16,8 +20,7 @@ parsing fait:
 	! attention si on charge des fichier ayant le meme nom (ou 2 fois le meme)
 		! pour mtllib -> cas -d : dabord chercher dans les args puis dans le dir -d
 parsing a faire:
-	check les numeros des faces, les linker: creer des nouvelles variables.
-	vertix et faces: transformer les liste chainees en tableau (garder les memes zones memoire : pas possible ?)
+	? vertix et faces: transformer les liste chainees en tableau (garder les memes zones memoire : pas possible ?)
 
 un objet peut il etre defini sans faces ?
 on peut voir 2 fichiers .obj pour la teapot:

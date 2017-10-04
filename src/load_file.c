@@ -48,6 +48,8 @@ void	load_file(t_env *e, int ac, char **av)
 {
 	int		i;
 
+	if (ac == 1)
+		error_arg(av[0], SCOP_BAD_ARG);
 	i = 1;
 	while (av[i])
 	{
@@ -65,5 +67,6 @@ void	load_file(t_env *e, int ac, char **av)
 		i++;
 	}
 	link_file(e);
-	(void)ac;
+	obj_checks(e->objfile);
+	mtl_checks(e->mtlfile);
 }

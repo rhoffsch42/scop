@@ -57,7 +57,7 @@ void	dump_data_mtl(t_mat *mat)
 		printf("d:       \t%f\n", mat->d);
 		printf("illum:   \t%d\n", mat->illum);
 		mat = mat->next;
-		ft_putendl(">>>");
+		ft_putendl("<=============>");
 	}
 }
 
@@ -77,7 +77,8 @@ void	dump_data_obj(t_obj *obj)
 	printf("Vertix amount:\t%d\n", obj->v_amount);
 	printf("Faces amount:\t%d\n", obj->f_amount);
 	v = obj->v;
-	return ;// comment it to print data
+	if (DATA == 0)
+		return ;
 	while (v)
 	{
 		printf("vertix %d:\t%f\t%f\t%f\n", v->id, v->x, v->y, v->z);
@@ -134,8 +135,6 @@ int		main(int ac, char **av)
 	e = init_env();
 	load_file(e, ac, av);
 	dump_datafile(e->objfile, e->mtlfile, e->dir);
-	obj_checks(e->objfile);
-	mtl_checks(e->mtlfile);
 	ft_putendl("________________END________________");
 	return (0);
 }

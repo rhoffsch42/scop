@@ -76,4 +76,7 @@ fclean: clean
 	@rm -f $(NAME)
 	@echo "\033[33;32m$(NAME) \033[33;31mdeleted\033[33;37m"
 
+pclean: fclean
+	@make fclean -C ./libft/
+
 re: fclean all

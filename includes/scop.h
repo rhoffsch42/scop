@@ -21,6 +21,7 @@
 # include <errno.h>
 # include <stdbool.h>
 
+# define DATA			1
 # define ENDL			ft_putchar(10);
 # define SPACE			ft_putchar(32);
 # define T_LIST			t_str*
@@ -51,6 +52,7 @@
 # define DATA_CORRUPT		101
 # define MTL_BAD_FORMAT		102
 # define OBJ_ERROR			"Error : bad obj format"
+# define OBJ_FACE_ERROR		"Incorrect vertix number"
 # define OBJF_NO_OBJ		"Error : This file has no valid object"
 # define MTLF_NO_MAT		"Error : This file has no valid material"
 # define MTL_ERROR			"Error : bad mtl format"
@@ -79,6 +81,12 @@
 # define MTL_OPACITY	"d"
 # define MTL_ILLUM		"illum"
 
+typedef struct			s_arg
+{
+	struct s_arg	*next;
+	void			*ptr[10];
+}						t_arg;
+
 typedef struct			s_vertix
 {
 	struct s_vertix		*next;
@@ -96,6 +104,10 @@ typedef struct			s_face
 	int					b;
 	int					c;
 	int					d;
+	t_vertix			*v1;
+	t_vertix			*v2;
+	t_vertix			*v3;
+	t_vertix			*v4;
 }						t_face;
 
 typedef struct			s_mat
@@ -175,6 +187,9 @@ int			is_readable(char *path);
 int			is_typefile(char *file, char *type);
 char		*remove_trailing_slach(char *str);
 void		*for_list(void *list, void* (*func)(void*));
+void		*for_list_args(void *list, t_arg args, void* (*func)(void*, t_arg args));
+t_arg		init_args(void *a1, void *a2, void *a3, void *a4);
+t_void		*get_link(t_void* list, int index);
 
 t_env		*init_env(void);
 t_obj		*init_obj(void);
