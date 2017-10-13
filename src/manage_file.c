@@ -39,7 +39,7 @@ void	add_objfile(t_objfile **addr, char *file)
 	new_objfile->id = id;
 	new_objfile->path = ft_strdup(file);
 	new_objfile->name = ft_strdup(basename(file));
-	new_objfile->obj = build_object(file);
+	new_objfile->obj = build_objects(file);
 	new_objfile->next = *addr;
 	*addr = new_objfile;
 	id++;

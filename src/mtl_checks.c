@@ -34,7 +34,7 @@ void	regularize_values(t_mat *mat, char *error)
 		ft_strcat(error, "\t - opacity (d) regularized\n");
 }
 
-void		*check_mat(void *matptr)
+t_void		*check_mat(t_void *matptr)
 {
 	t_mat	*mat;
 	char	error[300];
@@ -53,7 +53,7 @@ void		*check_mat(void *matptr)
 	return (NULL);
 }
 
-void		*check_mtlfile(void *link)
+t_void		*check_mtlfile(t_void *link)
 {
 	t_mtlfile	*mtlfile;
 
@@ -63,12 +63,12 @@ void		*check_mtlfile(void *link)
 		ft_putstr_fd(mtlfile->path, STDERR_FILENO);
 		ft_errexit(MTLF_NO_MAT, RED, MTL_BAD_FORMAT);
 	}
-	return (for_list(mtlfile->mat, &check_mat));
+	return (for_list((t_void*)(mtlfile->mat), &check_mat));
 }
 
 void	mtl_checks(t_mtlfile *mtlfile)
 {
 	COLOR(YELLOW, STDERR_FILENO);
-	for_list((void*)mtlfile, &check_mtlfile);
+	for_list((t_void*)mtlfile, &check_mtlfile);
 	COLOR(NOCOLOR, STDERR_FILENO);
 }

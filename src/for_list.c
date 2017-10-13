@@ -35,31 +35,27 @@ t_arg		init_args(void *a1, void *a2, void *a3, void *a4)
 	return (s);
 }
 
-void		*for_list_args(void *list, t_arg args, \
-							void* (*func)(void*, t_arg args))
+t_void		*for_list_args(t_void *ptr, t_arg args, \
+							t_void* (*func)(t_void*, t_arg args))
 {
-	t_void	*ptr;
 	void	*ret;
 
-	ptr = (t_void*)list;
 	while (ptr)
 	{
-		if ((ret = func((void*)ptr, args)) != NULL)
+		if ((ret = func(ptr, args)) != NULL)
 			return (ret);
 		ptr = ptr->next;
 	}
 	return (NULL);
 }
 
-void		*for_list(void *list, void* (*func)(void*))
+t_void		*for_list(t_void *ptr, t_void* (*func)(t_void*))
 {
-	t_void	*ptr;
-	void	*ret;
+	t_void	*ret;
 
-	ptr = (t_void*)list;
 	while (ptr)
 	{
-		if ((ret = func((void*)ptr)) != NULL)
+		if ((ret = func(ptr)) != NULL)
 			return (ret);
 		ptr = ptr->next;
 	}

@@ -7,7 +7,7 @@ void		error_obj(char *s1, char *s2)
 	ft_errexit(s2, RED, OBJ_BAD_FORMAT);
 }
 
-static void		*link_vertix(void *f, t_arg args)
+static t_void		*link_vertix(t_void *f, t_arg args)
 {
 	t_face		*face;
 	t_vertix	*vertix;
@@ -58,7 +58,7 @@ static void		build_data(t_obj *obj, t_str *ptr)
 	}
 }
 
-t_obj		*build_object(char *path)
+t_obj		*build_objects(char *path)
 {
 	t_str	*lst;
 	t_obj	*new_obj;
@@ -71,12 +71,13 @@ t_obj		*build_object(char *path)
 	// pour avoir plusieurs objects dans un objfile
 	new_obj = init_obj();
 	build_data(new_obj, lst);
+	triangularize(new_obj);
 	if (ft_listlen(new_obj->v) != new_obj->v_amount || \
 		ft_listlen(new_obj->f) != new_obj->f_amount)
 		ft_errexit(DATA_CORRUPT_MSG, RED, DATA_CORRUPT);
 	ft_free_list(lst, free_t_str);
 	lst = NULL;
-	for_list_args(new_obj->f, \
-		init_args((void*)(new_obj->v), NULL, NULL, NULL), link_vertix);
+	for_list_args((t_void*)(new_obj->f), \
+		init_args(new_obj->v, NULL, NULL, NULL), link_vertix);
 	return (new_obj);
 }

@@ -12,10 +12,12 @@
 
 NAME			=	scop
 CC				=	gcc
-CFLAGS			=	-Wall -Wextra
+CFLAGS			=	-Wall -Wextra -Werror
 
 SDL_DST			=	SDL
-INCLUDE			=	-I includes -I libft/includes
+INCLUDE			=	-I includes -I libft/includes -I ./$(SDL_DST)/include -I /usr/include
+SDL				=	`./$(SDL_DST)/bin/sdl2-config --cflags --libs` -lSDL2_image
+
 
 CFILE			=	main.c \
 					init.c \
@@ -33,7 +35,9 @@ CFILE			=	main.c \
 					string.c \
 					remove_list.c \
 					ft_free_list.c \
-					for_list.c
+					for_list.c \
+					sdl_putpixel.c \
+					display.c
 
 HFILE			=	scop.h
 
@@ -44,19 +48,22 @@ SRC				=	$(patsubst %.c, $(SDIR)%.c, $(CFILE))
 ODIR			=	obj/
 OBJ				=	$(patsubst %.c, $(ODIR)%.o, $(CFILE))
 
-.PHONY: all compile lib norm clean fclean re
+.PHONY: all compile lib norm clean fclean pclean re
 
 all: compile
 
-compile: lib
+compile: lib sdl
 	@mkdir -p $(ODIR)
 	@$(MAKE) $(NAME)
 
 lib:
 	@$(MAKE) -C libft/
 
+sdl:
+	@$(MAKE) -f Makefile.sdl
+
 $(NAME): $(SRC) $(OBJ)
-	@$(CC) $(CFLAGS) $(OBJ) -o $(NAME) -L libft/ -lft
+	@$(CC) $(CFLAGS) $(OBJ) -o $(NAME) -L libft/ -lft $(SDL) -lGL -lGLU #-lglut
 	@echo "\033[33;32m$(NAME) \033[33;37mcompiled"
 	@echo "\033[33;35m$(NAME) End\033[33;37m"
 
@@ -77,6 +84,7 @@ fclean: clean
 	@echo "\033[33;32m$(NAME) \033[33;31mdeleted\033[33;37m"
 
 pclean: fclean
-	@make fclean -C ./libft/
+	make fclean -C ./libft/
+	make fclean -f Makefile.sdl
 
 re: fclean all

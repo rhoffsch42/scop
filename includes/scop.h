@@ -14,12 +14,28 @@
 # define SCOP_H
 
 # include <libft.h>
+# include <SDL2/SDL.h>
+# include <GL/gl.h>
+# include <GL/glu.h>
 # include <unistd.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
 # include <errno.h>
 # include <stdbool.h>
+
+/*
+0	GL_POINTS
+1	GL_LINES
+2	GL_LINE_STRIP
+3	GL_LINE_LOOP
+4	GL_TRIANGLES
+5	GL_TRIANGLE_STRIP
+6	GL_TRIANGLE_FAN
+7	GL_QUADS
+8	GL_QUAD_STRIP
+9	GL_POLYGON
+*/
 
 # define DATA			1
 # define ENDL			ft_putchar(10);
@@ -32,6 +48,11 @@
 # define ROT_WAY		1
 # define ROT_RIGHT		-1
 # define ROT_LEFT		1
+
+# define DRAW_MODE		GL_POINTS
+// # define DRAW_MODE		GL_LINE_STRIP
+# define FPS			10
+# define FRAME_TICK		(1000 / FPS)
 
 # define DEF_WIN_TITLE	"Default title"
 # define DEF_WIN_X		800
@@ -51,6 +72,8 @@
 # define OBJ_BAD_FORMAT		100
 # define DATA_CORRUPT		101
 # define MTL_BAD_FORMAT		102
+# define SDL_FAIL			103
+# define SDL_BAD_BPP		104
 # define OBJ_ERROR			"Error : bad obj format"
 # define OBJ_FACE_ERROR		"Incorrect vertix number"
 # define OBJF_NO_OBJ		"Error : This file has no valid object"
@@ -162,12 +185,23 @@ typedef struct			s_objfile
 	t_obj				*obj;
 }						t_objfile;
 
+typedef struct			s_sdl
+{
+	int					size[2];
+	int					mid[2];
+	char				*title;
+	SDL_Window			*win;
+	SDL_Surface			*surface;
+	SDL_GLContext		glcontext;
+}						t_sdl;
+
 typedef struct			s_env
 {
 	t_obj				*obj;// faire pareil que .mtl? ie. struct .obj
 	t_objfile			*objfile;
 	t_mtlfile			*mtlfile;
 	t_str				*dir;
+	t_sdl				*sdl;
 }						t_env;
 
 ////debug, a delete apres
@@ -186,8 +220,8 @@ int			is_dir(void);
 int			is_readable(char *path);
 int			is_typefile(char *file, char *type);
 char		*remove_trailing_slach(char *str);
-void		*for_list(void *list, void* (*func)(void*));
-void		*for_list_args(void *list, t_arg args, void* (*func)(void*, t_arg args));
+t_void		*for_list(t_void *list, t_void* (*func)(t_void*));
+t_void		*for_list_args(t_void *list, t_arg args, t_void* (*func)(t_void*, t_arg args));
 t_arg		init_args(void *a1, void *a2, void *a3, void *a4);
 t_void		*get_link(t_void* list, int index);
 
@@ -207,7 +241,7 @@ int			chk_mtlfile(t_mtlfile *mtlfile, char *path);
 void		link_file(t_env *e);
 
 //parsing .obj
-t_obj		*build_object(char *path);
+t_obj		*build_objects(char *path);
 void		error_obj(char *s1, char *s2);
 t_str		*add_vertix(t_obj *obj, t_str *ptr);
 t_str		*add_face(t_obj *obj, t_str *ptr);
@@ -216,6 +250,8 @@ t_str		*add_material_name(t_obj *obj, t_str *ptr);
 t_str		*add_smooth(t_obj *obj, t_str *ptr);
 t_str		*add_objname(t_obj *obj, t_str *ptr);
 void		obj_checks(t_objfile *objfile);
+t_void		*rewrite_objects(t_void *objfile);
+void		triangularize(t_obj* obj);
 
 //parsing .mtl
 t_mat		*build_material(char *path);
@@ -225,5 +261,11 @@ t_str		*add_value(t_str *ptr, int *var);
 t_str		*add_value_f(t_str *ptr, float *var);
 void		error_mtl(char *s1, char *s2);
 void		mtl_checks(t_mtlfile *mtlfile);
+
+//sdl
+void		sdl_putpixel(SDL_Surface *surface, int x, int y, Uint32 pixel);
+t_sdl		*init_sdl(void);
+void		display_object(t_sdl *sdl, t_objfile *objf);
+void		translate_obj(t_vertix *vertix, float x, float y, float z);
 
 #endif

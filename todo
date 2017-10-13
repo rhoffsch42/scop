@@ -1,7 +1,4 @@
 ------------------------------------
-lets go openGL
-
-------------------------------------
 parsing fait:
 	le pgm n accepte que des .obj ou .mtl ou -d dir_path
 		si les fichiers ne sont pas valides, ils sont ignores
@@ -28,7 +25,7 @@ on peut voir 2 fichiers .obj pour la teapot:
 	dans le cas ou il y a plusieurs objets dans un fichiers est ce que le token (o nom_de l'objet) est il obligatoire pour le premier ?
 
 bonus a faire:
-	- multiple objets (avec texture differente par ex)
+	- multiples objets (avec texture differente par ex) formant un seul ensemble
 		> parsing : plusieurs fichiers .obj : les obj dans un meme fichier forment un ensemble (rotation autour du centre de l'ensemble)
 		> plusieur .obj : pouvoir selectionner l'objet (donc l'ensemble auquel il appartient) dans la scene, pour les rotations
 		? est il necessaire de faire des objet (o object_name) differents pour utiliser des textures differentes?
@@ -45,3 +42,42 @@ bonus a faire:
 				! si ya le fichier .mtl dans les 2 ?
 					-> prendre le premier dossier de la liste (ordre des args) ou bien ordre du stock
 						- va chercher le materiaux dans tous les fichiers ayant le nom demande (mtllib)
+------------------------------------
+lets go openGL
+
+a faire:
+	utilisation du .mtl
+	perspective (ce qui est loin est plus petit)
+	translation
+	! les faces sont dessinees dans l'ordre de obj->f, donc les faces de derriere peuvent apparaitrent devant...
+		-> option opengl?
+	les rotations sont faites avec le repere de l'objet (pas de pb)
+		-> rotater avec une autre fonction opengl, repere monde
+fait:
+	afficher object
+	object centre via mediane des extremites
+	rotations:		translations:
+		x: 7 4				x: fleches gauche droite
+		y: 8 5				y: fleches haut bas
+		z: 9 6				z: 1 0
+------------------------------------
+BAREME A FAIRE
+
+Couleur (triangularisation OK, reste a choisir definitivement le mode de couleur)
+	On a bien des couleurs par facette.
+	Controllez avec un objet qui a d'autres facettes que des triangles : on a la meme couleur sur toute la facette.
+	Cette question est consideree comme OK egalement si un algo pour triangulariser les faces qui ne le sont pas, a ete implémenté.
+	Dans ce cas, il sera normal d'avoir des triangles de couleurs differentes.
+texture
+	L'appui sur une touche permet d'avoir l'apparition douce d'une texture sur l'objet.
+	L'application de la texture n'a pas vocation a etre super bien appliquee sur toutes les faces.
+	Il doit y avoir certaines faces ou c'est correct (voir l'exemple du sujet et la video).
+42
+	L'objet 42 est bien chargé, il tourne sur le bon axe, il se deplace, les facettes sont avec differents niveaux de gris,
+	on a des chatons/poneys/licornes comme texture.
+*obj files
+	Chargement non-trivial des fichiers obj : non coplanaire, faces concaves, triangularisation.
+	Verifier avec teapot.obj et au moins un autre fichier obj ambigus.
+*texture ++
+	La texture n'est deformee sur aucune des faces
+*autre ? (5 bonus)

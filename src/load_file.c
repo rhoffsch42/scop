@@ -69,4 +69,5 @@ void	load_file(t_env *e, int ac, char **av)
 	link_file(e);
 	obj_checks(e->objfile);
 	mtl_checks(e->mtlfile);
+	for_list((t_void*)(e->objfile), rewrite_objects);
 }

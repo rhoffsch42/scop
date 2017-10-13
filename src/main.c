@@ -135,6 +135,9 @@ int		main(int ac, char **av)
 	e = init_env();
 	load_file(e, ac, av);
 	dump_datafile(e->objfile, e->mtlfile, e->dir);
+	// exit(0);
+	e->sdl = init_sdl();
+	display_object(e->sdl, e->objfile);
 	ft_putendl("________________END________________");
 	return (0);
 }
