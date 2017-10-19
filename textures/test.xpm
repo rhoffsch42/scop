@@ -1,0 +1,17 @@
+/* XPM */
+/* //XPM */
+static char *gl[] = {
+/* columns rows colors chars-per-pixel */
+"4 4 256 2 ",//
+" /* stay */ ",
+"   c #000000",
+".  c #070306",
+"X  c #191518",
+"o  c #323232",
+/* pixels */
+"//..",//*
+"....",
+"\".. /* stay */ ",
+"\".// /* stay */ ",
+"....",
+};

@@ -1,5 +1,21 @@
 #include <scop.h>
 
+t_xpm	*init_xpm(void)
+{
+	static int	id = 0;
+	t_xpm		*xpm;
+
+	xpm = (t_xpm*)safe_malloc(sizeof(t_xpm));
+	ft_bzero((void*)xpm, sizeof(t_xpm));
+	xpm->next = NULL;
+	xpm->name = NULL;
+	xpm->path = NULL;
+	xpm->data = NULL;
+	xpm->id = id;
+	id++;
+	return (xpm);
+}
+
 t_sdl	*init_sdl(void)
 {
 	t_sdl	*sdl;
@@ -39,6 +55,7 @@ t_env	*init_env(void)
 	e->mtlfile = NULL;
 	e->dir = NULL;
 	e->sdl = NULL;
+	e->rgb = init_rgb();
 	return (e);
 }
 

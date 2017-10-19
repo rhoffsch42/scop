@@ -29,13 +29,13 @@ t_str		*ft_getfile(char *filename)
 	return (ptr[2]);
 }
 
-void			remove_comments(t_str *ptr, char comment_char)
+void			remove_comments(t_str *ptr, char *comment_str)
 {
 	char	*ptr1;
 
 	while (ptr)
 	{
-		ptr1 = ft_strchr(ptr->str, comment_char);
+		ptr1 = ft_strstr(ptr->str, comment_str);
 		if (ptr1)
 			ptr1[0] = 0;
 		ptr = ptr->next;

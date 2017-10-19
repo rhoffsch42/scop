@@ -63,7 +63,7 @@ typedef struct			s_str
 }						t_str;
 
 t_str				*ft_getfile(char *filename);
-void				remove_comments(t_str *ptr, char comment_char);
+void				remove_comments(t_str *ptr, char *comment_str);
 void				remove_white_spaces(t_str *ptr);
 int					ft_listlen(void *list);
 void				ft_chkptr(void *ptr, char *message, int code);

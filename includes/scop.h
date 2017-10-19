@@ -40,7 +40,7 @@
 # define DATA			1
 # define ENDL			ft_putchar(10);
 # define SPACE			ft_putchar(32);
-# define T_LIST			t_str*
+# define TAB			ft_putchar('\t');
 
 # define RGB(r, g, b)	(65536 * (int)(r) + 256 * (int)(g) + (int)(b))
 # define RTOD(x)		(x * (180.0f / M_PI))
@@ -54,6 +54,8 @@
 # define FPS			10
 # define FRAME_TICK		(1000 / FPS)
 
+# define COLOR_RGB_1	"/etc/X11/rgb.txt"
+# define COLOR_RGB_2	"/usr/share/X11/rgb.txt"
 # define DEF_WIN_TITLE	"Default title"
 # define DEF_WIN_X		800
 # define DEF_WIN_Y		800
@@ -74,6 +76,10 @@
 # define MTL_BAD_FORMAT		102
 # define SDL_FAIL			103
 # define SDL_BAD_BPP		104
+# define XPM_BAD_FORMAT		105
+# define RGB_FILE_ERR		106
+# define RGB_FILE_OPEN		"Error : can't open rgb.txt"
+# define RGB_FILE_EMPTY		"Error : rgb.txt is empty"
 # define OBJ_ERROR			"Error : bad obj format"
 # define OBJ_FACE_ERROR		"Incorrect vertix number"
 # define OBJF_NO_OBJ		"Error : This file has no valid object"
@@ -83,8 +89,11 @@
 # define DATA_CORRUPT_MSG	"Error : data corrupt"
 # define SCOP_DIR_ERR		"option -d : missing argument\nUsage: scop file.obj [file.mtl] [-d path]"
 # define SCOP_BAD_ARG		" : invalid argument\nUsage: scop file.obj [file.mtl] [-d path]"
+# define XPM_ERROR			"Error : bad xpm format"
+# define XPM_TOKEN_ERR		"Bad token for remove_comments_vl : "
 
-# define COMMENT_CHAR	'#'
+# define COMMENT_CHAR	"#"
+# define DOUBLE_QUOTE	'"'
 
 # define OBJ_MTLFILE	"mtllib"
 # define OBJ_NEW		"o"
@@ -103,6 +112,16 @@
 # define MTL_DENSITY	"Ni"
 # define MTL_OPACITY	"d"
 # define MTL_ILLUM		"illum"
+
+typedef struct			s_rgb
+{
+	struct s_rgb		*next;
+	int					id;
+	char				*name;
+	unsigned char		r;
+	unsigned char		g;
+	unsigned char		b;
+}						t_rgb;
 
 typedef struct			s_arg
 {
@@ -195,6 +214,17 @@ typedef struct			s_sdl
 	SDL_GLContext		glcontext;
 }						t_sdl;
 
+typedef struct			s_xpm
+{
+	struct s_xpm		*next;
+	int					id;
+	char				*name;
+	char				*path;
+	int					width;
+	int					height;
+	char				*data;
+}						t_xpm;
+
 typedef struct			s_env
 {
 	t_obj				*obj;// faire pareil que .mtl? ie. struct .obj
@@ -202,6 +232,7 @@ typedef struct			s_env
 	t_mtlfile			*mtlfile;
 	t_str				*dir;
 	t_sdl				*sdl;
+	t_rgb				*rgb;
 }						t_env;
 
 ////debug, a delete apres
@@ -210,11 +241,14 @@ typedef struct			s_env
 void		ft_free_list(void *list, void (custom_free)(void*));
 void		free_t_str(void	*list);
 
+// color
+t_rgb		*init_rgb(void);
+t_rgb		*get_color(t_rgb *rgb, char *name);
 
 // file manipulation
-int			is_empty(T_LIST ptr);
-T_LIST		del(T_LIST ptr);
-T_LIST		remove_list(T_LIST ptr, int (condition)(T_LIST), T_LIST (del)(T_LIST));
+t_void		*del(t_void *ptr);
+int			is_empty(t_void *ptr);
+t_void		*remove_list(t_void *ptr, int (condition)(t_void*), t_void* (del)(t_void*));
 char		*basename(char *path);
 int			is_dir(void);
 int			is_readable(char *path);
@@ -224,10 +258,21 @@ t_void		*for_list(t_void *list, t_void* (*func)(t_void*));
 t_void		*for_list_args(t_void *list, t_arg args, t_void* (*func)(t_void*, t_arg args));
 t_arg		init_args(void *a1, void *a2, void *a3, void *a4);
 t_void		*get_link(t_void* list, int index);
+t_xpm		*load_xpm(char *path);
 
+//parsing char* / t_str
+void		remove_comments_l(t_str *ptr, char *comment_str);
+void		remove_comments_vl(char *str, char *start, char *end, char *front);
+char		*t_str_to_char(t_str *ptr);
+t_str		*char_to_t_str(char *str);
+void		remove_comments_str(char *str, char *comm);
+
+// inits
 t_env		*init_env(void);
 t_obj		*init_obj(void);
 t_mat		*init_mat(void);
+t_xpm		*init_xpm(void);
+t_sdl		*init_sdl(void);
 
 //parsing args
 void		load_file(t_env *e, int ac, char **av);
@@ -264,7 +309,6 @@ void		mtl_checks(t_mtlfile *mtlfile);
 
 //sdl
 void		sdl_putpixel(SDL_Surface *surface, int x, int y, Uint32 pixel);
-t_sdl		*init_sdl(void);
 void		display_object(t_sdl *sdl, t_objfile *objf);
 void		translate_obj(t_vertix *vertix, float x, float y, float z);
 

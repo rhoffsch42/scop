@@ -37,7 +37,10 @@ CFILE			=	main.c \
 					ft_free_list.c \
 					for_list.c \
 					sdl_putpixel.c \
-					display.c
+					display.c \
+					load_xpm.c \
+					data_parsing.c \
+					color.c
 
 HFILE			=	scop.h
 

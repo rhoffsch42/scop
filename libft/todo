@@ -35,3 +35,13 @@ attention: les pointeur dans le tableau pointent directement sur data,
 la chaine contenue ne se termine donc pas a   ptr + w   mais contient tout jusqua la fin de data.
 ->Bien manipuler la chaine avec  w .
 ---------------------------------
+! get_next_line utilise des strdup ~like 
+	-> s'arrete sur les \0
+faire une fonction qui copie le contenu complet et l'envoie dans cette structure:
+typedef struct		s_data
+{
+	struct s_data	*next;
+	int				len;
+	char			*data;
+}					t_data;
+---------------------------------

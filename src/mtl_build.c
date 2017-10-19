@@ -43,7 +43,7 @@ t_mat			*build_material(char *path)
 	lst = ft_getfile(path);
 	remove_comments(lst, COMMENT_CHAR);
 	remove_white_spaces(lst);
-	lst = remove_list(lst, is_empty, del);
+	lst = (t_str*)remove_list((t_void*)lst, is_empty, del);
 	new_mat = NULL;
 	build_data(&new_mat, lst);
 

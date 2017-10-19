@@ -1,22 +1,28 @@
 #include <scop.h>
 
-int		is_empty(T_LIST ptr)
+int		is_empty(t_void *ptr)
 {
-	if (ft_strlen(ptr->str) == 0)
+	t_str	*s;
+
+	s = (t_str*)ptr;
+	if (ft_strlen(s->str) == 0)
 		return (1);
 	return (0);
 }
 
-T_LIST	del(T_LIST ptr)
+t_void	*del(t_void *ptr)
 {
-	ft_strclr(ptr->str);
+	t_str	*s;
+
+	s = (t_str*)ptr;
+	ft_strclr(s->str);
 	return (ptr->next);
 }
 
-T_LIST	remove_list(T_LIST ptr, int (condition)(T_LIST), T_LIST (del)(T_LIST))
+t_void	*remove_list(t_void *ptr, int (condition)(t_void*), t_void* (del)(t_void*))
 {
-	T_LIST	before;
-	T_LIST	current;
+	t_void	*before;
+	t_void	*current;
 
 	before = NULL;
 	current = ptr;

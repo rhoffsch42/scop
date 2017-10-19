@@ -15,6 +15,28 @@ char	*get_line(t_str *lst, int n)
 	return (lst->str);
 }
 
+void	test_texture(char *path)
+{
+	ft_chkptr(path, "FUCK envoie une texture!\n", 1);
+	t_str	*data = ft_getfile(path);
+
+	while (data)
+	{
+		int i = 0;
+		while (data->str[i])
+		{
+			ft_putnbr((unsigned char)(data->str[i]));
+			ft_putchar(32);
+			i++;
+			if (i % 15 == 0)
+				ft_putchar(10);
+		}
+		ft_putchar(10);
+		data = data->next;
+	}
+	exit(0);
+}
+
 void	test_sscanf(t_str *lst)
 {
 	float	x, y, z = 0;
@@ -130,11 +152,20 @@ int		main(int ac, char **av)
 {
 	// exit(0);
 	// test_sscanf(lst);
+	// test_texture(av[1]);
+	// load_xpm(av[1]); exit(0);
 	ft_putendl("________________BEGIN________________");
 	t_env	*e;
 	e = init_env();
 	load_file(e, ac, av);
 	dump_datafile(e->objfile, e->mtlfile, e->dir);
+	t_rgb *rgb = get_color(e->rgb, "medium slate blue");
+	if (rgb)
+	{
+		ft_putnbrendl(rgb->r);
+		ft_putnbrendl(rgb->g);
+		ft_putnbrendl(rgb->b);
+	}
 	// exit(0);
 	e->sdl = init_sdl();
 	display_object(e->sdl, e->objfile);
