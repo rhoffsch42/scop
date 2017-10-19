@@ -222,7 +222,7 @@ typedef struct			s_xpm
 	char				*path;
 	int					width;
 	int					height;
-	char				*data;
+	unsigned char		*data;
 }						t_xpm;
 
 typedef struct			s_env
@@ -232,7 +232,7 @@ typedef struct			s_env
 	t_mtlfile			*mtlfile;
 	t_str				*dir;
 	t_sdl				*sdl;
-	t_rgb				*rgb;
+	t_rgb				*chart;
 }						t_env;
 
 ////debug, a delete apres
@@ -240,6 +240,8 @@ typedef struct			s_env
 // libft
 void		ft_free_list(void *list, void (custom_free)(void*));
 void		free_t_str(void	*list);
+int			safe_open(char *path);
+void		hex_to_rgb(unsigned char *rgb, char *s);
 
 // color
 t_rgb		*init_rgb(void);
@@ -258,7 +260,12 @@ t_void		*for_list(t_void *list, t_void* (*func)(t_void*));
 t_void		*for_list_args(t_void *list, t_arg args, t_void* (*func)(t_void*, t_arg args));
 t_arg		init_args(void *a1, void *a2, void *a3, void *a4);
 t_void		*get_link(t_void* list, int index);
-t_xpm		*load_xpm(char *path);
+
+// xpm
+void		error_xpm(char *s1, char *s2);
+t_xpm		*load_xpm(char *path, t_rgb *chart);
+t_str		*build_pixels(t_xpm *xpm, t_rgb *rgb_tokens, int t_size, t_str *ptr);
+char		*chk_separator(char *str);
 
 //parsing char* / t_str
 void		remove_comments_l(t_str *ptr, char *comment_str);

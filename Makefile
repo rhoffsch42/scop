@@ -33,14 +33,15 @@ CFILE			=	main.c \
 					mtl_data.c \
 					mtl_checks.c \
 					string.c \
-					remove_list.c \
 					ft_free_list.c \
 					for_list.c \
 					sdl_putpixel.c \
 					display.c \
-					load_xpm.c \
+					xpm_load.c \
+					xpm_data.c \
 					data_parsing.c \
-					color.c
+					color.c \
+					misc.c
 
 HFILE			=	scop.h
 

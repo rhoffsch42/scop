@@ -15,6 +15,7 @@ char	*t_str_to_char(t_str *ptr)
 	t_str	*ptr1;
 	char	*all;
 	int		len;
+	int		ind;
 
 	ptr1 = ptr;
 	len = 0;
@@ -27,10 +28,12 @@ char	*t_str_to_char(t_str *ptr)
 	all = (char*)safe_malloc(sizeof(char) * (len + 1));
 	ft_bzero(all, len + 1);
 	ptr1 = ptr;
+	ind = ft_strlen(all);
 	while (ptr1)
 	{
-		ft_strcat(all, ptr1->str);
-		ft_strcat(all, "\n");
+		ft_strcpy(all + ind, ptr1->str);
+		ind += ft_strlen(ptr1->str);
+		ft_strcpy(all + ind++, "\n");
 		ptr1 = ptr1->next;
 	}
 	return (all);

@@ -95,7 +95,8 @@ CFILE	=	ft_atoi.c \
 			ft_tablen.c \
 			ft_tolower.c \
 			ft_toupper.c \
-			get_next_line.c
+			get_next_line.c \
+			remove_list.c
 
 SDIR	=	src/
 SRC		=	$(patsubst %.c, $(SDIR)%.c, $(CFILE))

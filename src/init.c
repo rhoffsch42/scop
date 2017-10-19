@@ -55,7 +55,7 @@ t_env	*init_env(void)
 	e->mtlfile = NULL;
 	e->dir = NULL;
 	e->sdl = NULL;
-	e->rgb = init_rgb();
+	e->chart = init_rgb();
 	return (e);
 }
 

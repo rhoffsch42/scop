@@ -153,13 +153,13 @@ int		main(int ac, char **av)
 	// exit(0);
 	// test_sscanf(lst);
 	// test_texture(av[1]);
-	// load_xpm(av[1]); exit(0);
 	ft_putendl("________________BEGIN________________");
 	t_env	*e;
 	e = init_env();
+	load_xpm(av[1], e->chart); exit(0);
 	load_file(e, ac, av);
 	dump_datafile(e->objfile, e->mtlfile, e->dir);
-	t_rgb *rgb = get_color(e->rgb, "medium slate blue");
+	t_rgb *rgb = get_color(e->chart, "medium slate blue");
 	if (rgb)
 	{
 		ft_putnbrendl(rgb->r);

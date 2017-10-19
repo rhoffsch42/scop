@@ -65,6 +65,9 @@ typedef struct			s_str
 t_str				*ft_getfile(char *filename);
 void				remove_comments(t_str *ptr, char *comment_str);
 void				remove_white_spaces(t_str *ptr);
+t_void				*remove_list(t_void *ptr, int (condition)(t_void*), t_void* (del)(t_void*));
+t_void				*del(t_void *ptr);
+int					is_empty(t_void *ptr);
 int					ft_listlen(void *list);
 void				ft_chkptr(void *ptr, char *message, int code);
 void				*safe_malloc(int size);
