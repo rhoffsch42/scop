@@ -12,7 +12,7 @@
 
 NAME			=	scop
 CC				=	gcc
-CFLAGS			=	-Wall -Wextra -Werror
+CFLAGS			=	-Wall -Wextra -Werror -g
 
 SDL_DST			=	SDL
 INCLUDE			=	-I includes -I libft/includes -I ./$(SDL_DST)/include -I /usr/include
@@ -34,6 +34,8 @@ CFILE			=	main.c \
 					mtl_checks.c \
 					string.c \
 					ft_free_list.c \
+					free_struct1.c \
+					free_struct2.c \
 					for_list.c \
 					sdl_putpixel.c \
 					display.c \

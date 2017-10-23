@@ -1,4 +1,4 @@
-version: 14 09 2017
+version: 20 10 2017
 -----------------------
 
 logs:
@@ -44,4 +44,6 @@ typedef struct		s_data
 	int				len;
 	char			*data;
 }					t_data;
+
+valgrind detecte des read incorrect et un leak de 1 bytes parfois, osef ?
 ---------------------------------

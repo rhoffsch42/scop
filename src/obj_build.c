@@ -66,7 +66,7 @@ t_obj		*build_objects(char *path)
 	lst = ft_getfile(path);
 	remove_comments(lst, COMMENT_CHAR);
 	remove_white_spaces(lst);
-	lst = (t_str*)remove_list((t_void*)lst, is_empty, del);
+	lst = (t_str*)remove_list((t_void*)lst, is_empty, free_t_str);
 	// pour l instant un seul objet est cree, il faudra faire une boucle (ou autre)
 	// pour avoir plusieurs objects dans un objfile
 	new_obj = init_obj();

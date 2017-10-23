@@ -7,11 +7,12 @@ static void		check_directory(t_env *e, char *filename)
 	int		len[2];
 
 	dir = e->dir;
-	bigpath = ft_strdup("n");
+	bigpath = NULL;
 	len[1] = ft_strlen(filename);
 	while (dir)
 	{
-		ft_strdel(&bigpath);
+		if (bigpath)
+			ft_strdel(&bigpath);
 		len[0] = len[1] + ft_strlen(dir->str) + 1;
 		bigpath = (char*)safe_malloc(sizeof(char) * len[0]);
 		ft_bzero(bigpath, len[0]);

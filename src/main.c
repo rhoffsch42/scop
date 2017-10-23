@@ -156,7 +156,7 @@ int		main(int ac, char **av)
 	ft_putendl("________________BEGIN________________");
 	t_env	*e;
 	e = init_env();
-	load_xpm(av[1], e->chart); exit(0);
+	t_xpm *texture = load_xpm(av[1], e->chart); ft_free_list(texture, free_t_xpm);
 	load_file(e, ac, av);
 	dump_datafile(e->objfile, e->mtlfile, e->dir);
 	t_rgb *rgb = get_color(e->chart, "medium slate blue");
@@ -167,8 +167,9 @@ int		main(int ac, char **av)
 		ft_putnbrendl(rgb->b);
 	}
 	// exit(0);
-	e->sdl = init_sdl();
-	display_object(e->sdl, e->objfile);
+	// e->sdl = init_sdl();
+	// display_object(e->sdl, e->objfile);
+	// free_t_env((t_void*)e);
 	ft_putendl("________________END________________");
 	return (0);
 }

@@ -49,9 +49,9 @@ t_str	*char_to_t_str(char *str)
 	ptr = (t_str*)safe_malloc(sizeof(t_str));
 	lst = ptr;
 	ptr->str = (char*)safe_malloc(sizeof(char) * (linelen(str) + 1));
-	i = 0;
+	i = -1;
 	j = 0;
-	while (str[i++])
+	while (str[++i])
 		if (str[i] == '\n')
 		{
 			ptr->str[j] = '\0';

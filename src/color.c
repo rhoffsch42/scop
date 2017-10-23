@@ -42,10 +42,11 @@ t_rgb			*init_rgb(void)
 	lst = ft_getfile(file);
 	remove_comments(lst, "!");
 	remove_white_spaces(lst);
-	lst = (t_str*)remove_list((t_void*)lst, is_empty, del);
+	lst = (t_str*)remove_list((t_void*)lst, is_empty, free_t_str);
 	if (!lst)
 		ft_errexit(RGB_FILE_EMPTY, RED, RGB_FILE_ERR);
 	rgb = (t_rgb*)safe_malloc(sizeof(t_rgb));
 	build_rgb(rgb, lst);
+	ft_free_list(lst, free_t_str);
 	return (rgb);
 }

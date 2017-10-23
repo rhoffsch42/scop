@@ -79,6 +79,7 @@ static void		build_xpm(t_xpm *x, t_str *ptr, t_rgb *chart)
 	line = build_tokens(rgb_tokens, t_amount, ptr->next->next, t_size);
 	ft_putendl(line->str);
 	line = build_pixels(x, rgb_tokens[3], t_size, line);
+	ft_free_list(rgb_tokens[3], free_t_rgb);
 }
 
 t_xpm		*load_xpm(char *path, t_rgb *chart)
@@ -104,12 +105,15 @@ t_xpm		*load_xpm(char *path, t_rgb *chart)
 	ft_putchar('.');
 	remove_white_spaces(lst);
 	ft_putchar('.');
-	lst = (t_str*)remove_list((t_void*)lst, is_empty, del);
+	lst = (t_str*)remove_list((t_void*)lst, is_empty, free_t_str);
 	ft_putchar('.');
 	xpm = init_xpm();
 	xpm->path = ft_strdup(path);
 	xpm->name = ft_strdup(basename(path));
 	xpm->next = NULL;
 	build_xpm(xpm, lst, chart);
+	ft_free_list(lst, free_t_str);
+	ft_free_list(str, free_t_str);
+	free(all);
 	return (xpm);
 }

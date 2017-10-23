@@ -1,18 +1,24 @@
 #include <scop.h>
 
-void	free_t_str(void	*list)
+t_void	*free_t_str(t_void *list)
 {
 	t_str	*ptr;
+	t_void	*next;
 
+	if (!list)
+		return (NULL);
+	next = list->next;
 	ptr = (t_str*)list;
-	ft_strclr(ptr->str);
-	free(ptr->str);
-	ptr->str = NULL;
 	ptr->next = NULL;
-	free(ptr);
+	ft_strdel(&(ptr->str));
+	ft_bzero(list, sizeof(t_str));
+	free(list);
+	ptr = NULL;
+	list = NULL;
+	return (next);
 }
 
-void	ft_free_list(void *list, void (custom_free)(void*))
+void	ft_free_list(void *list, t_void* (custom_free)(t_void*))
 {
 	t_void	*ptr;
 	t_void	*f;

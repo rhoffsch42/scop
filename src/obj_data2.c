@@ -9,7 +9,10 @@ t_str	*add_objname(t_obj *obj, t_str *ptr)
 	ft_bzero(name, 500);
 	sscanf(ptr->str, "%s %s", token, name);
 	if (ft_strlen(name) > 0)
+	{
+		ft_strdel(&obj->name);
 		obj->name = ft_strdup(name);
+	}
 	return (ptr->next);
 }
 

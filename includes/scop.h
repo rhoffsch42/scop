@@ -37,7 +37,7 @@
 9	GL_POLYGON
 */
 
-# define DATA			1
+# define DATA			0
 # define ENDL			ft_putchar(10);
 # define SPACE			ft_putchar(32);
 # define TAB			ft_putchar('\t');
@@ -88,7 +88,7 @@
 # define MTL_USED			"Error : name already in use"
 # define DATA_CORRUPT_MSG	"Error : data corrupt"
 # define SCOP_DIR_ERR		"option -d : missing argument\nUsage: scop file.obj [file.mtl] [-d path]"
-# define SCOP_BAD_ARG		" : invalid argument\nUsage: scop file.obj [file.mtl] [-d path]"
+# define SCOP_BAD_ARG		" : invalid argument\nUsage: scop file.obj [file.mtl] [file.xpm] [-d path]"
 # define XPM_ERROR			"Error : bad xpm format"
 # define XPM_TOKEN_ERR		"Bad token for remove_comments_vl : "
 
@@ -227,7 +227,6 @@ typedef struct			s_xpm
 
 typedef struct			s_env
 {
-	t_obj				*obj;// faire pareil que .mtl? ie. struct .obj
 	t_objfile			*objfile;
 	t_mtlfile			*mtlfile;
 	t_str				*dir;
@@ -238,10 +237,22 @@ typedef struct			s_env
 ////debug, a delete apres
 
 // libft
-void		ft_free_list(void *list, void (custom_free)(void*));
-void		free_t_str(void	*list);
+void		ft_free_list(void *list, t_void* (custom_free)(t_void*));
+t_void		*free_t_str(t_void *list);
 int			safe_open(char *path);
 void		hex_to_rgb(unsigned char *rgb, char *s);
+
+// free structure
+t_void		*free_t_env(t_void *list);
+t_void		*free_t_xpm(t_void	*list);
+t_void		*free_t_rgb(t_void *list);
+t_void		*free_t_vertix(t_void *list);
+t_void		*free_t_face(t_void *list);
+t_void		*free_t_mat(t_void *list);
+t_void		*free_t_mtlfile(t_void *list);
+t_void		*free_t_obj(t_void *list);
+t_void		*free_t_objfile(t_void *list);
+t_void		*free_t_sdl(t_void *list);
 
 // color
 t_rgb		*init_rgb(void);
