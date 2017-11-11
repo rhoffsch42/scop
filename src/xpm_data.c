@@ -30,27 +30,22 @@ t_str	*build_pixels(t_xpm *xpm, t_rgb *rgb_tokens, int t_size, t_str *ptr)
 	int		index;
 	int		line_count;
 
-	ft_putendl("- - - - 1");
 	ft_bzero(tok, 3);
 	len = sizeof(unsigned char) * (xpm->width * xpm->height * 3 + 1);
 	xpm->data = (unsigned char*)safe_malloc(len);
 	ft_bzero(xpm->data, len);
 	line_count = 0;
-	ft_putendl("- - - - 2");
 	while (line_count < xpm->height)
 	{
 		i = 0;
 		s = chk_separator(ptr->str);
-		ft_putendl(s);
 		while ((i / t_size) < xpm->width)
 		{
 			tok[0] = s[i];
 			tok[1] = (t_size == 2) ? s[i + 1] : tok[1];
-			ft_putstr(tok);
 			if ((rgb = get_color(rgb_tokens, tok)) != NULL)
 			{
 				index = line_count * xpm->width * bpp + (i / t_size) * bpp;
-				ft_putchar('\t');ft_putnbr(index);ENDL
 				xpm->data[index + 0] = rgb->r;
 				xpm->data[index + 1] = rgb->g;
 				xpm->data[index + 2] = rgb->b;
@@ -61,9 +56,7 @@ t_str	*build_pixels(t_xpm *xpm, t_rgb *rgb_tokens, int t_size, t_str *ptr)
 		line_count++;
 		ptr = ptr->next;
 	}
-	print_data(xpm);
-	ft_putnbrendl(i);
-	ft_putnbrendl(len);
-	ft_putendl(ptr->str);
+	// print_data(xpm);
+	(void)print_data;
 	return (ptr);
 }

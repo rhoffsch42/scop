@@ -46,16 +46,18 @@ bonus a faire:
 lets go openGL
 
 a faire:
+	texture gl
 	utilisation du .mtl
-	perspective (ce qui est loin est plus petit)
-	translation
-	! les faces sont dessinees dans l'ordre de obj->f, donc les faces de derriere peuvent apparaitrent devant...
-		-> option opengl?
 	les rotations sont faites avec le repere de l'objet (pas de pb)
 		-> rotater avec une autre fonction opengl, repere monde
 fait:
+	translation
+	perspective (ce qui est loin est plus petit)
 	afficher object
 	object centre via mediane des extremites
+	touches changement de texture et obj
+		texture:	home<	end>
+		obj:		PageUp	PageDown
 	rotations:		translations:
 		x: 7 4				x: fleches gauche droite
 		y: 8 5				y: fleches haut bas

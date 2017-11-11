@@ -62,7 +62,9 @@ void	load_file(t_env *e, int ac, char **av)
 			add_objfile(&(e->objfile), av[i]);
 		else if (is_typefile(av[i], ".mtl") && is_readable(av[i]))
 			add_mtlfile(&(e->mtlfile), av[i]);
-		else if (!is_typefile(av[i], ".xpm"))
+		else if (is_typefile(av[i], ".xpm"))
+			add_xpmfile(&(e->xpmfile), av[i], e->chart);
+		else
 			error_arg(av[i], SCOP_BAD_ARG);
 		i++;
 	}

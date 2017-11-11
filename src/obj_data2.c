@@ -74,10 +74,8 @@ void	triangularize(t_obj* obj)
 	f = obj->f;
 	while (f)
 	{
-		ft_putchar('.');
 		if (f->d != 0)
 		{
-			ft_putchar('+');
 			id++;
 			new_f = (t_face*)safe_malloc(sizeof(t_face));
 			new_f->next = f->next;

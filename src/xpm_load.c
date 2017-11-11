@@ -71,13 +71,11 @@ static void		build_xpm(t_xpm *x, t_str *ptr, t_rgb *chart)
 		error_xpm(ptr->next->str, XPM_ERROR);
 	if (t_amount <= 0 || t_size <= 0 || x->width <= 0 || x->height <= 0)
 		error_xpm(ptr->next->str, XPM_ERROR);
-	ft_putnbrendl(t_amount);
 	rgb_tokens[3] = (t_rgb*)safe_malloc(sizeof(t_rgb));
 	rgb_tokens[0] = rgb_tokens[3];
 	rgb_tokens[1] = chart;
 	rgb_tokens[2] = NULL;
 	line = build_tokens(rgb_tokens, t_amount, ptr->next->next, t_size);
-	ft_putendl(line->str);
 	line = build_pixels(x, rgb_tokens[3], t_size, line);
 	ft_free_list(rgb_tokens[3], free_t_rgb);
 }
@@ -94,19 +92,12 @@ t_xpm		*load_xpm(char *path, t_rgb *chart)
 		ft_putstr_fd(path, STDERR_FILENO);
 		ft_errexit(" is not a valid xpm file", RED, BAD_ARGS);
 	}
-	ft_putchar('.');
 	str = ft_getfile(path);
-	ft_putchar('.');
 	all = t_str_to_char(str);
-	ft_putchar('.');
 	remove_comments_vl(all, "/*", "*/", "//");
-	ft_putchar('.');
 	lst = char_to_t_str(all);
-	ft_putchar('.');
 	remove_white_spaces(lst);
-	ft_putchar('.');
 	lst = (t_str*)remove_list((t_void*)lst, is_empty, free_t_str);
-	ft_putchar('.');
 	xpm = init_xpm();
 	xpm->path = ft_strdup(path);
 	xpm->name = ft_strdup(basename(path));

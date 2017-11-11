@@ -115,7 +115,7 @@ void	dump_data_obj(t_obj *obj)
 	}
 }
 
-void	dump_datafile(t_objfile *objfile, t_mtlfile *mtlfile, t_str *dir)
+void	dump_datafile(t_objfile *objfile, t_mtlfile *mtlfile, t_str *dir, t_xpm *xpm)
 {
 	ft_putendl("*******************************************");
 	while (objfile)
@@ -146,6 +146,12 @@ void	dump_datafile(t_objfile *objfile, t_mtlfile *mtlfile, t_str *dir)
 		ft_putendl(dir->str);
 		dir = dir->next;
 	}
+	while (xpm)
+	{
+		ft_putendl(xpm->path);
+		xpm = xpm->next;
+	}
+	ft_putendl("*******************************************");
 }
 
 int		main(int ac, char **av)
@@ -154,11 +160,12 @@ int		main(int ac, char **av)
 	// test_sscanf(lst);
 	// test_texture(av[1]);
 	ft_putendl("________________BEGIN________________");
-	t_env	*e;
+	t_env		*e;
+	t_objfile	**object_tab;
+	t_xpm		**texture_tab;
 	e = init_env();
-	t_xpm *texture = load_xpm(av[1], e->chart); ft_free_list(texture, free_t_xpm);
 	load_file(e, ac, av);
-	dump_datafile(e->objfile, e->mtlfile, e->dir);
+	dump_datafile(e->objfile, e->mtlfile, e->dir, e->xpmfile);
 	t_rgb *rgb = get_color(e->chart, "medium slate blue");
 	if (rgb)
 	{
@@ -167,7 +174,12 @@ int		main(int ac, char **av)
 		ft_putnbrendl(rgb->b);
 	}
 	// exit(0);
-	// e->sdl = init_sdl();
+	object_tab = (t_objfile**)list_to_tab((t_void*)(e->objfile));
+	texture_tab = (t_xpm**)list_to_tab((t_void*)(e->xpmfile));
+	e->sdl = init_sdl();
+	(void)texture_tab;
+	display_object(e->sdl, object_tab, texture_tab, \
+		(int[2]){ft_listlen(e->objfile), ft_listlen(e->xpmfile)});
 	// display_object(e->sdl, e->objfile);
 	// free_t_env((t_void*)e);
 	ft_putendl("________________END________________");

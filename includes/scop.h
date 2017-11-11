@@ -229,6 +229,7 @@ typedef struct			s_env
 {
 	t_objfile			*objfile;
 	t_mtlfile			*mtlfile;
+	t_xpm				*xpmfile;
 	t_str				*dir;
 	t_sdl				*sdl;
 	t_rgb				*chart;
@@ -241,6 +242,7 @@ void		ft_free_list(void *list, t_void* (custom_free)(t_void*));
 t_void		*free_t_str(t_void *list);
 int			safe_open(char *path);
 void		hex_to_rgb(unsigned char *rgb, char *s);
+t_void		**list_to_tab(t_void *list);
 
 // free structure
 t_void		*free_t_env(t_void *list);
@@ -272,11 +274,6 @@ t_void		*for_list_args(t_void *list, t_arg args, t_void* (*func)(t_void*, t_arg 
 t_arg		init_args(void *a1, void *a2, void *a3, void *a4);
 t_void		*get_link(t_void* list, int index);
 
-// xpm
-void		error_xpm(char *s1, char *s2);
-t_xpm		*load_xpm(char *path, t_rgb *chart);
-t_str		*build_pixels(t_xpm *xpm, t_rgb *rgb_tokens, int t_size, t_str *ptr);
-char		*chk_separator(char *str);
 
 //parsing char* / t_str
 void		remove_comments_l(t_str *ptr, char *comment_str);
@@ -297,11 +294,19 @@ void		load_file(t_env *e, int ac, char **av);
 int			is_typefile(char *file, char *type);
 void		add_objfile(t_objfile **addr, char *file);
 void		add_mtlfile(t_mtlfile **addr, char *file);
+void		add_xpmfile(t_xpm **addr, char *file, t_rgb *chart);
 t_objfile	*get_objfile(t_objfile *ptr, char *file);
 t_mtlfile	*get_mtlfile(t_mtlfile *ptr, char *file);
 int			chk_objfile(t_objfile *objfile, char *path);
 int			chk_mtlfile(t_mtlfile *mtlfile, char *path);
+int			chk_xpmfile(t_xpm *xpmfile, char *path);
 void		link_file(t_env *e);
+
+// parsing .xpm
+void		error_xpm(char *s1, char *s2);
+t_xpm		*load_xpm(char *path, t_rgb *chart);
+t_str		*build_pixels(t_xpm *xpm, t_rgb *rgb_tokens, int t_size, t_str *ptr);
+char		*chk_separator(char *str);
 
 //parsing .obj
 t_obj		*build_objects(char *path);
@@ -327,7 +332,7 @@ void		mtl_checks(t_mtlfile *mtlfile);
 
 //sdl
 void		sdl_putpixel(SDL_Surface *surface, int x, int y, Uint32 pixel);
-void		display_object(t_sdl *sdl, t_objfile *objf);
+void		display_object(t_sdl *sdl, t_objfile **objf, t_xpm **xpm, int *len);
 void		translate_obj(t_vertix *vertix, float x, float y, float z);
 
 #endif

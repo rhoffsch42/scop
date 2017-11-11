@@ -155,8 +155,8 @@ void		draw_obj(t_sdl *sdl, t_obj *obj, int *rot, float *trans)
 	glRotated(rot[0], 1, 0, 0);
 	glRotated(rot[1], 0, 1, 0);
 	glRotated(rot[2], 0, 0, 1);
-	printf("%.1f\t%.1f\t%.1f\n", trans[0], trans[1], trans[2]);
-	printf("%d\t%d\t%d\n------------------\n", rot[0], rot[1], rot[2]);
+	// printf("%.1f\t%.1f\t%.1f\n", trans[0], trans[1], trans[2]);
+	// printf("%d\t%d\t%d\n------------------\n", rot[0], rot[1], rot[2]);
 	float scale = 0.20;
 	glScalef(scale, scale, scale);
 
@@ -169,13 +169,15 @@ void		draw_obj(t_sdl *sdl, t_obj *obj, int *rot, float *trans)
 	SDL_GL_SwapWindow(sdl->win);
 }
 
-void		display_object(t_sdl *sdl, t_objfile *objf)
+void		display_object(t_sdl *sdl, t_objfile **objf, t_xpm **xpm, int *len)
 {
 	int			quit;
 	SDL_Event	event;
 	int			rot[3];
 	float		trans[3];
+	int			ind[2];
 
+	ft_bzero(ind, sizeof(int) * 2);
 	ft_bzero(rot, sizeof(int) * 3);
 	ft_bzero(trans, sizeof(float) * 3);
 	// draw_test_sdl(sdl);
@@ -185,7 +187,7 @@ void		display_object(t_sdl *sdl, t_objfile *objf)
 	glLoadIdentity();
 	gluPerspective(90, sdl->size[0] / sdl->size[1], 0.1f, 1000);
 	glEnable(GL_DEPTH_TEST);
-	draw_obj(sdl, objf->obj, rot, trans);
+	draw_obj(sdl, objf[ind[0]]->obj, rot, trans);
 
 	// glEnable(GL_CULL_FACE);
 	// glCullFace(GL_BACK);
@@ -197,17 +199,20 @@ void		display_object(t_sdl *sdl, t_objfile *objf)
 	int		current_time;
 	int		ellapsed_time;
 	int		last_time = (int)SDL_GetTicks();
-	int		angle = 5;
-	float	vec = 0.05f;
+	int		angle = 10;
+	float	vec = 0.1f;
 	quit = 0;
 	while (!quit)
 	{
 		frame++;
 		start_time = SDL_GetTicks();
-		while (SDL_PollEvent(&event) == 1)
+		while (SDL_PollEvent(&event))
 		{
-			if (event.type == SDL_KEYDOWN)
+			if (event.type == SDL_KEYUP)
+				ft_putendl("up");
+			else if (event.type == SDL_KEYDOWN && !event.key.repeat)
 			{
+				ft_putendl("down");
 				ft_putnbrendl(event.key.keysym.scancode);
 				if (event.key.keysym.scancode == SDL_SCANCODE_ESCAPE)
 				{
@@ -239,24 +244,34 @@ void		display_object(t_sdl *sdl, t_objfile *objf)
 					trans[2] += -vec;
 				else if (event.key.keysym.scancode == 39)
 					trans[2] += vec;
-				draw_obj(sdl, objf->obj, rot, trans);
+				else if (event.key.keysym.scancode == 75)//up obj
+					ind[0] = (objf[ind[0] + 1] != NULL) ? ind[0] + 1 : 0;
+				else if (event.key.keysym.scancode == 78)//down obj
+					ind[0] = (ind[0] != 0) ? ind[0] - 1 : len[0] - 1;
+				else if (event.key.keysym.scancode == 74)//up texture
+					ind[1] = (xpm[ind[1] + 1] != NULL) ? ind[1] + 1 : 0;
+				else if (event.key.keysym.scancode == 77)//down texture
+					ind[1] = (ind[1] != 0) ? ind[1] - 1 : len[1] - 1;
+				ft_putnbrendl(ind[0]);
+				ft_putendl(xpm[ind[1]]->path);
+				// draw_obj(sdl, objf[ind[0]]->obj, rot, trans);
 			}
 		}
 		current_time = SDL_GetTicks();
-		ft_putnbrendl(current_time);
+		// ft_putnbrendl(current_time);
 		ellapsed_time = current_time - last_time;
 		last_time = current_time;
 
 		rot[1] += ellapsed_time / 20;
-		draw_obj(sdl, objf->obj, rot, trans);
+		draw_obj(sdl, objf[ind[0]]->obj, rot, trans);
 
 		if (frame == FPS)
 		{
 			frame = 0;
 			t++;
 		}
-		ft_putnbrendl(frame);
-		ft_putnbrendl(t);
+		// ft_putnbrendl(frame);
+		// ft_putnbrendl(t);
 
 		ellapsed_time = SDL_GetTicks() - start_time;
 		if (ellapsed_time < tick)

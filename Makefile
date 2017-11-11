@@ -37,6 +37,7 @@ CFILE			=	main.c \
 					free_struct1.c \
 					free_struct2.c \
 					for_list.c \
+					list_to_tab.c \
 					sdl_putpixel.c \
 					display.c \
 					xpm_load.c \
