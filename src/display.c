@@ -1,85 +1,8 @@
 #include <scop.h>
 
-void		draw_test_gl(t_sdl *sdl)
-{
-	glMatrixMode( GL_PROJECTION );
-	glLoadIdentity();
-	gluPerspective(70,(double)800/800,1,1000);
-	glEnable(GL_DEPTH_TEST);
-	glDepthFunc(GL_LEQUAL);
-	// glDepthFunc(GL_GREATER);
-
-	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-
-    glMatrixMode( GL_MODELVIEW );
-    glLoadIdentity( );
-
-	gluLookAt(3,4,2,0,0,0,0,0,1);
-
-	glBegin(GL_QUADS);
-		glColor3ub(255,0,0); //face rouge
-		glVertex3d(1,1,1);
-		glVertex3d(1,1,-1);
-		glVertex3d(-1,1,-1);
-		glVertex3d(-1,1,1);
-	glEnd();
-
-	glBegin(GL_QUADS);
-		glColor3ub(0,255,0); //face verte
-		glVertex3d(1,-1,1);
-		glVertex3d(1,-1,-1);
-		glVertex3d(1,1,-1);
-		glVertex3d(1,1,1);
-	glEnd();
-
-	glBegin(GL_QUADS);
-		glColor3ub(0,0,255); //face bleue
-		glVertex3d(-1,-1,1);
-		glVertex3d(-1,-1,-1);
-		glVertex3d(1,-1,-1);
-		glVertex3d(1,-1,1);
-	glEnd();
-
-	glFlush();
-	SDL_GL_SwapWindow(sdl->win);
-
-	SDL_Event	event;
-	int			quit = 0;
-	while (!quit)
-		while (SDL_PollEvent(&event) == 1)
-		{
-			if (event.type == SDL_KEYDOWN)
-			{
-				ft_putnbrendl(event.key.keysym.scancode);
-				if (event.key.keysym.scancode == SDL_SCANCODE_ESCAPE)
-				{
-					quit = 1;
-					SDL_GL_DeleteContext(sdl->glcontext);
-					break ;
-				}
-			}
-		}
-	exit (0);
-}
-void		draw_test_sdl(t_sdl *sdl)
-{
-	int	y = sdl->mid[1] - 30;
-	while (y <= sdl->mid[1] + 30)
-	{
-		int	x = sdl->mid[0] - 30;
-		while (x <= sdl->mid[1] + 30)
-		{
-			sdl_putpixel(sdl->surface, x, y, RGB(255, 0, 0));
-			x++;
-		}
-		y++;
-	}
-	SDL_UpdateWindowSurface(sdl->win);
-}
-
 void	*draw_face2(void *f, t_arg args)
 {
-	// ft_putendl("- - - draw_face2");
+	// printf("__ draw_face2\n");
 	t_face	*face;
 	t_mat	*mat;
 
@@ -159,7 +82,7 @@ t_void	*draw_face(t_void *f, t_arg args)
 	return (NULL);
 }
 
-void		draw_obj(t_sdl *sdl, t_obj *obj, t_gl_env *gl_e)
+void		draw_obj(t_glfw *glfw, t_obj *obj, t_gl_env *gl_e)
 {
 	float	c;
 	float	scale;
@@ -169,7 +92,7 @@ void		draw_obj(t_sdl *sdl, t_obj *obj, t_gl_env *gl_e)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	gluLookAt(0, 0, 1, 0, 0, 0, 0, 1, 0);
+	// gluLookAt(0, 0, 1, 0, 0, 0, 0, 1, 0);
 	glTranslatef(gl_e->pos[0], gl_e->pos[1], gl_e->pos[2]);
 	glRotated(gl_e->rot[0], 1, 0, 0);
 	glRotated(gl_e->rot[1], 0, 1, 0);
@@ -179,13 +102,233 @@ void		draw_obj(t_sdl *sdl, t_obj *obj, t_gl_env *gl_e)
 	glDepthFunc(GL_LEQUAL);
 	srand(1);
 	for_list_args((t_void*)(obj->f), \
-		init_args(sdl, obj, &c, &gl_e->tex), draw_face);
+		init_args(glfw, obj, &c, &gl_e->tex), draw_face);
 	glFlush();
-	SDL_GL_SwapWindow(sdl->win);
+	// SDL_GL_SwapWindow(glfw->win);
 }
 
-void		display_object(t_sdl *sdl, t_objfile **objf, t_xpm **xpm, int *len)
+void		old_draw_glfour(t_glfw *glfw)
 {
+	const char *vs_source[] =
+	{
+		"#version 410 core                                                 \n"
+		"                                                                  \n"
+		"void main(void)                                                   \n"
+		"{                                                                 \n"
+		"    const vec4 vertices[] = vec4[](vec4( 0.25, -0.25, 0.5, 1.0),  \n"
+		"                                   vec4(-0.25, -0.25, 0.5, 1.0),  \n"
+		"                                   vec4( 0.25,  0.25, 0.5, 1.0)); \n"
+		"                                                                  \n"
+		"    gl_Position = vertices[gl_VertexID];                          \n"
+		"}                                                                 \n"
+	};
+	printf("%s\n", *vs_source);
+	const char *fs_source[] =
+	{
+		"#version 410 core                                                 \n"
+		"                                                                  \n"
+		"out vec4 color;                                                   \n"
+		"                                                                  \n"
+		"void main(void)                                                   \n"
+		"{                                                                 \n"
+		"    color = vec4(0.0, 0.8, 1.0, 1.0);                             \n"
+		"}                                                                 \n"
+	};
+	// printf("%s\n", *fs_source);
+
+	GLuint	program;
+	GLuint	vao;
+	GLuint	fs;
+	GLuint	vs;
+	fs = glCreateShader(GL_FRAGMENT_SHADER);
+	glShaderSource(fs, 1, fs_source, NULL);
+	glCompileShader(fs);
+	vs = glCreateShader(GL_VERTEX_SHADER);
+	glShaderSource(vs, 1, vs_source, NULL);
+	glCompileShader(vs);
+	program = glCreateProgram();
+	glAttachShader(program, vs);
+	glAttachShader(program, fs);
+	glLinkProgram(program);
+	glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao);
+	glUseProgram(program);
+	while (!glfwWindowShouldClose(glfw->win))
+	{
+		static const GLfloat green[] = { 0.0f, 0.25f, 0.0f, 1.0f };
+		glClearBufferfv(GL_COLOR, 0, green);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+		glfwSwapBuffers(glfw->win);
+		glfwPollEvents();
+	}
+	glDeleteVertexArrays(1, &vao);
+	glDeleteProgram(program);
+}
+
+void		vertix_to_vector3(t_vertix *vertix, t_vector3 *vector)
+{
+	vector->x = vertix->x;
+	vector->y = vertix->y;
+	vector->z = vertix->z;
+}
+
+void		fill_points_array(float *arr, t_face *face, float scale, float *offset, t_vector3 rot)
+{
+	int			i;
+	t_vector3	tmp;
+
+	i = 0;
+	while (face)
+	{
+		vertix_to_vector3(face->v1, &tmp);
+		rot_vector3_bis(&tmp, &tmp, rot, ROT_WAY);
+		arr[i + 0] = tmp.x * scale + offset[0];
+		arr[i + 1] = tmp.y * scale + offset[1];
+		arr[i + 2] = tmp.z * scale + offset[2];
+		vertix_to_vector3(face->v2, &tmp);
+		rot_vector3_bis(&tmp, &tmp, rot, ROT_WAY);
+		arr[i + 3] = tmp.x * scale + offset[0];
+		arr[i + 4] = tmp.y * scale + offset[1];
+		arr[i + 5] = tmp.z * scale + offset[2];
+		vertix_to_vector3(face->v3, &tmp);
+		rot_vector3_bis(&tmp, &tmp, rot, ROT_WAY);
+		arr[i + 6] = tmp.x * scale + offset[0];
+		arr[i + 7] = tmp.y * scale + offset[1];
+		arr[i + 8] = tmp.z * scale + offset[2];
+		i += 9;
+		face = face->next;
+	}
+}
+
+void		new_draw_glfour(t_glfw *glfw, t_obj *obj)
+{
+	float		scale = 0.20f;
+	float		offset[3] = {0, 0, 0};
+	t_vector3	rot = {DTOR(90), DTOR(10), DTOR(45)};
+
+	int		len = obj->f_amount * 9;
+	float	points[len];
+	fill_points_array(points, obj->f, scale, offset, rot);
+	int i = 0;
+	while (i < obj->f_amount)
+	{
+		printf("%f\t%f\t%f\n", points[i + 0], points[i + 1], points[i + 2]);
+		printf("%f\t%f\t%f\n", points[i + 3], points[i + 4], points[i + 5]);
+		printf("%f\t%f\t%f\n\n", points[i + 6], points[i + 7], points[i + 8]);
+		i++;
+	}
+	printf("i: %d\n", i);
+	printf("points amount: %d\n", obj->f_amount);
+	// exit(0);
+
+	GLuint vbo = 0;
+	GLuint vao = 0;
+	glGenBuffers(1, &vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glBufferData(GL_ARRAY_BUFFER, len * sizeof(float), points, GL_STATIC_DRAW);
+	glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao);
+	glEnableVertexAttribArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+	const char *vertex_shader[] =
+	{
+		"#version 410\n"
+		"in vec3 vp;"
+		"void main() {"
+		"  gl_Position = vec4(vp, 1.0);"
+		"}"
+	};
+	const char* fragment_shader[] =
+	{
+		"#version 410\n"
+		"out vec4 frag_colour;"
+		"void main() {"
+		"  frag_colour = vec4(0.5, 0.0, 0.5, 1.0);"
+		"}"
+	};
+	GLuint vs = glCreateShader(GL_VERTEX_SHADER);
+	glShaderSource(vs, 1, vertex_shader, NULL);
+	glCompileShader(vs);
+	GLuint fs = glCreateShader(GL_FRAGMENT_SHADER);
+	glShaderSource(fs, 1, fragment_shader, NULL);
+	glCompileShader(fs);
+	GLuint shader_programme = glCreateProgram();
+	glAttachShader(shader_programme, fs);
+	glAttachShader(shader_programme, vs);
+	glLinkProgram(shader_programme);
+	while(!glfwWindowShouldClose(glfw->win)) {
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glUseProgram(shader_programme);
+		glBindVertexArray(vao);
+		glDrawArrays(GL_TRIANGLES, 0, obj->f_amount * 3);
+		glfwSwapBuffers(glfw->win);
+		glfwPollEvents();
+		if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_ESCAPE))
+			printf("press escape: %d\n", 666);
+		else if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_ENTER))//ENTER
+			printf("Changing material/texture/color.\n");
+		else if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_SPACE))//SPACE
+			printf("Rotatio on/off\n");
+		else if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_LEFT))//gauche
+			printf("going left\n");
+		else if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_RIGHT))//droite
+			printf("going right\n");
+		else if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_DOWN))//bas
+			printf("going bot\n");
+		else if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_UP))//haut
+			printf("going top\n");
+		else if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_1))//pav1
+			printf("going far\n");
+		else if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_0))//pav0
+			printf("going close\n");
+		else if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_7))//pav7
+			printf("rot X up\n");
+		else if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_4))//pav4
+			printf("rot X down\n");
+		else if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_8))//pav8
+			printf("rot Y up\n");
+		else if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_5))//pav5
+			printf("rot Y down\n");
+		else if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_9))//pav9
+			printf("rot Z up\n");
+		else if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_6))//pav6
+			printf("rot Z down\n");
+		else if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_PAGE_UP))//pageUp
+			printf("object ind up\n");
+		else if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_PAGE_DOWN))//pageDown
+			printf("object ind down\n");
+		else if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_HOME))//home
+			printf("texture up\n");
+		else if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_END))//end
+			printf("texture down\n");
+	}
+	/*
+	36	ENTER
+	49	SPACE
+	12	gauche
+	12	droite
+	12	bas
+	12	haut
+	83	pav1
+	82	pav0
+	89	pav7
+	86	pav4
+	91	pav8
+	87	pav5
+	92	pav9
+	88	pav6
+	*/
+	exit(0);
+}
+
+void		display_object(t_glfw *glfw, t_objfile **objf, t_xpm **xpm, int *len)
+{
+	printf("__ display_object\n");
+
+	// old_draw_glfour(glfw);
+	new_draw_glfour(glfw, objf[0]->obj);
+
 	t_sdl_env	*s_e;
 	t_gl_env	*gl_e;
 
@@ -193,22 +336,22 @@ void		display_object(t_sdl *sdl, t_objfile **objf, t_xpm **xpm, int *len)
 	gl_e = init_gl_env(objf, xpm, len);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(90, sdl->size[0] / sdl->size[1], 0.1f, 1000);
+	// gluPerspective(90, glfw->size[0] / glfw->size[1], 0.1f, 1000);
 	glEnable(GL_DEPTH_TEST);
 	glBindTexture(GL_TEXTURE_2D, gl_e->tex_id[0]);
 	while (!s_e->quit)
 	{
-		s_e->start_time = SDL_GetTicks();
-		while (SDL_PollEvent(&s_e->event) && !s_e->quit)
-			if (s_e->event.type == SDL_KEYDOWN && !s_e->event.key.repeat)
-				events(s_e->event.key.keysym.scancode, sdl, s_e, gl_e);
-		s_e->current_time = SDL_GetTicks();
-		s_e->ellapsed_time = s_e->current_time - s_e->last_time;
-		s_e->last_time = s_e->current_time;
-		gl_e->rot[1] += (gl_e->rotate) ? s_e->ellapsed_time / 20 : 0;
-		draw_obj(sdl, gl_e->objf[gl_e->obj_i]->obj, gl_e);
-		s_e->ellapsed_time = SDL_GetTicks() - s_e->start_time;
-		if (s_e->ellapsed_time < s_e->tick)
-			SDL_Delay(s_e->tick - s_e->ellapsed_time);
+		// s_e->start_time = SDL_GetTicks();
+		// while (SDL_PollEvent(&s_e->event) && !s_e->quit)
+		// 	if (s_e->event.type == SDL_KEYDOWN && !s_e->event.key.repeat)
+		// 		events(s_e->event.key.keysym.scancode, glfw, s_e, gl_e);
+		// s_e->current_time = SDL_GetTicks();
+		// s_e->ellapsed_time = s_e->current_time - s_e->last_time;
+		// s_e->last_time = s_e->current_time;
+		// gl_e->rot[1] += (gl_e->rotate) ? s_e->ellapsed_time / 20 : 0;
+		draw_obj(glfw, gl_e->objf[gl_e->obj_i]->obj, gl_e);
+		// s_e->ellapsed_time = SDL_GetTicks() - s_e->start_time;
+		// if (s_e->ellapsed_time < s_e->tick)
+		// 	SDL_Delay(s_e->tick - s_e->ellapsed_time);
 	}
 }

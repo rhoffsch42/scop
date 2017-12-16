@@ -176,9 +176,9 @@ int		main(int ac, char **av)
 	// exit(0);
 	object_tab = (t_objfile**)list_to_tab((t_void*)(e->objfile));
 	texture_tab = (t_xpm**)list_to_tab((t_void*)(e->xpmfile));
-	e->sdl = init_sdl();
+	e->glfw = init_glfw();
 	(void)texture_tab;
-	display_object(e->sdl, object_tab, texture_tab, \
+	display_object(e->glfw, object_tab, texture_tab, \
 		(int[2]){ft_listlen(e->objfile), ft_listlen(e->xpmfile)});
 	// display_object(e->sdl, e->objfile);
 	// free_t_env((t_void*)e);

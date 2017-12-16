@@ -14,10 +14,20 @@ NAME			=	scop
 CC				=	gcc
 CFLAGS			=	-Wall -Wextra -Werror -g
 
-SDL_DST			=	SDL
-INCLUDE			=	-I includes -I libft/includes -I ./$(SDL_DST)/include -I /usr/include
-SDL				=	`./$(SDL_DST)/bin/sdl2-config --cflags --libs` -lSDL2_image
+INCLUDE			=	-I includes \
+					-I libft/includes \
+					-I /Users/rhoffsch/.brew/Cellar/glfw/3.2.1/include \
+					-I /Users/rhoffsch/.brew/Cellar/glew/2.1.0/include
+					# -I ./$(SDL_DST)/include -I /usr/include
+					# -I /System/Library/Frameworks/OpenGL.framework/Versions/A/Headers/
+					# -I /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks/OpenGL.framework/Versions/A/Headers
+					#-I /Developer/NVIDIA/CUDA-9.0/extras/CUPTI/include #Mac42
 
+FRAMEWORKS		=	-framework OpenGL
+
+# SDL				=	`./$(SDL_DST)/bin/sdl2-config --cflags --libs` -lSDL2_image
+GLFW			=	/Users/rhoffsch/.brew/Cellar/glfw/3.2.1/lib/libglfw.dylib
+GLEW			=	/Users/rhoffsch/.brew/Cellar/glew/2.1.0/lib/libGLEW.2.1.dylib
 
 CFILE			=	main.c \
 					init1.c \
@@ -39,14 +49,13 @@ CFILE			=	main.c \
 					free_struct2.c \
 					for_list.c \
 					list_to_tab.c \
-					sdl_putpixel.c \
 					display.c \
-					event.c \
 					xpm_load.c \
 					xpm_data.c \
 					xpm_to_glid.c \
 					data_parsing.c \
 					color.c \
+					rot_vector.c \
 					misc.c
 
 HFILE			=	scop.h
@@ -62,18 +71,16 @@ OBJ				=	$(patsubst %.c, $(ODIR)%.o, $(CFILE))
 
 all: compile
 
-compile: lib sdl
+compile: lib
 	@mkdir -p $(ODIR)
 	@$(MAKE) $(NAME)
 
 lib:
 	@$(MAKE) -C libft/
 
-sdl:
-	@$(MAKE) -f Makefile.sdl
-
 $(NAME): $(SRC) $(OBJ)
-	@$(CC) $(CFLAGS) $(OBJ) -o $(NAME) -L libft/ -lft $(SDL) -lGL -lGLU #-lglut
+	@#$(CC) $(CFLAGS) $(OBJ) -o $(NAME) -L libft/ -lft $(SDL) -lGL -lGLU #-lglut
+	@$(CC) $(CFLAGS) $(OBJ) -o $(NAME) -L libft/ -lft $(FRAMEWORKS) $(GLFW) $(GLEW)
 	@echo "\033[33;32m$(NAME) \033[33;37mcompiled"
 	@echo "\033[33;35m$(NAME) End\033[33;37m"
 
@@ -94,7 +101,6 @@ fclean: clean
 	@echo "\033[33;32m$(NAME) \033[33;31mdeleted\033[33;37m"
 
 pclean: fclean
-	make fclean -C ./libft/
-	make fclean -f Makefile.sdl
+	@$(MAKE) fclean -C libft/
 
 re: fclean all

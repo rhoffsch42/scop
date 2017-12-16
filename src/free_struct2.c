@@ -84,19 +84,18 @@ t_void	*free_t_objfile(t_void *list)
 	return (next);
 }
 
-t_void	*free_t_sdl(t_void *list)
+t_void	*free_t_glfw(t_void *list)
 {
-	t_sdl	*ptr;
+	t_glfw	*ptr;
 	t_void	*next;
 
 	if (!list)
 		return (NULL);
 	next = list->next;
-	ptr = (t_sdl*)list;
+	ptr = (t_glfw*)list;
 	ft_strdel(&ptr->title);
-	SDL_DestroyWindow(ptr->win);
-	SDL_FreeSurface(ptr->surface);
-	ft_bzero(list, sizeof(t_sdl));
+	// SDL_DestroyWindow(ptr->win);
+	ft_bzero(list, sizeof(t_glfw));
 	free(list);
 	ptr = NULL;
 	list = NULL;

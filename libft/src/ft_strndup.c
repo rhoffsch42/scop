@@ -25,6 +25,7 @@ char	*ft_strndup(char *src, int start, int end)
 	if (src == NULL || start < 0 || start > end)
 		return (NULL);
 	dst = (char*)malloc(sizeof(char) * (end - start + 2));
+	i = 0;
 	while (start <= end)
 	{
 		dst[i] = src[start];

@@ -12,7 +12,7 @@ t_void	*free_t_env(t_void *list)
 	ft_free_list(ptr->objfile, free_t_objfile);
 	ft_free_list(ptr->mtlfile, free_t_mtlfile);
 	ft_free_list(ptr->dir, free_t_str);
-	free_t_sdl((t_void*)ptr->sdl);
+	free_t_glfw((t_void*)ptr->glfw);
 	ft_free_list(ptr->chart, free_t_rgb);
 	ft_bzero(list, sizeof(t_env));
 	free(list);

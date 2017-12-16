@@ -14,15 +14,17 @@
 # define SCOP_H
 
 # include <libft.h>
-# include <SDL2/SDL.h>
-# include <GL/gl.h>
-# include <GL/glu.h>
+# include <GL/glew.h>
+# include <GLFW/glfw3.h>
+
 # include <unistd.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
 # include <errno.h>
 # include <stdbool.h>
+# include <stddef.h>
+# include <math.h>
 
 /*
 0	GL_POINTS
@@ -54,8 +56,10 @@
 # define FPS			40
 # define FRAME_TICK		(1000 / FPS)
 
+
 # define COLOR_RGB_1	"/etc/X11/rgb.txt"
-# define COLOR_RGB_2	"/usr/share/X11/rgb.txt"
+// # define COLOR_RGB_2	"/usr/share/X11/rgb.txt"
+# define COLOR_RGB_2	"/usr/share/emacs/26.0.50/etc/rgb.txt" //MAC 42
 # define DEF_WIN_TITLE	"Default title"
 # define DEF_WIN_X		800
 # define DEF_WIN_Y		800
@@ -74,13 +78,16 @@
 # define OBJ_BAD_FORMAT		100
 # define DATA_CORRUPT		101
 # define MTL_BAD_FORMAT		102
-# define SDL_FAIL			103
-# define SDL_BAD_BPP		104
+# define GLEW_FAIL			103
+# define GLFW_FAIL			104
 # define XPM_BAD_FORMAT		105
 # define RGB_FILE_ERR		106
 # define RGB_FILE_OPEN		"Error : can't open rgb.txt"
 # define RGB_FILE_EMPTY		"Error : rgb.txt is empty"
 # define OBJ_ERROR			"Error : bad obj format"
+# define GLEW_WIN_FAIL		"Failed initialize GLEW"
+# define GLFW_INIT_FAIL		"Failed initialize GLFW."
+# define GLFW_WIN_FAIL		"Failed to create GLFW window."
 # define OBJ_FACE_ERROR		"Incorrect vertix number"
 # define OBJF_NO_OBJ		"Error : This file has no valid object"
 # define MTLF_NO_MAT		"Error : This file has no valid material"
@@ -112,6 +119,19 @@
 # define MTL_DENSITY	"Ni"
 # define MTL_OPACITY	"d"
 # define MTL_ILLUM		"illum"
+
+typedef struct			s_vector2
+{
+	float				x;
+	float				y;
+}						t_vector2;
+
+typedef struct			s_vector3
+{
+	float				x;
+	float				y;
+	float				z;
+}						t_vector3;
 
 typedef struct			s_rgb
 {
@@ -204,15 +224,13 @@ typedef struct			s_objfile
 	t_obj				*obj;
 }						t_objfile;
 
-typedef struct			s_sdl
+typedef struct			s_glfw
 {
 	int					size[2];
 	int					mid[2];
 	char				*title;
-	SDL_Window			*win;
-	SDL_Surface			*surface;
-	SDL_GLContext		glcontext;
-}						t_sdl;
+	GLFWwindow			*win;
+}						t_glfw;
 
 typedef struct			s_xpm
 {
@@ -231,13 +249,13 @@ typedef struct			s_env
 	t_mtlfile			*mtlfile;
 	t_xpm				*xpmfile;
 	t_str				*dir;
-	t_sdl				*sdl;
+	t_glfw				*glfw;
 	t_rgb				*chart;
 }						t_env;
 
 typedef struct			s_sdl_env
 {
-	SDL_Event			event;
+	// SDL_Event			event;
 	int					quit;
 	int					virtual_time;
 	int					frame;
@@ -250,19 +268,19 @@ typedef struct			s_sdl_env
 
 typedef struct			s_gl_env
 {
-	t_objfile	**objf;
-	t_xpm		**xpm;
-	GLuint		*tex_id;
-	int			obj_len;
-	int			xpm_len;
-	int			obj_i;
-	int			tex_i;
-	int			tex;
-	int			rotate;
-	int			rot[3];
-	float		pos[3];
-	int			angle;
-	float		vector;
+	t_objfile			**objf;
+	t_xpm				**xpm;
+	GLuint				*tex_id;
+	int					obj_len;
+	int					xpm_len;
+	int					obj_i;
+	int					tex_i;
+	int					tex;
+	int					rotate;
+	int					rot[3];
+	float				pos[3];
+	int					angle;
+	float				vector;
 }						t_gl_env;
 ////debug, a delete apres
 
@@ -283,7 +301,7 @@ t_void		*free_t_mat(t_void *list);
 t_void		*free_t_mtlfile(t_void *list);
 t_void		*free_t_obj(t_void *list);
 t_void		*free_t_objfile(t_void *list);
-t_void		*free_t_sdl(t_void *list);
+t_void		*free_t_glfw(t_void *list);
 
 // color
 t_rgb		*init_rgb(void);
@@ -316,7 +334,7 @@ t_env		*init_env(void);
 t_obj		*init_obj(void);
 t_mat		*init_mat(void);
 t_xpm		*init_xpm(void);
-t_sdl		*init_sdl(void);
+t_glfw		*init_glfw(void);
 t_sdl_env	*init_sdl_env(void);
 t_gl_env	*init_gl_env(t_objfile **objf, t_xpm **xpm, int *len);
 
@@ -362,16 +380,21 @@ t_str		*add_value_f(t_str *ptr, float *var);
 void		error_mtl(char *s1, char *s2);
 void		mtl_checks(t_mtlfile *mtlfile);
 
-//sdl
-void		sdl_putpixel(SDL_Surface *surface, int x, int y, Uint32 pixel);
-void		display_object(t_sdl *sdl, t_objfile **objf, t_xpm **xpm, int *len);
+//sdl/glfw
+void		display_object(t_glfw *glfw, t_objfile **objf, t_xpm **xpm, int *len);
 void		translate_obj(t_vertix *vertix, float x, float y, float z);
 
 // sdl events
-void		events(int scancode, t_sdl *sdl, t_sdl_env *sdl_e, t_gl_env *gl_e);
+// void		events(int scancode, t_sdl *sdl, t_sdl_env *sdl_e, t_gl_env *gl_e);
 // int			event_obj_rotate(int scancode, int *rot, int angle);
 // int			event_obj_translate(int scancode, float *pos, float vector);
 // int			event_assets(int scancode, t_objfile **objf, GLuint *texture_id, t_arg args);
 // int			event_properties(int scancode, int *rotate, int *tex);
+
+//rotations matricielles
+void	rot_vector2(t_vector2 *src, t_vector2 *dst, float rad, float rot_direction);
+void	rot_vector3_bis(t_vector3 *src, t_vector3 *dst, t_vector3 rad, float rot_direction);
+void	rot_vector3(t_vector3 *src, t_vector3 *dst, t_vector3 rad, float rot_direction);
+void	revrot_vector3(t_vector3 *src, t_vector3 *dst, t_vector3 rad, float rot_direction);
 
 #endif
