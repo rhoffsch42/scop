@@ -20,7 +20,8 @@ SDL				=	`./$(SDL_DST)/bin/sdl2-config --cflags --libs` -lSDL2_image
 
 
 CFILE			=	main.c \
-					init.c \
+					init1.c \
+					init2.c \
 					load_file.c \
 					manage_file.c \
 					manage_file2.c \
@@ -40,8 +41,10 @@ CFILE			=	main.c \
 					list_to_tab.c \
 					sdl_putpixel.c \
 					display.c \
+					event.c \
 					xpm_load.c \
 					xpm_data.c \
+					xpm_to_glid.c \
 					data_parsing.c \
 					color.c \
 					misc.c

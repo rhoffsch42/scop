@@ -46,11 +46,16 @@ bonus a faire:
 lets go openGL
 
 a faire:
-	texture gl
+	texture gl:
+		pas d'ettirement: actuellement le dessin se faire sur le plan XY
+		faire en sorte que les faces ne faisant pas parti du plan used aient une texture pas etiree.
+			-> prendre la taille de la face et l'appliquer sur le plan used
+			-> comportement variable en fonctione de la forme de l'objet
 	utilisation du .mtl
 	les rotations sont faites avec le repere de l'objet (pas de pb)
 		-> rotater avec une autre fonction opengl, repere monde
 fait:
+	texture gl
 	translation
 	perspective (ce qui est loin est plus petit)
 	afficher object

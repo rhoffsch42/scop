@@ -51,7 +51,7 @@
 
 # define DRAW_MODE		GL_POINTS
 // # define DRAW_MODE		GL_LINE_STRIP
-# define FPS			10
+# define FPS			40
 # define FRAME_TICK		(1000 / FPS)
 
 # define COLOR_RGB_1	"/etc/X11/rgb.txt"
@@ -235,6 +235,35 @@ typedef struct			s_env
 	t_rgb				*chart;
 }						t_env;
 
+typedef struct			s_sdl_env
+{
+	SDL_Event			event;
+	int					quit;
+	int					virtual_time;
+	int					frame;
+	int					tick;
+	int					start_time;
+	int					current_time;
+	int					ellapsed_time;
+	int					last_time;
+}						t_sdl_env;
+
+typedef struct			s_gl_env
+{
+	t_objfile	**objf;
+	t_xpm		**xpm;
+	GLuint		*tex_id;
+	int			obj_len;
+	int			xpm_len;
+	int			obj_i;
+	int			tex_i;
+	int			tex;
+	int			rotate;
+	int			rot[3];
+	float		pos[3];
+	int			angle;
+	float		vector;
+}						t_gl_env;
 ////debug, a delete apres
 
 // libft
@@ -288,6 +317,8 @@ t_obj		*init_obj(void);
 t_mat		*init_mat(void);
 t_xpm		*init_xpm(void);
 t_sdl		*init_sdl(void);
+t_sdl_env	*init_sdl_env(void);
+t_gl_env	*init_gl_env(t_objfile **objf, t_xpm **xpm, int *len);
 
 //parsing args
 void		load_file(t_env *e, int ac, char **av);
@@ -307,6 +338,7 @@ void		error_xpm(char *s1, char *s2);
 t_xpm		*load_xpm(char *path, t_rgb *chart);
 t_str		*build_pixels(t_xpm *xpm, t_rgb *rgb_tokens, int t_size, t_str *ptr);
 char		*chk_separator(char *str);
+GLuint		xpm_to_glid(t_xpm *xpm);
 
 //parsing .obj
 t_obj		*build_objects(char *path);
@@ -334,5 +366,12 @@ void		mtl_checks(t_mtlfile *mtlfile);
 void		sdl_putpixel(SDL_Surface *surface, int x, int y, Uint32 pixel);
 void		display_object(t_sdl *sdl, t_objfile **objf, t_xpm **xpm, int *len);
 void		translate_obj(t_vertix *vertix, float x, float y, float z);
+
+// sdl events
+void		events(int scancode, t_sdl *sdl, t_sdl_env *sdl_e, t_gl_env *gl_e);
+// int			event_obj_rotate(int scancode, int *rot, int angle);
+// int			event_obj_translate(int scancode, float *pos, float vector);
+// int			event_assets(int scancode, t_objfile **objf, GLuint *texture_id, t_arg args);
+// int			event_properties(int scancode, int *rotate, int *tex);
 
 #endif
