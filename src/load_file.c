@@ -24,6 +24,7 @@ static void		add_directory(char **av, int i, t_str **dir)
 	t_str	*new_dir;
 	t_str	*ptr;
 
+	printf("__ add_directory\n");
 	if (av[i + 1] == NULL)
 		ft_errexit(SCOP_DIR_ERR, RED, BAD_ARGS);
 	if (check_perm(av[i + 1]) && is_dir())
@@ -48,11 +49,13 @@ void	load_file(t_env *e, int ac, char **av)
 {
 	int		i;
 
+	printf("__ load_file\n");
 	if (ac == 1)
 		error_arg(av[0], SCOP_BAD_ARG);
 	i = 1;
 	while (av[i])
 	{
+		printf("%s\n", av[i]);
 		if (ft_strcmp(av[i], SCOP_DIR) == 0)
 		{
 			add_directory(av, i, &(e->dir));

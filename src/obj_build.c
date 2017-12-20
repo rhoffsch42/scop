@@ -38,6 +38,7 @@ static void		build_data(t_obj *obj, t_str *ptr)
 {
 	char	keyword[100];
 
+	printf("__ build_data (obj)\n");
 	while (ptr)
 	{
 		sscanf(ptr->str, "%s", keyword);

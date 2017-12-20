@@ -159,12 +159,15 @@ int		main(int ac, char **av)
 	// exit(0);
 	// test_sscanf(lst);
 	// test_texture(av[1]);
+	ft_puttab(av);
 	ft_putendl("________________BEGIN________________");
 	t_env		*e;
 	t_objfile	**object_tab;
 	t_xpm		**texture_tab;
 	e = init_env();
+	printf("__ load_file\n");
 	load_file(e, ac, av);
+	printf("__ dump_datafile\n");
 	dump_datafile(e->objfile, e->mtlfile, e->dir, e->xpmfile);
 	t_rgb *rgb = get_color(e->chart, "medium slate blue");
 	if (rgb)

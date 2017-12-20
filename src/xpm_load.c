@@ -87,6 +87,7 @@ t_xpm		*load_xpm(char *path, t_rgb *chart)
 	char	*all;
 	t_xpm	*xpm;
 
+	printf("__ load_xpm\n");
 	if (!is_typefile(path, ".xpm"))
 	{
 		ft_putstr_fd(path, STDERR_FILENO);

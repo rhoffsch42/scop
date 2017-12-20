@@ -11,6 +11,7 @@ static void		build_data(t_mat **mat, t_str *ptr)
 {
 	char	keyword[100];
 
+	printf("__ build_data (mtl)\n");
 	while (ptr)
 	{
 		sscanf(ptr->str, "%s", keyword);
@@ -40,14 +41,15 @@ t_mat			*build_material(char *path)
 	t_str	*lst;
 	t_mat	*new_mat;
 
+	printf("__ build_material\n");
 	lst = ft_getfile(path);
 	remove_comments(lst, COMMENT_CHAR);
 	remove_white_spaces(lst);
 	lst = (t_str*)remove_list((t_void*)lst, is_empty, free_t_str);
 	new_mat = NULL;
 	build_data(&new_mat, lst);
-
 	ft_free_list(lst, free_t_str);
 	lst = NULL;
+	printf("__ build_material end\n");
 	return (new_mat);
 }

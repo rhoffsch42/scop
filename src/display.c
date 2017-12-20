@@ -1,65 +1,9 @@
 #include <scop.h>
 
-void		old_draw_glfour(t_glfw *glfw)
+const char* GL_type_to_string(GLenum type)
 {
-	const char *vs_source[] =
-	{
-		"#version 410 core                                                 \n"
-		"                                                                  \n"
-		"void main(void)                                                   \n"
-		"{                                                                 \n"
-		"    const vec4 vertices[] = vec4[](vec4( 0.25, -0.25, 0.5, 1.0),  \n"
-		"                                   vec4(-0.25, -0.25, 0.5, 1.0),  \n"
-		"                                   vec4( 0.25,  0.25, 0.5, 1.0)); \n"
-		"                                                                  \n"
-		"    gl_Position = vertices[gl_VertexID];                          \n"
-		"}                                                                 \n"
-	};
-	printf("%s\n", *vs_source);
-	const char *fs_source[] =
-	{
-		"#version 410 core                                                 \n"
-		"                                                                  \n"
-		"out vec4 color;                                                   \n"
-		"                                                                  \n"
-		"void main(void)                                                   \n"
-		"{                                                                 \n"
-		"    color = vec4(0.0, 0.8, 1.0, 1.0);                             \n"
-		"}                                                                 \n"
-	};
-	// printf("%s\n", *fs_source);
-
-	GLuint	program;
-	GLuint	vao;
-	GLuint	fs;
-	GLuint	vs;
-	fs = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fs, 1, fs_source, NULL);
-	glCompileShader(fs);
-	vs = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(vs, 1, vs_source, NULL);
-	glCompileShader(vs);
-	program = glCreateProgram();
-	glAttachShader(program, vs);
-	glAttachShader(program, fs);
-	glLinkProgram(program);
-	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);
-	glUseProgram(program);
-	while (!glfwWindowShouldClose(glfw->win))
-	{
-		static const GLfloat green[] = { 0.0f, 0.25f, 0.0f, 1.0f };
-		glClearBufferfv(GL_COLOR, 0, green);
-		glDrawArrays(GL_TRIANGLES, 0, 3);
-		glfwSwapBuffers(glfw->win);
-		glfwPollEvents();
-	}
-	glDeleteVertexArrays(1, &vao);
-	glDeleteProgram(program);
-}
-
-const char* GL_type_to_string(GLenum type) {
-  switch(type) {
+  switch(type)
+  {
     case GL_BOOL: return "bool";
     case GL_INT: return "int";
     case GL_FLOAT: return "float";
@@ -77,6 +21,7 @@ const char* GL_type_to_string(GLenum type) {
   }
   return "other";
 }
+
 void _print_programme_info_log(GLuint programme)
 {
 	int		max_len = 2048;
@@ -86,7 +31,8 @@ void _print_programme_info_log(GLuint programme)
 	printf("program info log for GL index %u:\n%s", programme, program_log);
 }
 
-void print_all(GLuint programme) {
+void print_all(GLuint programme)
+{
   printf("--------------------\nshader programme %i info:\n", programme);
   int params = -1;
   glGetProgramiv(programme, GL_LINK_STATUS, &params);
@@ -160,7 +106,6 @@ void print_all(GLuint programme) {
   }
 
   _print_programme_info_log(programme);
-  // exit(0);
 }
 
 void		vertix_to_vector3(t_vertix *vertix, t_vector3 *vector)
@@ -192,6 +137,25 @@ void		fill_color_array(float *arr, t_face *face, t_gl_env *gl_e)
 	}
 }
 
+void		fill_tex_array(float *arr, t_face *face, t_gl_env *gl_e)
+{
+	int			i;
+
+	(void)gl_e;
+	i = 0;
+	while (face)
+	{
+		arr[i + 0] = face->v1->x;
+		arr[i + 1] = face->v1->y;
+		arr[i + 2] = face->v2->x;
+		arr[i + 3] = face->v2->y;
+		arr[i + 4] = face->v3->x;
+		arr[i + 5] = face->v3->y;
+		i += 6;
+		face = face->next;
+	}
+}
+
 void		fill_points_array(float *arr, t_face *face, t_gl_env *gl_e)
 {
 	int			i;
@@ -219,38 +183,29 @@ void		fill_points_array(float *arr, t_face *face, t_gl_env *gl_e)
 		face = face->next;
 	}
 }
-// float colours[] = {
-//   1.0f, 0.0f,  0.0f,
-//   0.0f, 1.0f,  0.0f,
-//   0.0f, 0.0f,  1.0f
-// };
-void		show_why(GLuint shader)
+
+void		gl_compile_error(GLuint shader, char *intro)
 {
 	GLsizei	maxl = 1000;
 	GLsizei	l;
-	GLchar	*info = malloc(1000);
+	GLchar	*info = safe_malloc(1000);
 
 	glGetShaderInfoLog(shader, maxl, &l, info);
-	printf("%s\n", info);
-	// void glGetShaderInfoLog(	GLuint shader,
- 	// GLsizei maxLength,
- 	// GLsizei *length,
- 	// GLchar *infoLog);
-	exit(0);
+	printf("%s\n%s\n", intro, info);
+	ft_errexit(GL_COMPILE_SHADER, RED, GL_ERROR);
 }
 
-void		draw_glfour(t_glfw* glfw, t_obj *obj, t_xpm *xpm, t_gl_env *gl_e)
+void		draw_glfour(t_glfw* glfw, t_obj *obj, t_gl_env *gl_e)
 {
-	printf("__ draw_glfour\n");
-	(void)xpm;
+	// printf("__ draw_glfour\n");
 	(void)glfw;
-	int		len = obj->f_amount * 9;
+	int		len = obj->f_amount * 3 * 3;
 	float	points[len];
-	float	colours[len];
+	float	colors[len];
+	float	tex[obj->f_amount * 3 * 2];
 	fill_points_array(points, obj->f, gl_e);
-	printf("___ data points generated\n");
-	fill_color_array(colours, obj->f, gl_e);
-	printf("___ data colours generated\n");
+	fill_color_array(colors, obj->f, gl_e);
+	fill_tex_array(tex, obj->f, gl_e);
 	// int i = 0;
 	// while (i < obj->f_amount)
 	// {
@@ -262,96 +217,139 @@ void		draw_glfour(t_glfw* glfw, t_obj *obj, t_xpm *xpm, t_gl_env *gl_e)
 	// printf("i: %d\n", i);
 	// printf("points amount: %d\n", obj->f_amount);
 
+	glGenVertexArrays(1, &gl_e->vao);
+	glBindVertexArray(gl_e->vao);
+	glEnableVertexAttribArray(0);
+
 	glGenBuffers(1, &gl_e->vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, gl_e->vbo);
 	glBufferData(GL_ARRAY_BUFFER, len * sizeof(float), points, GL_STATIC_DRAW);
-
-	GLuint colours_vbo = 0;
-	glGenBuffers(1, &colours_vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, colours_vbo);
-	glBufferData(GL_ARRAY_BUFFER, len * sizeof(float), colours, GL_STATIC_DRAW);
-
-	glGenVertexArrays(1, &gl_e->vao);
-	glBindVertexArray(gl_e->vao);
-	// glEnableVertexAttribArray(0);
-	glBindBuffer(GL_ARRAY_BUFFER, gl_e->vbo);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
-	glBindBuffer(GL_ARRAY_BUFFER, colours_vbo);
+	glEnableVertexAttribArray(0);
+
+	glGenBuffers(1, &gl_e->colors_vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, gl_e->colors_vbo);
+	glBufferData(GL_ARRAY_BUFFER, len * sizeof(float), colors, GL_STATIC_DRAW);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+	glEnableVertexAttribArray(1);
 
-	glEnableVertexAttribArray(0);// = glVertexAttribPointer(0, ...) <- this number
-	glEnableVertexAttribArray(1);// = glVertexAttribPointer(1, ...) <- this number
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, gl_e->tex_id[gl_e->tex_i]);
+	glGenBuffers(1, &gl_e->tex_vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, gl_e->tex_vbo);
+	glBufferData(GL_ARRAY_BUFFER, obj->f_amount * 3 * 2 * sizeof(float), tex, GL_STATIC_DRAW);
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, NULL);
+	glEnableVertexAttribArray(2);
 
-	/*
-	"#version 410\n"
-	*/
+
+	const char *vertex_shader_old[] =
+	{
+		"#version 410\n"
+		"layout(location = 0) in vec3 vertex_position;"
+		"layout(location = 1) in vec3 vertex_colour;"
+		"out vec3 colour;"
+		"void main() {"
+		"  colour = vertex_colour;"
+		"  gl_Position = vec4(vertex_position, 1.0);"
+		"}"
+	};(void)vertex_shader_old;
 	const char *vertex_shader[] =
 	{
 		"#version 410\n"
 		"layout(location = 0) in vec3 vertex_position;"
 		"layout(location = 1) in vec3 vertex_colour;"
+		"layout(location = 2) in vec2 vertexUV;"
 
+		"out vec2 UV;"
 		"out vec3 colour;"
 
-		"void main() {"
-		"  colour = vertex_colour;"
-		"  gl_Position = vec4(vertex_position, 1.0);"
+		"void main(){"
+		"	colour = vertex_colour;"
+		"	gl_Position = vec4(vertex_position, 1.0);"
+		"	UV = vertexUV;"
 		"}"
 	};
-	const char *vertex_shader_old[] =
-	{
-		"#version 410\n"
-		"in vec3 vp;"
-		"void main() {"
-		"  gl_Position = vec4(vp, 1.0);"
-		"}"
-	};(void)vertex_shader_old;
-
 	const char *fragment_shader[] =
 	{
 		"#version 410\n"
-		"in vec3 colour;"
-		"out vec4 frag_colour;"
+		/*texture mod*/
+		"in vec2 UV;"
+		"out vec4 color;"
+		"uniform sampler2D myTextureSampler;"
 
-		"void main() {"
-		"  frag_colour = vec4(colour, 1.0);"
+		/*color mod*/
+		// "in vec3 colour;"
+		// "out vec4 frag_colour;"
+
+		"void main(){"
+		/*texture mod*/
+		"	color = texture( myTextureSampler, UV );"
+		/*color mod*/
+		// "	frag_colour = vec4(colour, 1.0);"
 		"}"
 	};
 	const char *fragment_shader_old[] =
 	{
 		"#version 410\n"
+		"in vec3 colour;"
 		"out vec4 frag_colour;"
 		"void main() {"
-		"  frag_colour = vec4(0.5, 0.0, 0.5, 1.0);"
+		"  frag_colour = vec4(colour, 1.0);"
 		"}"
 	};(void)fragment_shader_old;
+/*
+.glsl
+	uniform bool		smod;
+	uniform bool		tmod;
+	uniform bool		gmod;
+	uniform sampler2D	ltexture;
 
-	GLint	rep;
+.c
+	GLuint	program;
+	GLint	mvploc;
+	GLint	cmdloc;
+	GLint	smdloc;
+	GLint	tmdloc;
+	GLint	gmdloc;
+	GLint	mmdloc;
+	GLint	texloc;
+
+	env->shader.mvploc = glGetUniformLocation(env->shader.program, "mvp");
+	env->shader.smdloc = glGetUniformLocation(env->shader.program, "smod");
+	env->shader.cmdloc = glGetUniformLocation(env->shader.program, "cmod");
+	env->shader.tmdloc = glGetUniformLocation(env->shader.program, "tmod");
+	env->shader.gmdloc = glGetUniformLocation(env->shader.program, "gmod");
+	env->shader.mmdloc = glGetUniformLocation(env->shader.program, "mmod");
+	env->shader.texloc = glGetUniformLocation(env->shader.program, "ltexture");
+
+	glUniform1i(env->shader.smdloc, env->mod.shading);
+	glUniform1i(env->shader.cmdloc, env->mod.color);
+	glUniform1i(env->shader.gmdloc, env->mod.greyscale);
+	glUniform1i(env->shader.mmdloc, env->mod.mapping);
+	glUniform1i(env->shader.tmdloc, env->mod.texture);
+	*/
+
+
+	GLint	ret;
 	gl_e->vs = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(gl_e->vs, 1, vertex_shader, NULL);
 	glCompileShader(gl_e->vs);
-	glGetShaderiv(gl_e->vs, GL_COMPILE_STATUS, &rep);
-	if (rep == GL_FALSE)
-	{
-		printf("vertex_shader compilation error:\n");
-		show_why(gl_e->vs);
-	}
+	glGetShaderiv(gl_e->vs, GL_COMPILE_STATUS, &ret);
+	if (ret == GL_FALSE)
+		gl_compile_error(gl_e->vs, "vertex_shader compilation error:");
 
 	gl_e->fs = glCreateShader(GL_FRAGMENT_SHADER);
 	glShaderSource(gl_e->fs, 1, fragment_shader, NULL);
 	glCompileShader(gl_e->fs);
-	glGetShaderiv(gl_e->fs, GL_COMPILE_STATUS, &rep);
-	if (rep == GL_FALSE)
-	{
-		printf("fragment_shader compilation error:\n");
-		show_why(gl_e->fs);
-	}
+	glGetShaderiv(gl_e->fs, GL_COMPILE_STATUS, &ret);
+	if (ret == GL_FALSE)
+		gl_compile_error(gl_e->fs, "fragment_shader compilation error:");
 
 	gl_e->shader_programme = glCreateProgram();
+	glGetUniformLocation(gl_e->shader_programme, "display_mod");
+	glUniform1i(gl_e->display_mod, DISPLAY_COLOR);
 	glAttachShader(gl_e->shader_programme, gl_e->fs);
 	glAttachShader(gl_e->shader_programme, gl_e->vs);
-	// glBindAttribLocation(gl_e->shader_programme, 0, "vertex_position");//mac version for layout keyword (gl 3.2)
-	// glBindAttribLocation(gl_e->shader_programme, 1, "vertex_colour");//mac version for layout keyword (gl 3.2)
 	glLinkProgram(gl_e->shader_programme);
 
 	int params = -1;
@@ -363,11 +361,8 @@ void		draw_glfour(t_glfw* glfw, t_obj *obj, t_xpm *xpm, t_gl_env *gl_e)
 		gl_e->shader_programme);
 		_print_programme_info_log(gl_e->shader_programme);
 		print_all(gl_e->shader_programme);
-		exit(0);
+		exit(GL_ERROR);
 	}
-	else
-		printf("PG LINK OK\n");
-	print_all(gl_e->shader_programme);
 
 	// glDeleteVertexArrays(1, &gl_e->vao);
 	// glDeleteProgram(gl_e->shader_programme);
@@ -384,8 +379,14 @@ void		display_object(t_glfw *glfw, t_objfile **objf, t_xpm **xpm, int *len)
 
 	ft_bzero(boolens, sizeof(char) * 348);
 	gl_e = init_gl_env(objf, xpm, len);
+
+	// glEnable(GL_CULL_FACE); // cull face
+	// glCullFace(GL_BACK); // cull back face
+	// glFrontFace(GL_CW); // GL_CCW for counter clock-wise
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LESS);
 	while(!glfwWindowShouldClose(glfw->win)) {
-		draw_glfour(glfw, objf[gl_e->obj_i]->obj, xpm[gl_e->tex_i], gl_e);
+		draw_glfour(glfw, objf[gl_e->obj_i]->obj, gl_e);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glUseProgram(gl_e->shader_programme);
 		glBindVertexArray(gl_e->vao);
@@ -417,7 +418,6 @@ void		display_object(t_glfw *glfw, t_objfile **objf, t_xpm **xpm, int *len)
 		{
 			boolens[GLFW_KEY_PAGE_DOWN] = 1;
 			gl_e->obj_i = (gl_e->obj_i < gl_e->obj_len - 1) ? gl_e->obj_i + 1 : 0;
-			printf("object ind up\n");
 		}
 		else if (val == GLFW_RELEASE)
 			boolens[GLFW_KEY_PAGE_DOWN] = 0;
@@ -426,7 +426,6 @@ void		display_object(t_glfw *glfw, t_objfile **objf, t_xpm **xpm, int *len)
 		{
 			boolens[GLFW_KEY_PAGE_UP] = 1;
 			gl_e->obj_i = (gl_e->obj_i > 0) ? gl_e->obj_i - 1 : gl_e->obj_len - 1;
-			printf("object ind down\n");
 		}
 		else if (val == GLFW_RELEASE)
 			boolens[GLFW_KEY_PAGE_UP] = 0;
@@ -435,7 +434,6 @@ void		display_object(t_glfw *glfw, t_objfile **objf, t_xpm **xpm, int *len)
 		{
 			boolens[GLFW_KEY_HOME] = 1;
 			gl_e->tex_i = (gl_e->tex_i < gl_e->xpm_len - 1) ? gl_e->tex_i + 1 : 0;
-			printf("texture up\n");
 		}
 		else if (val == GLFW_RELEASE)
 			boolens[GLFW_KEY_HOME] = 0;
@@ -444,7 +442,6 @@ void		display_object(t_glfw *glfw, t_objfile **objf, t_xpm **xpm, int *len)
 		{
 			boolens[GLFW_KEY_END] = 1;
 			gl_e->tex_i = (gl_e->tex_i != 0) ? gl_e->tex_i - 1 : gl_e->xpm_len - 1;
-			printf("texture down\n");
 		}
 		else if (val == GLFW_RELEASE)
 			boolens[GLFW_KEY_END] = 0;
@@ -462,17 +459,17 @@ void		display_object(t_glfw *glfw, t_objfile **objf, t_xpm **xpm, int *len)
 		if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_0))//pav0
 			gl_e->pos.z -= 0.01f;
 		if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_7))//pav7
-			gl_e->rot.x -= RAD;
-		if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_4))//pav4
 			gl_e->rot.x += RAD;
+		if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_4))//pav4
+			gl_e->rot.x -= RAD;
 		if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_8))//pav8
-			gl_e->rot.y -= RAD;
-		if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_5))//pav5
 			gl_e->rot.y += RAD;
+		if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_5))//pav5
+			gl_e->rot.y -= RAD;
 		if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_9))//pav9
-			gl_e->rot.z -= RAD;
-		if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_6))//pav6
 			gl_e->rot.z += RAD;
+		if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_6))//pav6
+			gl_e->rot.z -= RAD;
 
 		if (gl_e->rotate)
 			gl_e->rot.y += RAD;

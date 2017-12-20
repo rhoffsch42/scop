@@ -132,6 +132,7 @@ t_env	*init_env(void)
 {
 	t_env	*e;
 
+	printf("__ init_env\n");
 	e = (t_env*)safe_malloc(sizeof(t_env));
 	e->objfile = NULL;
 	e->mtlfile = NULL;
@@ -147,6 +148,7 @@ t_obj	*init_obj(void)
 	static int	id = 0;
 	t_obj		*object;
 
+	printf("__ init_obj\n");
 	object = (t_obj*)safe_malloc(sizeof(t_obj));
 	object->id = id;
 	object->id_char = ft_itoa(id);
@@ -170,6 +172,7 @@ t_mat	*init_mat(void)
 	static int	id = 0;
 	t_mat		*material;
 
+	printf("__ init_mat\n");
 	material = (t_mat*)safe_malloc(sizeof(t_mat));
 	material->id = id;
 	material->id_char = ft_itoa(id);

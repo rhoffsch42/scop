@@ -4,6 +4,7 @@ t_sdl_env	*init_sdl_env(void)
 {
 	t_sdl_env	*sdl_e;
 
+	printf("__ init_sdl_env\n");
 	sdl_e = (t_sdl_env*)safe_malloc(sizeof(t_sdl_env));
 	ft_bzero(sdl_e, sizeof(t_sdl_env));
 	sdl_e->tick = FRAME_TICK;
@@ -16,6 +17,7 @@ t_gl_env	*init_gl_env(t_objfile **objf, t_xpm **xpm, int *len)
 	t_gl_env	*gl_e;
 	int			i;
 
+	printf("__ init_gl_env\n");
 	gl_e = (t_gl_env*)safe_malloc(sizeof(t_gl_env));
 	ft_bzero(gl_e, sizeof(t_gl_env));
 	gl_e->objf = objf;
@@ -34,6 +36,7 @@ t_gl_env	*init_gl_env(t_objfile **objf, t_xpm **xpm, int *len)
 	gl_e->rotate = 1;
 	gl_e->angle = 10;
 	gl_e->vector = 0.1f;
+	gl_e->scale = 0.20f;
 	return (gl_e);
 }
 
@@ -50,7 +53,7 @@ void	key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	if (action == GLFW_PRESS)
 		printf("press: %d\n", scancode);
 	else if (action == GLFW_RELEASE)
-		printf("release:: %d\n", scancode);
+		printf("release: %d\n", scancode);
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 	{
 		glfwSetWindowShouldClose(window, GL_TRUE);

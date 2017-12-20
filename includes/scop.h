@@ -47,6 +47,7 @@
 # define RGB(r, g, b)	(65536 * (int)(r) + 256 * (int)(g) + (int)(b))
 # define RTOD(x)		(x * (180.0f / M_PI))
 # define DTOR(x)		(x * M_PI / 180.0f)
+# define RAD			0.017453f
 # define ROT_WAY		1
 # define ROT_RIGHT		-1
 # define ROT_LEFT		1
@@ -82,12 +83,14 @@
 # define GLFW_FAIL			104
 # define XPM_BAD_FORMAT		105
 # define RGB_FILE_ERR		106
+# define GL_ERROR			107
 # define RGB_FILE_OPEN		"Error : can't open rgb.txt"
 # define RGB_FILE_EMPTY		"Error : rgb.txt is empty"
 # define OBJ_ERROR			"Error : bad obj format"
 # define GLEW_WIN_FAIL		"Failed initialize GLEW"
 # define GLFW_INIT_FAIL		"Failed initialize GLFW."
 # define GLFW_WIN_FAIL		"Failed to create GLFW window."
+# define GL_COMPILE_SHADER	"OpenGL shader error"
 # define OBJ_FACE_ERROR		"Incorrect vertix number"
 # define OBJF_NO_OBJ		"Error : This file has no valid object"
 # define MTLF_NO_MAT		"Error : This file has no valid material"
@@ -99,26 +102,31 @@
 # define XPM_ERROR			"Error : bad xpm format"
 # define XPM_TOKEN_ERR		"Bad token for remove_comments_vl : "
 
-# define COMMENT_CHAR	"#"
-# define DOUBLE_QUOTE	'"'
+# define COMMENT_CHAR		"#"
+# define DOUBLE_QUOTE		'"'
 
-# define OBJ_MTLFILE	"mtllib"
-# define OBJ_NEW		"o"
-# define OBJ_MTLUSE		"usemtl"
-# define OBJ_VERTIX		"v"
-# define OBJ_TEXTURE	"vt"
-# define OBJ_NORMAL		"vn"
-# define OBJ_FACE		"f"
-# define OBJ_SMOOTH		"s"
+# define OBJ_MTLFILE		"mtllib"
+# define OBJ_NEW			"o"
+# define OBJ_MTLUSE			"usemtl"
+# define OBJ_VERTIX			"v"
+# define OBJ_TEXTURE		"vt"
+# define OBJ_NORMAL			"vn"
+# define OBJ_FACE			"f"
+# define OBJ_SMOOTH			"s"
 
-# define MTL_MAT		"newmtl"
-# define MTL_AMBIANT	"Ka"
-# define MTL_DIFFUSE	"Kd"
-# define MTL_SPECULAR	"Ks"
-# define MTL_SPEC_EXP	"Ns"
-# define MTL_DENSITY	"Ni"
-# define MTL_OPACITY	"d"
-# define MTL_ILLUM		"illum"
+# define MTL_MAT			"newmtl"
+# define MTL_AMBIANT		"Ka"
+# define MTL_DIFFUSE		"Kd"
+# define MTL_SPECULAR		"Ks"
+# define MTL_SPEC_EXP		"Ns"
+# define MTL_DENSITY		"Ni"
+# define MTL_OPACITY		"d"
+# define MTL_ILLUM			"illum"
+
+#define DISPLAY_MODS		3
+#define DISPLAY_TEXTURE		0
+#define DISPLAY_COLOR		1
+#define DISPLAY_MATERIAL	2
 
 typedef struct			s_vector2
 {
@@ -145,8 +153,8 @@ typedef struct			s_rgb
 
 typedef struct			s_arg
 {
-	struct s_arg	*next;
-	void			*ptr[10];
+	struct s_arg		*next;
+	void				*ptr[10];
 }						t_arg;
 
 typedef struct			s_vertix
@@ -268,6 +276,13 @@ typedef struct			s_sdl_env
 
 typedef struct			s_gl_env
 {
+	GLuint				tex_vbo;
+	GLuint				colors_vbo;
+	GLuint				vbo;
+	GLuint				vao;
+	GLuint				vs;
+	GLuint				fs;
+	GLuint				shader_programme;
 	t_objfile			**objf;
 	t_xpm				**xpm;
 	GLuint				*tex_id;
@@ -277,10 +292,12 @@ typedef struct			s_gl_env
 	int					tex_i;
 	int					tex;
 	int					rotate;
-	int					rot[3];
-	float				pos[3];
+	t_vector3			rot;
+	t_vector3			pos;
 	int					angle;
 	float				vector;
+	float				scale;
+	GLint				display_mod;
 }						t_gl_env;
 ////debug, a delete apres
 
