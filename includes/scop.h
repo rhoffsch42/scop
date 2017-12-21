@@ -26,6 +26,10 @@
 # include <stddef.h>
 # include <math.h>
 
+//memory
+#include <sys/resource.h>
+#include <errno.h>
+
 /*
 0	GL_POINTS
 1	GL_LINES
@@ -61,6 +65,8 @@
 # define COLOR_RGB_1	"/etc/X11/rgb.txt"
 // # define COLOR_RGB_2	"/usr/share/X11/rgb.txt"
 # define COLOR_RGB_2	"/usr/share/emacs/26.0.50/etc/rgb.txt" //MAC 42
+# define VSHADER_FILE	"./shaders/vertex_shader.glsl"
+# define FSHADER_FILE	"./shaders/fragment_shader.glsl"
 # define DEF_WIN_TITLE	"Default title"
 # define DEF_WIN_X		800
 # define DEF_WIN_Y		800
@@ -123,7 +129,7 @@
 # define MTL_OPACITY		"d"
 # define MTL_ILLUM			"illum"
 
-#define DISPLAY_MODS		3
+#define MODS				3
 #define DISPLAY_TEXTURE		0
 #define DISPLAY_COLOR		1
 #define DISPLAY_MATERIAL	2
@@ -280,9 +286,11 @@ typedef struct			s_gl_env
 	GLuint				colors_vbo;
 	GLuint				vbo;
 	GLuint				vao;
-	GLuint				vs;
-	GLuint				fs;
+	GLuint				vshader;
+	GLuint				fshader;
 	GLuint				shader_programme;
+	GLint				display_mod;
+	int					dismod;
 	t_objfile			**objf;
 	t_xpm				**xpm;
 	GLuint				*tex_id;
@@ -297,9 +305,9 @@ typedef struct			s_gl_env
 	int					angle;
 	float				vector;
 	float				scale;
-	GLint				display_mod;
 }						t_gl_env;
 ////debug, a delete apres
+void	print_memory(void);
 
 // libft
 void		ft_free_list(void *list, t_void* (custom_free)(t_void*));

@@ -2,24 +2,24 @@
 
 const char* GL_type_to_string(GLenum type)
 {
-  switch(type)
-  {
-    case GL_BOOL: return "bool";
-    case GL_INT: return "int";
-    case GL_FLOAT: return "float";
-    case GL_FLOAT_VEC2: return "vec2";
-    case GL_FLOAT_VEC3: return "vec3";
-    case GL_FLOAT_VEC4: return "vec4";
-    case GL_FLOAT_MAT2: return "mat2";
-    case GL_FLOAT_MAT3: return "mat3";
-    case GL_FLOAT_MAT4: return "mat4";
-    case GL_SAMPLER_2D: return "sampler2D";
-    case GL_SAMPLER_3D: return "sampler3D";
-    case GL_SAMPLER_CUBE: return "samplerCube";
-    case GL_SAMPLER_2D_SHADOW: return "sampler2DShadow";
-    default: break;
-  }
-  return "other";
+	switch(type)
+	{
+		case GL_BOOL: return "bool";
+		case GL_INT: return "int";
+		case GL_FLOAT: return "float";
+		case GL_FLOAT_VEC2: return "vec2";
+		case GL_FLOAT_VEC3: return "vec3";
+		case GL_FLOAT_VEC4: return "vec4";
+		case GL_FLOAT_MAT2: return "mat2";
+		case GL_FLOAT_MAT3: return "mat3";
+		case GL_FLOAT_MAT4: return "mat4";
+		case GL_SAMPLER_2D: return "sampler2D";
+		case GL_SAMPLER_3D: return "sampler3D";
+		case GL_SAMPLER_CUBE: return "samplerCube";
+		case GL_SAMPLER_2D_SHADOW: return "sampler2DShadow";
+		default: break;
+	}
+	return "other";
 }
 
 void _print_programme_info_log(GLuint programme)
@@ -33,79 +33,70 @@ void _print_programme_info_log(GLuint programme)
 
 void print_all(GLuint programme)
 {
-  printf("--------------------\nshader programme %i info:\n", programme);
-  int params = -1;
-  glGetProgramiv(programme, GL_LINK_STATUS, &params);
-  printf("GL_LINK_STATUS = %i\n", params);
+	printf("--------------------\nshader programme %i info:\n", programme);
+	int params = -1;
+	glGetProgramiv(programme, GL_LINK_STATUS, &params);
+	printf("GL_LINK_STATUS = %i\n", params);
 
-  glGetProgramiv(programme, GL_ATTACHED_SHADERS, &params);
-  printf("GL_ATTACHED_SHADERS = %i\n", params);
+	glGetProgramiv(programme, GL_ATTACHED_SHADERS, &params);
+	printf("GL_ATTACHED_SHADERS = %i\n", params);
 
-  glGetProgramiv(programme, GL_ACTIVE_ATTRIBUTES, &params);
-  printf("GL_ACTIVE_ATTRIBUTES = %i\n", params);
-  for (int i = 0; i < params; i++) {
-    char name[64];
-    int max_length = 64;
-    int actual_length = 0;
-    int size = 0;
-    GLenum type;
-    glGetActiveAttrib (
-      programme,
-      i,
-      max_length,
-      &actual_length,
-      &size,
-      &type,
-      name
-    );
-    if (size > 1) {
-      for(int j = 0; j < size; j++) {
-        char long_name[64];
-        sprintf(long_name, "%s[%i]", name, j);
-        int location = glGetAttribLocation(programme, long_name);
-        printf("  %i) type:%s name:%s location:%i\n",
-          i, GL_type_to_string(type), long_name, location);
-      }
-    } else {
-      int location = glGetAttribLocation(programme, name);
-      printf("  %i) type:%s name:%s location:%i\n",
-        i, GL_type_to_string(type), name, location);
-    }
-  }
+	glGetProgramiv(programme, GL_ACTIVE_ATTRIBUTES, &params);
+	printf("GL_ACTIVE_ATTRIBUTES = %i\n", params);
+	for (int i = 0; i < params; i++)
+	{
+		char name[64];
+		int max_length = 64;
+		int actual_length = 0;
+		int size = 0;
+		GLenum type;
+		glGetActiveAttrib(programme, i, max_length, &actual_length, &size, \
+							&type, name);
+		if (size > 1)
+			for (int j = 0; j < size; j++)
+			{
+				char long_name[64];
+				sprintf(long_name, "%s[%i]", name, j);
+				int location = glGetAttribLocation(programme, long_name);
+				printf(" %i) type:%s name:%s location:%i\n",
+				i, GL_type_to_string(type), long_name, location);
+			}
+		else
+		{
+			int location = glGetAttribLocation(programme, name);
+			printf(" %i) type:%s name:%s location:%i\n",
+			i, GL_type_to_string(type), name, location);
+		}
+	}
 
-  glGetProgramiv(programme, GL_ACTIVE_UNIFORMS, &params);
-  printf("GL_ACTIVE_UNIFORMS = %i\n", params);
-  for(int i = 0; i < params; i++) {
-    char name[64];
-    int max_length = 64;
-    int actual_length = 0;
-    int size = 0;
-    GLenum type;
-    glGetActiveUniform(
-      programme,
-      i,
-      max_length,
-      &actual_length,
-      &size,
-      &type,
-      name
-    );
-    if(size > 1) {
-      for(int j = 0; j < size; j++) {
-        char long_name[64];
-        sprintf(long_name, "%s[%i]", name, j);
-        int location = glGetUniformLocation(programme, long_name);
-        printf("  %i) type:%s name:%s location:%i\n",
-          i, GL_type_to_string(type), long_name, location);
-      }
-    } else {
-      int location = glGetUniformLocation(programme, name);
-      printf("  %i) type:%s name:%s location:%i\n",
-        i, GL_type_to_string(type), name, location);
-    }
-  }
-
-  _print_programme_info_log(programme);
+	glGetProgramiv(programme, GL_ACTIVE_UNIFORMS, &params);
+	printf("GL_ACTIVE_UNIFORMS = %i\n", params);
+	for (int i = 0; i < params; i++)
+	{
+		char name[64];
+		int max_length = 64;
+		int actual_length = 0;
+		int size = 0;
+		GLenum type;
+		glGetActiveUniform(programme, i, max_length, &actual_length, &size, \
+							&type, name);
+		if (size > 1)
+			for (int j = 0; j < size; j++)
+			{
+				char long_name[64];
+				sprintf(long_name, "%s[%i]", name, j);
+				int location = glGetUniformLocation(programme, long_name);
+				printf(" %i) type:%s name:%s location:%i\n",
+				i, GL_type_to_string(type), long_name, location);
+			}
+		else
+		{
+			int location = glGetUniformLocation(programme, name);
+			printf(" %i) type:%s name:%s location:%i\n",
+			i, GL_type_to_string(type), name, location);
+		}
+	}
+ 	_print_programme_info_log(programme);
 }
 
 void		vertix_to_vector3(t_vertix *vertix, t_vector3 *vector)
@@ -115,33 +106,34 @@ void		vertix_to_vector3(t_vertix *vertix, t_vector3 *vector)
 	vector->z = vertix->z;
 }
 
-void		fill_color_array(float *arr, t_face *face, t_gl_env *gl_e)
+void		fill_color_array(float *arr, t_face *face)
 {
-	int			i;
+	int		i;
+	float	color;
 
-	(void)gl_e;
+	srand(1);
 	i = 0;
 	while (face)
 	{
-		arr[i + 0] = 1.0f;
-		arr[i + 1] = 0.0f;
-		arr[i + 2] = 0.0f;
-		arr[i + 3] = 0.0f;
-		arr[i + 4] = 1.0f;
-		arr[i + 5] = 0.0f;
-		arr[i + 6] = 0.0f;
-		arr[i + 7] = 0.0f;
-		arr[i + 8] = 1.0f;
+		color = (float)(rand() % 200) / 200.0f;
+		arr[i + 0] = color;
+		arr[i + 1] = color;
+		arr[i + 2] = color;
+		arr[i + 3] = color;
+		arr[i + 4] = color;
+		arr[i + 5] = color;
+		arr[i + 6] = color;
+		arr[i + 7] = color;
+		arr[i + 8] = color;
 		i += 9;
 		face = face->next;
 	}
 }
 
-void		fill_tex_array(float *arr, t_face *face, t_gl_env *gl_e)
+void		fill_tex_array(float *arr, t_face *face)
 {
 	int			i;
 
-	(void)gl_e;
 	i = 0;
 	while (face)
 	{
@@ -195,162 +187,56 @@ void		gl_compile_error(GLuint shader, char *intro)
 	ft_errexit(GL_COMPILE_SHADER, RED, GL_ERROR);
 }
 
-void		draw_glfour(t_glfw* glfw, t_obj *obj, t_gl_env *gl_e)
+GLuint		init_shader(char *filename, int type)
 {
-	// printf("__ draw_glfour\n");
-	(void)glfw;
-	int		len = obj->f_amount * 3 * 3;
-	float	points[len];
-	float	colors[len];
-	float	tex[obj->f_amount * 3 * 2];
-	fill_points_array(points, obj->f, gl_e);
-	fill_color_array(colors, obj->f, gl_e);
-	fill_tex_array(tex, obj->f, gl_e);
-	// int i = 0;
-	// while (i < obj->f_amount)
-	// {
-	// 	printf("%f\t%f\t%f\n", points[i + 0], points[i + 1], points[i + 2]);
-	// 	printf("%f\t%f\t%f\n", points[i + 3], points[i + 4], points[i + 5]);
-	// 	printf("%f\t%f\t%f\n\n", points[i + 6], points[i + 7], points[i + 8]);
-	// 	i++;
-	// }
-	// printf("i: %d\n", i);
-	// printf("points amount: %d\n", obj->f_amount);
+	GLint			ret;
+	GLuint			shader;
+	t_str			*content;
+	const GLchar	*gl_content;
 
+	content = ft_getfile(filename);
+	gl_content = t_str_to_char(content);
+	ft_free_list(content, free_t_str);
+	shader = glCreateShader(type);
+	glShaderSource(shader, 1, &gl_content, NULL);
+	free((void*)gl_content);
+	glCompileShader(shader);
+	glGetShaderiv(shader, GL_COMPILE_STATUS, &ret);
+	if (ret == GL_FALSE)
+		gl_compile_error(shader, "shader compilation error:");
+	return (shader);
+}
+
+void		create_program(t_gl_env *gl_e)
+{
 	glGenVertexArrays(1, &gl_e->vao);
 	glBindVertexArray(gl_e->vao);
 	glEnableVertexAttribArray(0);
 
 	glGenBuffers(1, &gl_e->vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, gl_e->vbo);
-	glBufferData(GL_ARRAY_BUFFER, len * sizeof(float), points, GL_STATIC_DRAW);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
 	glEnableVertexAttribArray(0);
 
 	glGenBuffers(1, &gl_e->colors_vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, gl_e->colors_vbo);
-	glBufferData(GL_ARRAY_BUFFER, len * sizeof(float), colors, GL_STATIC_DRAW);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, NULL);
 	glEnableVertexAttribArray(1);
 
 	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, gl_e->tex_id[gl_e->tex_i]);
 	glGenBuffers(1, &gl_e->tex_vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, gl_e->tex_vbo);
-	glBufferData(GL_ARRAY_BUFFER, obj->f_amount * 3 * 2 * sizeof(float), tex, GL_STATIC_DRAW);
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, NULL);
 	glEnableVertexAttribArray(2);
 
-
-	const char *vertex_shader_old[] =
-	{
-		"#version 410\n"
-		"layout(location = 0) in vec3 vertex_position;"
-		"layout(location = 1) in vec3 vertex_colour;"
-		"out vec3 colour;"
-		"void main() {"
-		"  colour = vertex_colour;"
-		"  gl_Position = vec4(vertex_position, 1.0);"
-		"}"
-	};(void)vertex_shader_old;
-	const char *vertex_shader[] =
-	{
-		"#version 410\n"
-		"layout(location = 0) in vec3 vertex_position;"
-		"layout(location = 1) in vec3 vertex_colour;"
-		"layout(location = 2) in vec2 vertexUV;"
-
-		"out vec2 UV;"
-		"out vec3 colour;"
-
-		"void main(){"
-		"	colour = vertex_colour;"
-		"	gl_Position = vec4(vertex_position, 1.0);"
-		"	UV = vertexUV;"
-		"}"
-	};
-	const char *fragment_shader[] =
-	{
-		"#version 410\n"
-		/*texture mod*/
-		"in vec2 UV;"
-		"out vec4 color;"
-		"uniform sampler2D myTextureSampler;"
-
-		/*color mod*/
-		// "in vec3 colour;"
-		// "out vec4 frag_colour;"
-
-		"void main(){"
-		/*texture mod*/
-		"	color = texture( myTextureSampler, UV );"
-		/*color mod*/
-		// "	frag_colour = vec4(colour, 1.0);"
-		"}"
-	};
-	const char *fragment_shader_old[] =
-	{
-		"#version 410\n"
-		"in vec3 colour;"
-		"out vec4 frag_colour;"
-		"void main() {"
-		"  frag_colour = vec4(colour, 1.0);"
-		"}"
-	};(void)fragment_shader_old;
-/*
-.glsl
-	uniform bool		smod;
-	uniform bool		tmod;
-	uniform bool		gmod;
-	uniform sampler2D	ltexture;
-
-.c
-	GLuint	program;
-	GLint	mvploc;
-	GLint	cmdloc;
-	GLint	smdloc;
-	GLint	tmdloc;
-	GLint	gmdloc;
-	GLint	mmdloc;
-	GLint	texloc;
-
-	env->shader.mvploc = glGetUniformLocation(env->shader.program, "mvp");
-	env->shader.smdloc = glGetUniformLocation(env->shader.program, "smod");
-	env->shader.cmdloc = glGetUniformLocation(env->shader.program, "cmod");
-	env->shader.tmdloc = glGetUniformLocation(env->shader.program, "tmod");
-	env->shader.gmdloc = glGetUniformLocation(env->shader.program, "gmod");
-	env->shader.mmdloc = glGetUniformLocation(env->shader.program, "mmod");
-	env->shader.texloc = glGetUniformLocation(env->shader.program, "ltexture");
-
-	glUniform1i(env->shader.smdloc, env->mod.shading);
-	glUniform1i(env->shader.cmdloc, env->mod.color);
-	glUniform1i(env->shader.gmdloc, env->mod.greyscale);
-	glUniform1i(env->shader.mmdloc, env->mod.mapping);
-	glUniform1i(env->shader.tmdloc, env->mod.texture);
-	*/
-
-
-	GLint	ret;
-	gl_e->vs = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(gl_e->vs, 1, vertex_shader, NULL);
-	glCompileShader(gl_e->vs);
-	glGetShaderiv(gl_e->vs, GL_COMPILE_STATUS, &ret);
-	if (ret == GL_FALSE)
-		gl_compile_error(gl_e->vs, "vertex_shader compilation error:");
-
-	gl_e->fs = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(gl_e->fs, 1, fragment_shader, NULL);
-	glCompileShader(gl_e->fs);
-	glGetShaderiv(gl_e->fs, GL_COMPILE_STATUS, &ret);
-	if (ret == GL_FALSE)
-		gl_compile_error(gl_e->fs, "fragment_shader compilation error:");
-
+	gl_e->vshader = init_shader(VSHADER_FILE, GL_VERTEX_SHADER);
+	gl_e->fshader = init_shader(FSHADER_FILE, GL_FRAGMENT_SHADER);
 	gl_e->shader_programme = glCreateProgram();
-	glGetUniformLocation(gl_e->shader_programme, "display_mod");
-	glUniform1i(gl_e->display_mod, DISPLAY_COLOR);
-	glAttachShader(gl_e->shader_programme, gl_e->fs);
-	glAttachShader(gl_e->shader_programme, gl_e->vs);
+	glAttachShader(gl_e->shader_programme, gl_e->vshader);
+	glAttachShader(gl_e->shader_programme, gl_e->fshader);
 	glLinkProgram(gl_e->shader_programme);
+
+	gl_e->display_mod = glGetUniformLocation(gl_e->shader_programme, "dismod");
 
 	int params = -1;
 	glGetProgramiv(gl_e->shader_programme, GL_LINK_STATUS, &params);
@@ -366,6 +252,29 @@ void		draw_glfour(t_glfw* glfw, t_obj *obj, t_gl_env *gl_e)
 
 	// glDeleteVertexArrays(1, &gl_e->vao);
 	// glDeleteProgram(gl_e->shader_programme);
+}
+
+void		draw_glfour(t_obj *obj, t_gl_env *gl_e)
+{
+	// printf("__ draw_glfour\n");
+	float	points[obj->f_amount * 9];
+	float	colors[obj->f_amount * 9];
+	float	tex[obj->f_amount * 6];
+
+	fill_points_array(points, obj->f, gl_e);
+	fill_color_array(colors, obj->f);
+	fill_tex_array(tex, obj->f);
+
+	glBindBuffer(GL_ARRAY_BUFFER, gl_e->vbo);
+	glBufferData(GL_ARRAY_BUFFER, obj->f_amount * 9 * sizeof(float), points, GL_STATIC_DRAW);
+
+	glBindBuffer(GL_ARRAY_BUFFER, gl_e->colors_vbo);
+	glBufferData(GL_ARRAY_BUFFER, obj->f_amount * 9 * sizeof(float), colors, GL_STATIC_DRAW);
+
+	glBindBuffer(GL_ARRAY_BUFFER, gl_e->tex_vbo);
+	glBufferData(GL_ARRAY_BUFFER, obj->f_amount * 6 * sizeof(float), tex, GL_STATIC_DRAW);
+
+	glBindTexture(GL_TEXTURE_2D, gl_e->tex_id[gl_e->tex_i]);
 }
 
 void		display_object(t_glfw *glfw, t_objfile **objf, t_xpm **xpm, int *len)
@@ -385,12 +294,15 @@ void		display_object(t_glfw *glfw, t_objfile **objf, t_xpm **xpm, int *len)
 	// glFrontFace(GL_CW); // GL_CCW for counter clock-wise
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
-	while(!glfwWindowShouldClose(glfw->win)) {
-		draw_glfour(glfw, objf[gl_e->obj_i]->obj, gl_e);
+	create_program(gl_e);
+	glUseProgram(gl_e->shader_programme);
+	while(!glfwWindowShouldClose(glfw->win))
+	{
+		draw_glfour(objf[gl_e->obj_i]->obj, gl_e);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		glUseProgram(gl_e->shader_programme);
 		glBindVertexArray(gl_e->vao);
 		glDrawArrays(GL_TRIANGLES, 0, objf[gl_e->obj_i]->obj->f_amount * 3);
+		glBindVertexArray(0);
 		glfwSwapBuffers(glfw->win);
 		glfwPollEvents();
 
@@ -400,7 +312,8 @@ void		display_object(t_glfw *glfw, t_objfile **objf, t_xpm **xpm, int *len)
 			&& !boolens[GLFW_KEY_ENTER])
 		{
 			boolens[GLFW_KEY_ENTER] = 1;
-			printf("Changing material/texture/color.\n");
+			gl_e->dismod = (gl_e->dismod < MODS - 1) ? gl_e->dismod + 1 : 0;
+			glUniform1i(gl_e->display_mod, gl_e->dismod);
 		}
 		else if (val == GLFW_RELEASE)
 			boolens[GLFW_KEY_ENTER] = 0;
@@ -409,7 +322,6 @@ void		display_object(t_glfw *glfw, t_objfile **objf, t_xpm **xpm, int *len)
 		{
 			boolens[GLFW_KEY_SPACE] = 1;
 			gl_e->rotate = !gl_e->rotate;
-			printf("Rotation on/off\n");
 		}
 		else if (val == GLFW_RELEASE)
 			boolens[GLFW_KEY_SPACE] = 0;

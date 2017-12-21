@@ -154,6 +154,22 @@ void	dump_datafile(t_objfile *objfile, t_mtlfile *mtlfile, t_str *dir, t_xpm *xp
 	ft_putendl("*******************************************");
 }
 
+void	print_memory(void)
+{
+	errno = 0;
+	struct rusage* memory = malloc(sizeof(struct rusage));
+	getrusage(RUSAGE_SELF, memory);
+	if(errno == EFAULT)
+		printf("Error: EFAULT\n");
+	else if(errno == EINVAL)
+		printf("Error: EINVAL\n");
+	printf("Usage: %ld\n", memory->ru_ixrss);
+	printf("Usage: %ld\n", memory->ru_isrss);
+	printf("Usage: %ld\n", memory->ru_idrss);
+	printf("Max: %ld\n", memory->ru_maxrss);
+
+}
+
 int		main(int ac, char **av)
 {
 	// exit(0);

@@ -43,7 +43,7 @@ bonus a faire:
 					-> prendre le premier dossier de la liste (ordre des args) ou bien ordre du stock
 						- va chercher le materiaux dans tous les fichiers ayant le nom demande (mtllib)
 ------------------------------------
-lets go openGL
+OpenGL 4.1 (glfw + glew)
 
 a faire:
 	texture gl:
@@ -52,21 +52,19 @@ a faire:
 			-> prendre la taille de la face et l'appliquer sur le plan used
 			-> comportement variable en fonctione de la forme de l'objet
 	utilisation du .mtl
-	les rotations sont faites avec le repere de l'objet (pas de pb)
-		-> rotater avec une autre fonction opengl, repere monde
+	perspective (ce qui est loin est plus petit)
 fait:
 	texture gl
 	translation
-	perspective (ce qui est loin est plus petit)
 	afficher object
 	object centre via mediane des extremites
 	touches changement de texture et obj
 		texture:	home<	end>
 		obj:		PageUp	PageDown
-	rotations:		translations:
-		x: 7 4				x: fleches gauche droite
-		y: 8 5				y: fleches haut bas
-		z: 9 6				z: 1 0
+		rotations:		translations:
+			x: 7 4			x: fleches gauche droite
+			y: 8 5			y: fleches haut bas
+			z: 9 6			z: 1 0
 ------------------------------------
 BAREME A FAIRE
 
