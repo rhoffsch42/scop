@@ -148,6 +148,43 @@ void		fill_tex_array(float *arr, t_face *face)
 	}
 }
 
+void	perpective_vector3(t_vector3 *src, t_vector3 *dst, t_vector3 rad, float rot_direction)
+{
+	float		v[8];
+	float		mat[16];
+	t_vector3	tmp;
+
+	rad.x *= rot_direction;
+	rad.y *= rot_direction;
+	rad.z *= rot_direction;
+	v[0] = cosf(rad.x);
+	v[1] = sinf(rad.x);
+	v[2] = cosf(rad.y);
+	v[3] = sinf(rad.y);
+	v[4] = cosf(rad.z);
+	v[5] = sinf(rad.z);
+	v[6] = v[0] * v[3];
+	v[7] = v[1] * v[3];
+	ft_bzero(mat, sizeof(float) * 16);
+	mat[0] = v[2] * v[4];
+	mat[1] = -v[2] * v[5];
+	mat[2] = v[3];
+	mat[4] = v[7] * v[4] + v[0] * v[5];
+	mat[5] = -v[7] * v[5] + v[0] * v[4];
+	mat[6] = -v[1] * v[2];
+	mat[8] = -v[6] * v[4] + v[1] * v[5];
+	mat[9] = v[6] * v[5] + v[1] * v[4];
+	mat[10] = v[0] * v[2];
+	mat[15] =  1;
+	tmp.x = src->x;
+	tmp.y = src->y;
+	tmp.z = src->z;
+	dst->x = tmp.x * mat[0] + tmp.y * mat[1] + tmp.z * mat[2];
+	dst->y = tmp.x * mat[4] + tmp.y * mat[5] + tmp.z * mat[6];
+	dst->z = tmp.x * mat[8] + tmp.y * mat[9] + tmp.z * mat[10];
+}
+
+
 void		fill_points_array(float *arr, t_face *face, t_gl_env *gl_e)
 {
 	int			i;
@@ -207,6 +244,66 @@ GLuint		init_shader(char *filename, int type)
 	return (shader);
 }
 
+void	mat_identity(float *m)
+{
+	int	i;
+
+	i = 0;
+	while (i < 16)
+	{
+		m[i] = 0;
+		if (i % 5 == 0)
+			m[i] = 1;
+		i++;
+	}
+}
+
+void	mat_mul(float *a, float *b)
+{
+	int		h;
+	int		w;
+	int		z;
+	float	m[16];
+
+	h = -1;
+	while (++h < 4)
+	{
+		w = -1;
+		while (++w < 4)
+		{
+			z = -1;
+			m[h * 4 + w] = 0;
+			while (++z < 4)
+				m[h * 4 + w] += a[h * 4 + z] * b[z * 4 + w];
+		}
+	}
+	h = 0;
+	while (h < 16)
+	{
+		a[h] = m[h];
+		h++;
+	}
+}
+
+void	set_projection_matrix(float *m, float fov)
+{
+	float	s;
+	float	far;
+	float	near;
+
+	far = 0.001f;
+	near = 100.0f;
+	s = 1 / (tan(fov * 0.5 * M_PI / 180.0));
+	ft_bzero(m, 16);
+	m[0] = s / (DEF_WIN_X / DEF_WIN_Y);
+	m[5] = s;
+	m[10] = -(far + near) / (far - near);
+	m[11] = -1;
+	m[14] = -2 * far * near / (far - near);
+}
+
+float	matrix[16];
+
 void		create_program(t_gl_env *gl_e)
 {
 	glGenVertexArrays(1, &gl_e->vao);
@@ -237,6 +334,13 @@ void		create_program(t_gl_env *gl_e)
 	glLinkProgram(gl_e->shader_programme);
 
 	gl_e->display_mod = glGetUniformLocation(gl_e->shader_programme, "dismod");
+	gl_e->projection = glGetUniformLocation(gl_e->shader_programme, "pro");
+	set_projection_matrix(matrix, 90);
+	if (matrix[11] != -1)
+	{
+		printf("%s\n", "FUCK");
+		exit(0);
+	}
 
 	int params = -1;
 	glGetProgramiv(gl_e->shader_programme, GL_LINK_STATUS, &params);
@@ -293,9 +397,14 @@ void		display_object(t_glfw *glfw, t_objfile **objf, t_xpm **xpm, int *len)
 	// glCullFace(GL_BACK); // cull back face
 	// glFrontFace(GL_CW); // GL_CCW for counter clock-wise
 	glEnable(GL_DEPTH_TEST);
-	glDepthFunc(GL_LESS);
+	glClearDepth(0.0f);
+	glClear(GL_DEPTH_BUFFER_BIT);
+	// glDepthFunc(GL_LESS);
+	glDepthFunc(GL_GREATER);
+
 	create_program(gl_e);
 	glUseProgram(gl_e->shader_programme);
+	glUniformMatrix4fv(gl_e->projection, 1, GL_FALSE, matrix);
 	while(!glfwWindowShouldClose(glfw->win))
 	{
 		draw_glfour(objf[gl_e->obj_i]->obj, gl_e);
@@ -305,6 +414,7 @@ void		display_object(t_glfw *glfw, t_objfile **objf, t_xpm **xpm, int *len)
 		glBindVertexArray(0);
 		glfwSwapBuffers(glfw->win);
 		glfwPollEvents();
+
 
 		if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_ESCAPE))
 			printf("press escape: %d\n", 666);
@@ -366,10 +476,10 @@ void		display_object(t_glfw *glfw, t_objfile **objf, t_xpm **xpm, int *len)
 			gl_e->pos.y -= 0.01f;
 		if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_UP))//haut
 			gl_e->pos.y += 0.01f;
-		if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_1))//pav1
-			gl_e->pos.z += 0.01f;
-		if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_0))//pav0
+		if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_0))//pav1
 			gl_e->pos.z -= 0.01f;
+		if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_1))//pav0
+			gl_e->pos.z += 0.01f;
 		if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_7))//pav7
 			gl_e->rot.x += RAD;
 		if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_4))//pav4

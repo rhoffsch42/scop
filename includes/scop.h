@@ -291,6 +291,7 @@ typedef struct			s_gl_env
 	GLuint				shader_programme;
 	GLint				display_mod;
 	int					dismod;
+	GLint				projection;
 	t_objfile			**objf;
 	t_xpm				**xpm;
 	GLuint				*tex_id;
