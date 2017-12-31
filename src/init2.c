@@ -33,6 +33,7 @@ t_gl_env	*init_gl_env(t_objfile **objf, t_xpm **xpm, int *len)
 	}
 	gl_e->obj_len = len[0];
 	gl_e->xpm_len = len[1];
+	gl_e->pos.z = -1.0f;
 	gl_e->rotate = 1;
 	gl_e->angle = 10;
 	gl_e->vector = 0.1f;
