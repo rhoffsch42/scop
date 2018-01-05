@@ -167,7 +167,6 @@ void	print_memory(void)
 	printf("Usage: %ld\n", memory->ru_isrss);
 	printf("Usage: %ld\n", memory->ru_idrss);
 	printf("Max: %ld\n", memory->ru_maxrss);
-
 }
 
 int		main(int ac, char **av)
@@ -192,7 +191,6 @@ int		main(int ac, char **av)
 		ft_putnbrendl(rgb->g);
 		ft_putnbrendl(rgb->b);
 	}
-	// exit(0);
 	object_tab = (t_objfile**)list_to_tab((t_void*)(e->objfile));
 	texture_tab = (t_xpm**)list_to_tab((t_void*)(e->xpmfile));
 	e->glfw = init_glfw();

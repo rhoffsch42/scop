@@ -15,21 +15,21 @@ CC				=	gcc
 CFLAGS			=	-Wall -Wextra -Werror -g
 
 INCLUDE			=	-I includes \
-					-I libft/includes \
+					-I libft/includes -I libmath3d/includes \
 					-I /Users/rhoffsch/.brew/Cellar/glfw/3.2.1/include \
 					-I /Users/rhoffsch/.brew/Cellar/glew/2.1.0/include
-					# -I ./$(SDL_DST)/include -I /usr/include
 					# -I /System/Library/Frameworks/OpenGL.framework/Versions/A/Headers/
 					# -I /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks/OpenGL.framework/Versions/A/Headers
-					#-I /Developer/NVIDIA/CUDA-9.0/extras/CUPTI/include #Mac42
+					# -I /Developer/NVIDIA/CUDA-9.0/extras/CUPTI/include #Mac42
+
+LIBS			=	-L libft/ -lft -L libmath3d/ -lmath3d
 
 FRAMEWORKS		=	-framework OpenGL
 
-# SDL				=	`./$(SDL_DST)/bin/sdl2-config --cflags --libs` -lSDL2_image
 GLFW			=	/Users/rhoffsch/.brew/Cellar/glfw/3.2.1/lib/libglfw.dylib
 GLEW			=	/Users/rhoffsch/.brew/Cellar/glew/2.1.0/lib/libGLEW.2.1.dylib
 
-CFILE			=	main.c \
+SRC_FILE		=	main.c \
 					init1.c \
 					init2.c \
 					load_file.c \
@@ -58,49 +58,42 @@ CFILE			=	main.c \
 					rot_vector.c \
 					misc.c
 
-HFILE			=	scop.h
+HDR_FILE		=	scop.h
 
-HDIR			=	includes/
-HDR				=	$(patsubst %.h, $(HDIR)%.h, $(HFILE))
-SDIR			=	src/
-SRC				=	$(patsubst %.c, $(SDIR)%.c, $(CFILE))
-ODIR			=	obj/
-OBJ				=	$(patsubst %.c, $(ODIR)%.o, $(CFILE))
+SRC_DIR			=	src
+OBJ_DIR			=	obj
+HDR_DIR			=	includes
+SRC				=	$(addprefix $(SRC_DIR)/, $(SRC_FILE))
+OBJ				=	$(patsubst %.c, $(OBJ_DIR)/%.o, $(SRC_FILE))
+HDR				=	$(addprefix $(HDR_DIR)/, $(HDR_FILE))
 
-.PHONY: all compile lib norm clean fclean pclean re
+.PHONY: all compile lib clean fclean pclean re
 
 all: compile
 
 compile: lib
-	@mkdir -p $(ODIR)
+	@mkdir -p $(OBJ_DIR)
 	@$(MAKE) $(NAME)
 
 lib:
 	@$(MAKE) -C libft/
+	@$(MAKE) -C libmath3d/
 
 $(NAME): $(SRC) $(OBJ)
 	@#$(CC) $(CFLAGS) $(OBJ) -o $(NAME) -L libft/ -lft $(SDL) -lGL -lGLU #-lglut
-	@$(CC) $(CFLAGS) $(OBJ) -o $(NAME) -L libft/ -lft $(FRAMEWORKS) $(GLFW) $(GLEW)
-	@echo "\033[33;32m$(NAME) \033[33;37mcompiled"
-	@echo "\033[33;35m$(NAME) End\033[33;37m"
+	$(CC) $(CFLAGS) $(OBJ) -o $(NAME) $(LIBS) $(FRAMEWORKS) $(GLFW) $(GLEW)
 
-$(ODIR)%.o: $(SDIR)%.c $(HDR)
-	@$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@
-	@echo "\033[33;33m\t$@ compiled\033[33;37m"
-
-
-norm:
-	norminette $(SRC) $(HDR)
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(HDR)
+	$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@
 
 clean:
-	@rm -rf $(ODIR)
-	@echo "\033[33;33mAll objects \033[33;31mdeleted\033[33;37m"
+	rm -rf $(OBJ_DIR)
 
 fclean: clean
-	@rm -f $(NAME)
-	@echo "\033[33;32m$(NAME) \033[33;31mdeleted\033[33;37m"
+	rm -f $(NAME)
 
 pclean: fclean
 	@$(MAKE) fclean -C libft/
+	@$(MAKE) fclean -C libmath3d/
 
 re: fclean all

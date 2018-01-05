@@ -130,6 +130,16 @@ void		fill_color_array(float *arr, t_face *face)
 	}
 }
 
+// vec2	cylinder_mapping()
+// {
+// 	float	u;
+// 	float	v;
+//
+// 	u = 0.5 + atan(position.z, position.x) / PI * 0.5;
+// 	v = position.y / 10.0;
+// 	return (vec2(u, v) * 15);
+// }
+
 void		fill_tex_array(float *arr, t_face *face)
 {
 	int			i;
@@ -138,52 +148,15 @@ void		fill_tex_array(float *arr, t_face *face)
 	while (face)
 	{
 		arr[i + 0] = face->v1->x;
-		arr[i + 1] = face->v1->y;
+		arr[i + 1] = 1 - face->v1->y;
 		arr[i + 2] = face->v2->x;
-		arr[i + 3] = face->v2->y;
+		arr[i + 3] = 1 - face->v2->y;
 		arr[i + 4] = face->v3->x;
-		arr[i + 5] = face->v3->y;
+		arr[i + 5] = 1 - face->v3->y;
 		i += 6;
 		face = face->next;
 	}
 }
-
-void	perpective_vector3(t_vector3 *src, t_vector3 *dst, t_vector3 rad, float rot_direction)
-{
-	float		v[8];
-	float		mat[16];
-	t_vector3	tmp;
-
-	rad.x *= rot_direction;
-	rad.y *= rot_direction;
-	rad.z *= rot_direction;
-	v[0] = cosf(rad.x);
-	v[1] = sinf(rad.x);
-	v[2] = cosf(rad.y);
-	v[3] = sinf(rad.y);
-	v[4] = cosf(rad.z);
-	v[5] = sinf(rad.z);
-	v[6] = v[0] * v[3];
-	v[7] = v[1] * v[3];
-	ft_bzero(mat, sizeof(float) * 16);
-	mat[0] = v[2] * v[4];
-	mat[1] = -v[2] * v[5];
-	mat[2] = v[3];
-	mat[4] = v[7] * v[4] + v[0] * v[5];
-	mat[5] = -v[7] * v[5] + v[0] * v[4];
-	mat[6] = -v[1] * v[2];
-	mat[8] = -v[6] * v[4] + v[1] * v[5];
-	mat[9] = v[6] * v[5] + v[1] * v[4];
-	mat[10] = v[0] * v[2];
-	mat[15] =  1;
-	tmp.x = src->x;
-	tmp.y = src->y;
-	tmp.z = src->z;
-	dst->x = tmp.x * mat[0] + tmp.y * mat[1] + tmp.z * mat[2];
-	dst->y = tmp.x * mat[4] + tmp.y * mat[5] + tmp.z * mat[6];
-	dst->z = tmp.x * mat[8] + tmp.y * mat[9] + tmp.z * mat[10];
-}
-
 
 void		fill_points_array(float *arr, t_face *face, t_gl_env *gl_e)
 {
@@ -244,48 +217,10 @@ GLuint		init_shader(char *filename, int type)
 	return (shader);
 }
 
-void	mat_identity(float *m)
-{
-	int	i;
+t_matrix4	promatrix;
+t_matrix4	viewmatrix;
 
-	i = 0;
-	while (i < 16)
-	{
-		m[i] = 0;
-		if (i % 5 == 0)
-			m[i] = 1;
-		i++;
-	}
-}
-
-void	mat_mul(float *a, float *b)
-{
-	int		h;
-	int		w;
-	int		z;
-	float	m[16];
-
-	h = -1;
-	while (++h < 4)
-	{
-		w = -1;
-		while (++w < 4)
-		{
-			z = -1;
-			m[h * 4 + w] = 0;
-			while (++z < 4)
-				m[h * 4 + w] += a[h * 4 + z] * b[z * 4 + w];
-		}
-	}
-	h = 0;
-	while (h < 16)
-	{
-		a[h] = m[h];
-		h++;
-	}
-}
-
-void	set_projection_matrix(float *m, float fov)
+void	set_projection_matrix(float fov)
 {
 	float	s;
 	float	far;
@@ -293,16 +228,75 @@ void	set_projection_matrix(float *m, float fov)
 
 	far = 0.001f;
 	near = 100.0f;
-	s = 1 / (tan(fov * 0.5 * M_PI / 180.0));
-	ft_bzero(m, 16);
-	m[0] = s / (DEF_WIN_X / DEF_WIN_Y);
-	m[5] = s;
-	m[10] = -(far + near) / (far - near);
-	m[11] = -1;
-	m[14] = -2 * far * near / (far - near);
+	s = 1.0f / (tanf(fov * 0.5f * M_PI / 180.0f));
+	promatrix = matrix4(0, MATRIX_ROW_MAJOR);
+	promatrix.m.e[0] = s / (DEF_WIN_X / DEF_WIN_Y);
+	promatrix.m.e[5] = s;
+	promatrix.m.e[10] = -(far + near) / (far - near);
+	promatrix.m.e[11] = -1;
+	promatrix.m.e[14] = -2 * far * near / (far - near);
+	// promatrix = matrix4_set_order(promatrix, MATRIX_COLUMN_MAJOR);
 }
 
-float	matrix[16];
+typedef struct			s_cam
+{
+	t_vector3			pos;
+	t_vector3			right;
+	t_vector3			up;
+	t_vector3			forward;
+	t_vector3			front;
+}						t_cam;
+
+t_cam	init_cam_relative(float x, float y, float z)
+{
+	t_cam	cam;
+
+	cam.pos.x = x;
+	cam.pos.y = y;
+	cam.pos.z = z;
+	cam.right.x = 1;
+	cam.right.y = 0;
+	cam.right.z = 0;
+	cam.up.x = 0;
+	cam.up.y = 1;
+	cam.up.z = 0;
+	cam.forward.x = 0;
+	cam.forward.y = 0;
+	cam.forward.z = 1;
+	cam.front = vector3_cross(cam.up, cam.right);
+	return (cam);
+}
+
+void		view_matrix()
+{
+	t_cam		cam = init_cam_relative(0, 0, 0);
+	viewmatrix = matrix4(0, MATRIX_COLUMN_MAJOR);
+
+	viewmatrix.m.e[0] = cam.right.x;
+	viewmatrix.m.e[1] = cam.right.y;
+	viewmatrix.m.e[2] = cam.right.z;
+
+	viewmatrix.m.e[4] = cam.up.x;
+	viewmatrix.m.e[5] = cam.up.y;
+	viewmatrix.m.e[6] = cam.up.z;
+
+	viewmatrix.m.e[8] = cam.forward.x;
+	viewmatrix.m.e[9] = cam.forward.y;
+	viewmatrix.m.e[10] = cam.forward.z;
+
+	viewmatrix.m.e[12] = cam.pos.x;
+	viewmatrix.m.e[13] = cam.pos.y;
+	viewmatrix.m.e[14] = cam.pos.z;
+	viewmatrix.m.e[15] = 1;
+
+	if (1)
+	{
+		t_vector3	tmp = vector3_cross(cam.front, cam.right);
+		viewmatrix.m.e[12] = -vector3_dot(cam.right, cam.pos);
+		viewmatrix.m.e[13] = -vector3_dot(tmp, cam.pos);
+		viewmatrix.m.e[14] = -vector3_dot(cam.front, cam.pos);
+	}
+}
 
 void		create_program(t_gl_env *gl_e)
 {
@@ -335,12 +329,17 @@ void		create_program(t_gl_env *gl_e)
 
 	gl_e->display_mod = glGetUniformLocation(gl_e->shader_programme, "dismod");
 	gl_e->projection = glGetUniformLocation(gl_e->shader_programme, "pro");
-	set_projection_matrix(matrix, 90);
-	if (matrix[11] != -1)
-	{
-		printf("%s\n", "FUCK");
-		exit(0);
-	}
+	set_projection_matrix(90);
+	view_matrix();
+	printf("Projection Matrix:\n");
+	matrix4_print(promatrix);
+	printf("View Matrix:\n");
+	matrix4_print(viewmatrix);
+	promatrix = matrix4_mult(promatrix, viewmatrix);
+
+	// promatrix = matrix4_set_order(promatrix, MATRIX_COLUMN_MAJOR);
+	printf("Projection Matrix:\n");
+	matrix4_print(promatrix);
 
 	int params = -1;
 	glGetProgramiv(gl_e->shader_programme, GL_LINK_STATUS, &params);
@@ -384,8 +383,6 @@ void		draw_glfour(t_obj *obj, t_gl_env *gl_e)
 void		display_object(t_glfw *glfw, t_objfile **objf, t_xpm **xpm, int *len)
 {
 	printf("__ display_object\n");
-
-	// old_draw_glfour(glfw);
 	t_gl_env	*gl_e;
 	int			val;
 	char		boolens[348];
@@ -393,18 +390,15 @@ void		display_object(t_glfw *glfw, t_objfile **objf, t_xpm **xpm, int *len)
 	ft_bzero(boolens, sizeof(char) * 348);
 	gl_e = init_gl_env(objf, xpm, len);
 
-	// glEnable(GL_CULL_FACE); // cull face
-	// glCullFace(GL_BACK); // cull back face
-	// glFrontFace(GL_CW); // GL_CCW for counter clock-wise
 	glEnable(GL_DEPTH_TEST);
-	glClearDepth(0.0f);
+	glClearDepth(-1.0f);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	// glDepthFunc(GL_LESS);
 	glDepthFunc(GL_GREATER);
 
 	create_program(gl_e);
 	glUseProgram(gl_e->shader_programme);
-	glUniformMatrix4fv(gl_e->projection, 1, GL_FALSE, matrix);
+	glUniformMatrix4fv(gl_e->projection, 1, GL_FALSE, promatrix.m.e);
 	while(!glfwWindowShouldClose(glfw->win))
 	{
 		draw_glfour(objf[gl_e->obj_i]->obj, gl_e);
@@ -435,6 +429,19 @@ void		display_object(t_glfw *glfw, t_objfile **objf, t_xpm **xpm, int *len)
 		}
 		else if (val == GLFW_RELEASE)
 			boolens[GLFW_KEY_SPACE] = 0;
+		if ((val = glfwGetKey(glfw->win, GLFW_KEY_C)) == GLFW_PRESS \
+			&& !boolens[GLFW_KEY_C])
+		{
+			boolens[GLFW_KEY_C] = 1;
+			glEnable(GL_CULL_FACE);
+			glCullFace(GL_BACK);
+			// glFrontFace(GL_CW); // GL_CCW for counter clock-wise
+		}
+		else if (val == GLFW_RELEASE)
+		{
+			boolens[GLFW_KEY_C] = 0;
+			glDisable(GL_CULL_FACE);
+		}
 		if ((val = glfwGetKey(glfw->win, GLFW_KEY_PAGE_DOWN)) == GLFW_PRESS \
 			&& !boolens[GLFW_KEY_PAGE_DOWN])
 		{
@@ -476,9 +483,9 @@ void		display_object(t_glfw *glfw, t_objfile **objf, t_xpm **xpm, int *len)
 			gl_e->pos.y -= 0.01f;
 		if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_UP))//haut
 			gl_e->pos.y += 0.01f;
-		if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_0))//pav1
+		if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_1))//pav1
 			gl_e->pos.z -= 0.01f;
-		if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_1))//pav0
+		if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_0))//pav0
 			gl_e->pos.z += 0.01f;
 		if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_7))//pav7
 			gl_e->rot.x += RAD;

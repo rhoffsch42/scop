@@ -1,39 +1,10 @@
-version: 20 10 2017
+v 2018 01 05
 -----------------------
-
 logs:
 	creer un fichier txt
 	ecrire dedans
 		faire ft_printf ?
 
----------------------------------------------
-max fmax fmaxf
----------------------------------
-strmax f" f"f
-tabmax f" f"f
-
-=> ou bien:
-
-strmax seulement grace a cette structure:
-strmax(TYPE *str, int size);
-
-#define TYPE	int
-#define TYPE	double
-#define TYPE	float
-
-typedef struct			s_itab
-{
-	TYPE				*data
-	TYPE				**tab;
-	int					w;
-	int					h;
-}						t_itab;
-tab = malloc(sizeof(TYPE*) * h);
-tab[i] = data + (i * w);
-
-attention: les pointeur dans le tableau pointent directement sur data,
-la chaine contenue ne se termine donc pas a   ptr + w   mais contient tout jusqua la fin de data.
-->Bien manipuler la chaine avec  w .
 ---------------------------------
 ! get_next_line utilise des strdup ~like 
 	-> s'arrete sur les \0

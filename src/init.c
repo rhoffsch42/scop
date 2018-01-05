@@ -57,7 +57,7 @@ t_glfw	*init_glfw(void)
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
-	glfw->win = glfwCreateWindow(800, 600, "OpenGL", NULL, NULL);
+	glfw->win = glfwCreateWindow(glfw->size[0], glfw->size[1], "OpenGL", NULL, NULL);
 	if (glfw->win == NULL)
 	{
 		fprintf(stderr, "Failed to create GLFW window.");

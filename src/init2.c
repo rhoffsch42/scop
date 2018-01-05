@@ -70,8 +70,8 @@ t_glfw	*init_glfw(void)
 	ft_bzero((void*)glfw, sizeof(t_glfw));
 	glfw->size[0] = DEF_WIN_X;
 	glfw->size[1] = DEF_WIN_Y;
-	glfw->mid[0] = glfw->size[0] / 2;
-	glfw->mid[1] = glfw->size[1] / 2;
+	glfw->mid[0] = glfw->size[0] >> 1;
+	glfw->mid[1] = glfw->size[1] >> 1;
 	glfw->title = ft_strdup(DEF_WIN_TITLE);
 	glfw->win = NULL;
 	if (!glfwInit())
@@ -82,7 +82,7 @@ t_glfw	*init_glfw(void)
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
-	if ((glfw->win = glfwCreateWindow(800, 600, "OpenGL", NULL, NULL)) == NULL)
+	if ((glfw->win = glfwCreateWindow(glfw->size[0], glfw->size[1], "OpenGL", NULL, NULL)) == NULL)
 	{
 		glfwTerminate();
 		ft_errexit(GLFW_WIN_FAIL, RED, GLFW_FAIL);

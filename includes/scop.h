@@ -14,6 +14,7 @@
 # define SCOP_H
 
 # include <libft.h>
+# include <libmath3d.h>
 # include <GL/glew.h>
 # include <GLFW/glfw3.h>
 
@@ -69,11 +70,11 @@
 # define FSHADER_FILE	"./shaders/fragment_shader.glsl"
 # define DEF_WIN_TITLE	"Default title"
 # define DEF_WIN_X		800
-# define DEF_WIN_Y		800
+# define DEF_WIN_Y		600
 # define MAX_WIN_X		1920
 # define MAX_WIN_Y		1080
 # define MIN_WIN_X		800
-# define MIN_WIN_Y		800
+# define MIN_WIN_Y		600
 # define FLOAT_MAX_LEN	7
 # define COLOR_MAX		255
 # define TITLE_MAX_LEN	50
@@ -133,19 +134,6 @@
 #define DISPLAY_TEXTURE		0
 #define DISPLAY_COLOR		1
 #define DISPLAY_MATERIAL	2
-
-typedef struct			s_vector2
-{
-	float				x;
-	float				y;
-}						t_vector2;
-
-typedef struct			s_vector3
-{
-	float				x;
-	float				y;
-	float				z;
-}						t_vector3;
 
 typedef struct			s_rgb
 {
