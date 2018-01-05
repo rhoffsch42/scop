@@ -39,3 +39,10 @@ void	hex_to_rgb(unsigned char *rgb, char *s)
 		j++;
 	}
 }
+
+void		vertix_to_vector3(t_vertix *vertix, t_vector3 *vector)
+{
+	vector->x = vertix->x;
+	vector->y = vertix->y;
+	vector->z = vertix->z;
+}

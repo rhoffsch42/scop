@@ -49,9 +49,9 @@
 # define SPACE			ft_putchar(32);
 # define TAB			ft_putchar('\t');
 
-# define RGB(r, g, b)	(65536 * (int)(r) + 256 * (int)(g) + (int)(b))
-# define RTOD(x)		(x * (180.0f / M_PI))
-# define DTOR(x)		(x * M_PI / 180.0f)
+// # define RGB(r, g, b)	(65536 * (int)(r) + 256 * (int)(g) + (int)(b))
+// # define RTOD(x)		((x) * (180.0f / M_PI))
+// # define DTOR(x)		((x) * M_PI / 180.0f)
 # define RAD			0.017453f
 # define ROT_WAY		1
 # define ROT_RIGHT		-1
@@ -79,8 +79,10 @@
 # define COLOR_MAX		255
 # define TITLE_MAX_LEN	50
 # define TITLE_TRUNC	"[...]"
-# define SCREEN_DIST	1.0f
-# define FOV			90.0f
+# define FAR			0.01f
+# define NEAR			10.0f
+# define FOVX			90.0f
+# define FOVY			90.0f
 
 # define SCOP_DIR			"-d"
 # define OBJ_BAD_FORMAT		100
@@ -295,8 +297,32 @@ typedef struct			s_gl_env
 	float				vector;
 	float				scale;
 }						t_gl_env;
+
+typedef struct			s_cam
+{
+	t_vector3			pos;
+	t_vector3			right;
+	t_vector3			up;
+	t_vector3			forward;
+	t_vector3			front;
+}						t_cam;
+
+typedef struct	s_logs
+{
+	int		params;;
+	char	name[64];
+	char	long_name[64];
+	int		length;
+	int		actual_length;
+	int		size;
+	int		location;
+	GLenum	type;
+	int		i;
+	int		j;
+}				t_logs;
+
 ////debug, a delete apres
-void	print_memory(void);
+void		print_memory(void);
 
 // libft
 void		ft_free_list(void *list, t_void* (custom_free)(t_void*));
@@ -304,6 +330,9 @@ t_void		*free_t_str(t_void *list);
 int			safe_open(char *path);
 void		hex_to_rgb(unsigned char *rgb, char *s);
 t_void		**list_to_tab(t_void *list);
+
+// misc
+void		vertix_to_vector3(t_vertix *vertix, t_vector3 *vector);
 
 // free structure
 t_void		*free_t_env(t_void *list);
@@ -397,13 +426,17 @@ void		mtl_checks(t_mtlfile *mtlfile);
 //sdl/glfw
 void		display_object(t_glfw *glfw, t_objfile **objf, t_xpm **xpm, int *len);
 void		translate_obj(t_vertix *vertix, float x, float y, float z);
+t_matrix4	view_matrix(void);
+t_matrix4	pro_matrix(float radx, float rady, float far, float near);
+void		fill_color_array(float *arr, t_face *face);
+void		fill_tex_array(float *arr, t_face *face);
+void		fill_points_array(float *arr, t_face *face, t_gl_env *gl_e);
 
-// sdl events
-// void		events(int scancode, t_sdl *sdl, t_sdl_env *sdl_e, t_gl_env *gl_e);
-// int			event_obj_rotate(int scancode, int *rot, int angle);
-// int			event_obj_translate(int scancode, float *pos, float vector);
-// int			event_assets(int scancode, t_objfile **objf, GLuint *texture_id, t_arg args);
-// int			event_properties(int scancode, int *rotate, int *tex);
+//error OpenGL
+void 		print_programme_info_log(GLuint programme);
+
+// events
+void		events(t_glfw *glfw, t_gl_env *gl_e, char **boolens);
 
 //rotations matricielles
 void	rot_vector2(t_vector2 *src, t_vector2 *dst, float rad, float rot_direction);

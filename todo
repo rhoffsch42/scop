@@ -54,6 +54,7 @@ a faire:
 				-> comportement variable en fonctione de la forme de l'objet
 			2-> trouver un algo
 	utilisation du .mtl
+	zoom avec le FOV
 fait:
 	texture gl
 	translation
@@ -86,5 +87,5 @@ Couleur (triangularisation OK, reste a choisir definitivement le mode de couleur
 *autre ? (5 bonus)
 	1 ++ multiple objet/mtl/texture
 	2 + -d parameter
-	3
+	3 + zoom via le FOV
 ------------------------------------------------------------------------------------------------------------

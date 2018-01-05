@@ -50,12 +50,15 @@ SRC_FILE		=	main.c \
 					for_list.c \
 					list_to_tab.c \
 					display.c \
+					matrix.c \
+					fill_gl_arrays.c \
+					gl_error.c \
+					event.c \
 					xpm_load.c \
 					xpm_data.c \
 					xpm_to_glid.c \
 					data_parsing.c \
 					color.c \
-					rot_vector.c \
 					misc.c
 
 HDR_FILE		=	scop.h

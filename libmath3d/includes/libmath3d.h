@@ -16,18 +16,21 @@
 # include <math.h>
 # include <stdint.h>
 # include <stdio.h>
+# include <string.h>
 # include <stdlib.h>
 # include <errno.h>
 
 # define RGB(r, g, b)			(65536 * (int)(r) + 256 * (int)(g) + (int)(b))
-# define RTOD(x)				(x * (180.0f / M_PI))
-# define DTOR(x)				(x * M_PI / 180.0f)
+# define RTOD(x)				((x) * (180.0f / M_PI))
+# define DTOR(x)				((x) * M_PI / 180.0f)
 
 # define MATRIX_COLUMN_MAJOR	0
 # define MATRIX_ROW_MAJOR		1
 # define IDENTITY				1
 # define ROT_RIGHT				-1
 # define ROT_LEFT				1
+# define RM		{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}
+# define CM		{0, 4, 8, 12, 1, 5, 9, 13, 2, 6, 10, 14, 3, 7, 11, 15}
 
 typedef struct	s_vector2
 {
@@ -77,7 +80,7 @@ typedef struct	s_matrix4
 
 void			vector2_print(const t_vector2 v);
 void			vector3_print(const t_vector3 v);
-void			matrix4_print(const t_matrix4 m);
+void			matrix4_print(t_matrix4 m);
 
 t_vector2		vector2(float x, float y);
 t_vector2		vector2_add(t_vector2 v1, const t_vector2 v2);

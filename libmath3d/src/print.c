@@ -22,8 +22,11 @@ void	vector3_print(const t_vector3 v)
 	printf("vector3\t\t%.2f\t%.2f\t%.2f\n", v.x, v.y, v.z);
 }
 
-void	matrix4_print(const t_matrix4 m)
+void	matrix4_print(t_matrix4 m)
 {
+	int		*o;
+
+	o = (m.order == MATRIX_ROW_MAJOR) ? (int[16])RM : (int[16])CM;
 	if (m.order == MATRIX_ROW_MAJOR)
 		printf("matrix4 (row-major order)\n");
 	else if (m.order == MATRIX_COLUMN_MAJOR)
@@ -33,12 +36,12 @@ void	matrix4_print(const t_matrix4 m)
 		fprintf(stderr, "\033[31mCritical: matrix order not set \033[0m\n");
 		exit(255);
 	}
+	printf("\t%.2f\t%.2f\t%.2f\t%.2f\n",
+		m.m.e[o[0]], m.m.e[o[1]], m.m.e[o[2]], m.m.e[o[3]]);
 	printf("\t%.2f\t%.2f\t%.2f\t%.2f\n", \
-		m.m.e[0], m.m.e[1], m.m.e[2], m.m.e[3]);
+		m.m.e[o[4]], m.m.e[o[5]], m.m.e[o[6]], m.m.e[o[7]]);
 	printf("\t%.2f\t%.2f\t%.2f\t%.2f\n", \
-		m.m.e[4], m.m.e[5], m.m.e[6], m.m.e[7]);
+		m.m.e[o[8]], m.m.e[o[9]], m.m.e[o[10]], m.m.e[o[11]]);
 	printf("\t%.2f\t%.2f\t%.2f\t%.2f\n", \
-		m.m.e[8], m.m.e[9], m.m.e[10], m.m.e[11]);
-	printf("\t%.2f\t%.2f\t%.2f\t%.2f\n", \
-		m.m.e[12], m.m.e[13], m.m.e[14], m.m.e[15]);
+		m.m.e[o[12]], m.m.e[o[13]], m.m.e[o[14]], m.m.e[o[15]]);
 }

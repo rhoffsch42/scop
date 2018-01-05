@@ -1,100 +1,94 @@
 #include <scop.h>
 
-void		event_properties(int scancode, t_gl_env *gl_e)
+static int		is_first_press(t_glfw *glfw, int key, char **boolens)
 {
-	if (scancode == 44)//space
-		gl_e->rotate = (gl_e->rotate) ? 0 : 1;
-	else if (scancode == 40)//enter (center)
+	int		val;
+
+	if ((val = glfwGetKey(glfw->win, key)) == GLFW_PRESS \
+		&& (*boolens)[key] == 0)
 	{
-		gl_e->tex = (gl_e->tex == 2) ? 0 : gl_e->tex + 1;
-		(gl_e->tex == 1) ? glEnable(GL_TEXTURE_2D) : glDisable(GL_TEXTURE_2D);
+		(*boolens)[key] = 1;
+		return (1);
 	}
+	else if (val == GLFW_RELEASE)
+	{
+		(*boolens)[key] = 0;
+		return (0);
+	}
+	return (0);
 }
 
-void		event_assets(int scancode, t_gl_env *gl_e)
+static void		events_one_press(t_glfw *glfw, t_gl_env *gl_e, char **boolens)
 {
-	if (scancode == 75)//up obj
+	int		val;
+
+	if ((val = is_first_press(glfw, GLFW_KEY_PAGE_DOWN, boolens)) == 1)
 		gl_e->obj_i = (gl_e->obj_i < gl_e->obj_len - 1) ? gl_e->obj_i + 1 : 0;
-	else if (scancode == 78)//down obj
-		gl_e->obj_i = (gl_e->obj_i != 0) ? gl_e->obj_i - 1 : gl_e->obj_len - 1;
-	else if (scancode == 74)//up texture
-	{
+	if ((val = is_first_press(glfw, GLFW_KEY_PAGE_UP, boolens)) == 1)
+		gl_e->obj_i = (gl_e->obj_i > 0) ? gl_e->obj_i - 1 : gl_e->obj_len - 1;
+	if ((val = is_first_press(glfw, GLFW_KEY_HOME, boolens)) == 1)
 		gl_e->tex_i = (gl_e->tex_i < gl_e->xpm_len - 1) ? gl_e->tex_i + 1 : 0;
-		glBindTexture(GL_TEXTURE_2D, gl_e->tex_id[gl_e->tex_i]);
-	}
-	else if (scancode == 77)//down texture
-	{
+	if ((val = is_first_press(glfw, GLFW_KEY_END, boolens)) == 1)
 		gl_e->tex_i = (gl_e->tex_i != 0) ? gl_e->tex_i - 1 : gl_e->xpm_len - 1;
-		glBindTexture(GL_TEXTURE_2D, gl_e->tex_id[gl_e->tex_i]);
-	}
-	else
-		event_properties(scancode, gl_e);
-}
-
-void		event_obj_translate(int scancode, t_gl_env *gl_e)
-{
-	if (scancode == 82)
-		gl_e->pos[1] += gl_e->vector;
-	else if (scancode == 81)
-		gl_e->pos[1] += -gl_e->vector;
-	else if (scancode == 80)
-		gl_e->pos[0] += -gl_e->vector;
-	else if (scancode == 79)
-		gl_e->pos[0] += gl_e->vector;
-	else if (scancode == 30)
-		gl_e->pos[2] += -gl_e->vector;
-	else if (scancode == 39)
-		gl_e->pos[2] += gl_e->vector;
-	else
-		event_assets(scancode, gl_e);
-}
-
-void		event_obj_rotate(int scancode, t_gl_env *gl_e)
-{
-	if (scancode == 36)
-		gl_e->rot[0] += gl_e->angle;
-	else if (scancode == 33)
-		gl_e->rot[0] += -gl_e->angle;
-	else if (scancode == 37)
-		gl_e->rot[1] += gl_e->angle;
-	else if (scancode == 34)
-		gl_e->rot[1] += -gl_e->angle;
-	else if (scancode == 38)
-		gl_e->rot[2] += gl_e->angle;
-	else if (scancode == 35)
-		gl_e->rot[2] += -gl_e->angle;
-	else
-		event_obj_translate(scancode, gl_e);
-}
-
-void		events(int scancode, t_sdl *sdl, t_sdl_env *sdl_e, t_gl_env *gl_e)
-{
-	if (scancode == SDL_SCANCODE_ESCAPE)
+	if ((val = is_first_press(glfw, GLFW_KEY_ENTER, boolens)) == 1)
 	{
-		sdl_e->quit = 1;
-		SDL_GL_DeleteContext(sdl->glcontext);
-		// break ;
+		gl_e->dismod = (gl_e->dismod < MODS - 1) ? gl_e->dismod + 1 : 0;
+		glUniform1i(gl_e->display_mod, gl_e->dismod);
 	}
-	else
-		event_obj_rotate(scancode, gl_e);
+	if ((val = is_first_press(glfw, GLFW_KEY_SPACE, boolens)) == 1)
+		gl_e->rotate = !gl_e->rotate;
 }
 
+static void		events_movements(t_glfw *glfw, t_gl_env *gl_e)
+{
+	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_LEFT))
+		gl_e->pos.x -= 0.01f;
+	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_RIGHT))
+		gl_e->pos.x += 0.01f;
+	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_DOWN))
+		gl_e->pos.y -= 0.01f;
+	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_UP))
+		gl_e->pos.y += 0.01f;
+	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_1))
+		gl_e->pos.z -= 0.01f;
+	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_0))
+		gl_e->pos.z += 0.01f;
+	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_7))
+		gl_e->rot.x += RAD;
+	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_4))
+		gl_e->rot.x -= RAD;
+	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_8))
+		gl_e->rot.y += RAD;
+	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_5))
+		gl_e->rot.y -= RAD;
+	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_9))
+		gl_e->rot.z += RAD;
+	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_6))
+		gl_e->rot.z -= RAD;
+}
 
-// 21/10
-// 1200	0
-// 0		4
-// 1232	0
-// 0		4.2
-// 1297	0
-// 0		4.6
-// 1399	0
-// 0		4.8
-// 1568	0
-// 0		5.2
-// 1663	0
-// 0		5.5
-// 1723	0
-// 13/11
-// 23 jours <=> 523
-// = 31 jours <=> 704 pour 1200
-// taxe 0%
+/*
+**	glFrontFace(GL_CW); // GL_CCW for counter clock-wise
+*/
+
+void			events(t_glfw *glfw, t_gl_env *gl_e, char **boolens)
+{
+	int		val;
+
+	if ((val = glfwGetKey(glfw->win, GLFW_KEY_C)) == GLFW_PRESS \
+		&& !(*boolens)[GLFW_KEY_C])
+	{
+		(*boolens)[GLFW_KEY_C] = 1;
+		glEnable(GL_CULL_FACE);
+		glCullFace(GL_BACK);
+	}
+	else if (val == GLFW_RELEASE)
+	{
+		(*boolens)[GLFW_KEY_C] = 0;
+		glDisable(GL_CULL_FACE);
+	}
+	events_one_press(glfw, gl_e, boolens);
+	events_movements(glfw, gl_e);
+	if (gl_e->rotate)
+		gl_e->rot.y += RAD;
+}
