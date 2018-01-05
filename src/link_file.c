@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   link_file.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/01/05 17:07:46 by rhoffsch          #+#    #+#             */
+/*   Updated: 2018/01/05 17:07:48 by rhoffsch         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <scop.h>
 
 static void		check_directory(t_env *e, char *filename)
@@ -6,11 +18,13 @@ static void		check_directory(t_env *e, char *filename)
 	t_str	*dir;
 	int		len[2];
 
+	printf("__ check_directory: %s\n", filename);
 	dir = e->dir;
 	bigpath = NULL;
 	len[1] = ft_strlen(filename);
 	while (dir)
 	{
+		printf("dir: %s\n", dir->str);
 		if (bigpath)
 			ft_strdel(&bigpath);
 		len[0] = len[1] + ft_strlen(dir->str) + 1;
@@ -33,16 +47,14 @@ static void		link_material(t_obj *obj, t_mtlfile *mtlf)
 		return ;
 	while (mtlf)
 	{
-		if (ft_strcmp(obj->mtllib, mtlf->name) == 0)
+		if (strcmp(obj->mtllib, mtlf->name) == 0)
 		{
 			mat = mtlf->mat;
 			while (mat)
 			{
-				if (ft_strcmp(mat->name, obj->mat_name) == 0)
+				if (strcmp(mat->name, obj->mat_name) == 0)
 				{
-					ft_putendl("linking mat:");
-					ft_putendl(obj->name);
-					ft_putendl(mat->name);
+					printf("linking mat:\t%s - %s\n", obj->name, mat->name);
 					obj->mtlfile = mtlf;
 					obj->mat = mat;
 					break ;
@@ -56,11 +68,12 @@ static void		link_material(t_obj *obj, t_mtlfile *mtlf)
 	}
 }
 
-void	link_file(t_env *e)
+void			link_file(t_env *e)
 {
 	t_objfile	*objf;
 	t_obj		*obj;
 
+	printf("__ link_file\n");
 	objf = e->objfile;
 	while (objf)
 	{
@@ -68,10 +81,11 @@ void	link_file(t_env *e)
 		while (obj)
 		{
 			link_material(obj, e->mtlfile);
-			if (obj->mat == NULL)
+			if (obj->mat == NULL && obj->mtllib)
 			{
 				check_directory(e, obj->mtllib);
 				link_material(obj, e->mtlfile);
+				printf("linked\n");
 			}
 			obj = obj->next;
 		}

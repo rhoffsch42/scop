@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   free_struct1.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/01/05 17:06:58 by rhoffsch          #+#    #+#             */
+/*   Updated: 2018/01/05 17:07:01 by rhoffsch         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <scop.h>
 
 t_void	*free_t_env(t_void *list)
@@ -33,7 +45,7 @@ t_void	*free_t_xpm(t_void *list)
 	ptr->next = NULL;
 	ft_strdel(&(ptr->name));
 	ft_strdel(&(ptr->path));
-	ft_strdel( (char**)&ptr->data   );
+	ft_strdel((char**)&ptr->data);
 	ft_bzero(list, sizeof(t_xpm));
 	free(list);
 	ptr = NULL;

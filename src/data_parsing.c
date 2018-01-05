@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   data_parsing.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/01/05 17:05:40 by rhoffsch          #+#    #+#             */
+/*   Updated: 2018/01/05 17:05:51 by rhoffsch         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <scop.h>
 
 static int	linelen(char *s)
@@ -10,7 +22,7 @@ static int	linelen(char *s)
 	return (i);
 }
 
-char	*t_str_to_char(t_str *ptr)
+char		*t_str_to_char(t_str *ptr)
 {
 	t_str	*ptr1;
 	char	*all;
@@ -39,7 +51,7 @@ char	*t_str_to_char(t_str *ptr)
 	return (all);
 }
 
-t_str	*char_to_t_str(char *str)
+t_str		*char_to_t_str(char *str)
 {
 	t_str	*lst;
 	t_str	*ptr;
@@ -68,7 +80,7 @@ t_str	*char_to_t_str(char *str)
 	return (lst);
 }
 
-static int		init(char *start, char *end, char *front, int *len)
+static int	init(char *start, char *end, char *front, int *len)
 {
 	if (ft_strchr(front, DOUBLE_QUOTE))
 		ft_errexit(ft_strjoin(XPM_TOKEN_ERR, front), RED, DATA_CORRUPT);
@@ -82,7 +94,7 @@ static int		init(char *start, char *end, char *front, int *len)
 	return (0);
 }
 
-void	remove_comments_vl(char *str, char *start, char *end, char *front)
+void		remove_comments_vl(char *str, char *start, char *end, char *front)
 {
 	int		i;
 	int		dq[2];

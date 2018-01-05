@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   matrix.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/01/05 17:08:13 by rhoffsch          #+#    #+#             */
+/*   Updated: 2018/01/05 17:08:16 by rhoffsch         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <scop.h>
 
-static t_cam	init_cam(float x, float y, float z)
+static t_cam		init_cam(float x, float y, float z)
 {
 	t_cam	cam;
 
@@ -20,7 +32,7 @@ static t_cam	init_cam(float x, float y, float z)
 	return (cam);
 }
 
-t_matrix4		view_matrix(void)
+static t_matrix4	view_matrix(void)
 {
 	t_cam		cam;
 	t_matrix4	viewmatrix;
@@ -44,7 +56,7 @@ t_matrix4		view_matrix(void)
 	return (viewmatrix);
 }
 
-t_matrix4		pro_matrix(float radx, float rady, float far, float near)
+static t_matrix4	pro_matrix(float radx, float rady, float far, float near)
 {
 	t_matrix4	promatrix;
 	float	ratiox;
@@ -60,4 +72,17 @@ t_matrix4		pro_matrix(float radx, float rady, float far, float near)
 	promatrix.m.tab[3][2] = -1.0f;
 	promatrix = matrix4_set_order(promatrix, !promatrix.order);
 	return (promatrix);
+}
+
+void				load_matrix(GLuint projection)
+{
+	t_matrix4	promatrix;
+	t_matrix4	viewmatrix;
+
+	viewmatrix = view_matrix();
+	promatrix = pro_matrix(DTOR(FOVX), DTOR(FOVY), FAR, NEAR);
+	promatrix = matrix4_mult(promatrix, viewmatrix);
+	printf("Projection * View Matrix:\n");
+	matrix4_print(promatrix);
+	glUniformMatrix4fv(projection, 1, GL_FALSE, promatrix.m.e);
 }

@@ -53,6 +53,7 @@ SRC_FILE		=	main.c \
 					matrix.c \
 					fill_gl_arrays.c \
 					gl_error.c \
+					gl_build.c \
 					event.c \
 					xpm_load.c \
 					xpm_data.c \

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   fill_gl_arrays.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/01/05 17:06:47 by rhoffsch          #+#    #+#             */
+/*   Updated: 2018/01/05 17:09:39 by rhoffsch         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <scop.h>
 
 void		fill_color_array(float *arr, t_face *face)
@@ -27,8 +39,8 @@ void		fill_color_array(float *arr, t_face *face)
 void		fill_tex_array(float *arr, t_face *face)
 {
 	int			i;
-	float 		scale;
-	float 		offset_y;
+	float		scale;
+	float		offset_y;
 
 	scale = 0.75f;
 	offset_y = -0.5f;

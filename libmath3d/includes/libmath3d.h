@@ -76,6 +76,9 @@ typedef struct	s_matrix4
 **		calc_new magnitude/otherx
 **	else
 **		return magnitude/otherx
+**
+**	void			vector2_scale(t_vector2 dst, float f);
+**	void			vector3_scale(t_vector3 dst, float v);
 */
 
 void			vector2_print(const t_vector2 v);
@@ -86,7 +89,6 @@ t_vector2		vector2(float x, float y);
 t_vector2		vector2_add(t_vector2 v1, const t_vector2 v2);
 t_vector2		vector2_sub(t_vector2 v1, const t_vector2 v2);
 t_vector2		vector2_mult_coef(t_vector2 v, float coef);
-void			vector2_scale(t_vector2 dst, float f);//
 float			vector2_magnitude(const t_vector2 v);
 float			vector2_dot(const t_vector2 v1, const t_vector2 v2);
 t_vector2		vector2_rot(t_vector2 v, float rad, float rot_direction);
@@ -95,7 +97,6 @@ t_vector3		vector3(float x, float y, float z);
 t_vector3		vector3_add(t_vector3 v1, const t_vector3 v2);
 t_vector3		vector3_sub(t_vector3 v1, const t_vector3 v2);
 t_vector3		vector3_mult_coef(t_vector3 v, float coef);
-void			vector3_scale(t_vector3 dst, float v);//
 float			vector3_magnitude(const t_vector3 v);
 float			vector3_dot(const t_vector3 v1, const t_vector3 v2);
 t_vector3		vector3_cross(const t_vector3 v1, const t_vector3 v2);

@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   for_list.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/01/05 17:06:53 by rhoffsch          #+#    #+#             */
+/*   Updated: 2018/01/05 17:06:56 by rhoffsch         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <scop.h>
 
-t_void		*get_link(t_void* list, int index)
+t_void		*get_link(t_void *list, int index)
 {
 	int		i;
 
@@ -17,10 +29,10 @@ t_void		*get_link(t_void* list, int index)
 	return (NULL);
 }
 
-
 t_arg		init_args(void *a1, void *a2, void *a3, void *a4)
 {
 	t_arg	s;
+
 	s.next = NULL;
 	s.ptr[0] = a1;
 	s.ptr[1] = a2;
@@ -36,7 +48,7 @@ t_arg		init_args(void *a1, void *a2, void *a3, void *a4)
 }
 
 t_void		*for_list_args(t_void *ptr, t_arg args, \
-							t_void* (*func)(t_void*, t_arg args))
+							t_void *(*func)(t_void*, t_arg args))
 {
 	void	*ret;
 
@@ -49,7 +61,7 @@ t_void		*for_list_args(t_void *ptr, t_arg args, \
 	return (NULL);
 }
 
-t_void		*for_list(t_void *ptr, t_void* (*func)(t_void*))
+t_void		*for_list(t_void *ptr, t_void *(*func)(t_void*))
 {
 	t_void	*ret;
 
@@ -61,13 +73,14 @@ t_void		*for_list(t_void *ptr, t_void* (*func)(t_void*))
 	}
 	return (NULL);
 }
-/*
-	en faisant un for_list dans un for_list, on peut return un pointeur
-	du deuxieme  for_list (profondeur 2), comment connaitre le type ?
 
-	- dans for_list donner une valeur a une globale pour identifier le type
-	- metre un 'int type;' dans chaque liste, et se referer a une table,
-		le 'int type;' doit se trouver au meme endroit dans la structure
-		par ex: juste apres le next
-		=> header commun a toute liste
+/*
+**	en faisant un for_list dans un for_list, on peut return un pointeur
+**	du deuxieme  for_list (profondeur 2), comment connaitre le type ?
+**
+**	- dans for_list donner une valeur a une globale pour identifier le type
+**	- metre un 'int type;' dans chaque liste, et se referer a une table,
+**		le 'int type;' doit se trouver au meme endroit dans la structure
+**		par ex: juste apres le next
+**		=> header commun a toute liste
 */

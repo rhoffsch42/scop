@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   load_file.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/01/05 17:07:53 by rhoffsch          #+#    #+#             */
+/*   Updated: 2018/01/05 17:07:57 by rhoffsch         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <scop.h>
 
 static void		error_arg(char *s1, char *s2)
@@ -45,11 +57,11 @@ static void		add_directory(char **av, int i, t_str **dir)
 	}
 }
 
-void	load_file(t_env *e, int ac, char **av)
+void			load_file(t_env *e, int ac, char **av)
 {
 	int		i;
 
-	printf("__ load_file\n");
+	printf("____ load_file\n");
 	if (ac == 1)
 		error_arg(av[0], SCOP_BAD_ARG);
 	i = 1;
@@ -71,8 +83,11 @@ void	load_file(t_env *e, int ac, char **av)
 			error_arg(av[i], SCOP_BAD_ARG);
 		i++;
 	}
+	printf("__ _______ 1endl load file\n");
 	link_file(e);
+	printf("__ _______ 2endl load file\n");
 	obj_checks(e->objfile);
 	mtl_checks(e->mtlfile);
 	for_list((t_void*)(e->objfile), rewrite_objects);
+	printf("__ 3endl load file\n");
 }

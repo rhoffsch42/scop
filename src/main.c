@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/01/05 17:07:58 by rhoffsch          #+#    #+#             */
+/*   Updated: 2018/01/05 17:09:41 by rhoffsch         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <scop.h>
 
 char	*get_line(t_str *lst, int n)
@@ -180,9 +192,8 @@ int		main(int ac, char **av)
 	t_objfile	**object_tab;
 	t_xpm		**texture_tab;
 	e = init_env();
-	printf("__ load_file\n");
 	load_file(e, ac, av);
-	printf("__ dump_datafile\n");
+	printf("___ dump_datafile\n");
 	dump_datafile(e->objfile, e->mtlfile, e->dir, e->xpmfile);
 	t_rgb *rgb = get_color(e->chart, "medium slate blue");
 	if (rgb)
@@ -193,7 +204,7 @@ int		main(int ac, char **av)
 	}
 	object_tab = (t_objfile**)list_to_tab((t_void*)(e->objfile));
 	texture_tab = (t_xpm**)list_to_tab((t_void*)(e->xpmfile));
-	e->glfw = init_glfw();
+	e->glfw = init_glfw(NULL);
 	(void)texture_tab;
 	display_object(e->glfw, object_tab, texture_tab, \
 		(int[2]){ft_listlen(e->objfile), ft_listlen(e->xpmfile)});

@@ -83,6 +83,7 @@
 # define NEAR			10.0f
 # define FOVX			90.0f
 # define FOVY			90.0f
+# define MAX_FOV		200.0f
 
 # define SCOP_DIR			"-d"
 # define OBJ_BAD_FORMAT		100
@@ -231,7 +232,6 @@ typedef struct			s_objfile
 typedef struct			s_glfw
 {
 	int					size[2];
-	int					mid[2];
 	char				*title;
 	GLFWwindow			*win;
 }						t_glfw;
@@ -365,7 +365,7 @@ t_arg		init_args(void *a1, void *a2, void *a3, void *a4);
 t_void		*get_link(t_void* list, int index);
 
 
-//parsing char* / t_str
+// parsing char* / t_str
 void		remove_comments_l(t_str *ptr, char *comment_str);
 void		remove_comments_vl(char *str, char *start, char *end, char *front);
 char		*t_str_to_char(t_str *ptr);
@@ -377,11 +377,11 @@ t_env		*init_env(void);
 t_obj		*init_obj(void);
 t_mat		*init_mat(void);
 t_xpm		*init_xpm(void);
-t_glfw		*init_glfw(void);
+t_glfw		*init_glfw(t_glfw *glfw);
 t_sdl_env	*init_sdl_env(void);
 t_gl_env	*init_gl_env(t_objfile **objf, t_xpm **xpm, int *len);
 
-//parsing args
+// parsing args
 void		load_file(t_env *e, int ac, char **av);
 int			is_typefile(char *file, char *type);
 void		add_objfile(t_objfile **addr, char *file);
@@ -401,7 +401,7 @@ t_str		*build_pixels(t_xpm *xpm, t_rgb *rgb_tokens, int t_size, t_str *ptr);
 char		*chk_separator(char *str);
 GLuint		xpm_to_glid(t_xpm *xpm);
 
-//parsing .obj
+// parsing .obj
 t_obj		*build_objects(char *path);
 void		error_obj(char *s1, char *s2);
 t_str		*add_vertix(t_obj *obj, t_str *ptr);
@@ -414,7 +414,7 @@ void		obj_checks(t_objfile *objfile);
 t_void		*rewrite_objects(t_void *objfile);
 void		triangularize(t_obj* obj);
 
-//parsing .mtl
+// parsing .mtl
 t_mat		*build_material(char *path);
 t_str		*add_mtlname(t_mat **mat, t_str *ptr);
 t_str		*add_color(t_str *ptr, float *color);
@@ -423,25 +423,19 @@ t_str		*add_value_f(t_str *ptr, float *var);
 void		error_mtl(char *s1, char *s2);
 void		mtl_checks(t_mtlfile *mtlfile);
 
-//sdl/glfw
+// glfw
 void		display_object(t_glfw *glfw, t_objfile **objf, t_xpm **xpm, int *len);
-void		translate_obj(t_vertix *vertix, float x, float y, float z);
-t_matrix4	view_matrix(void);
-t_matrix4	pro_matrix(float radx, float rady, float far, float near);
 void		fill_color_array(float *arr, t_face *face);
 void		fill_tex_array(float *arr, t_face *face);
 void		fill_points_array(float *arr, t_face *face, t_gl_env *gl_e);
+void		load_matrix(GLuint projection);
+void		create_program(t_gl_env *gl_e);
 
-//error OpenGL
+// error OpenGL
 void 		print_programme_info_log(GLuint programme);
+void		gl_compile_error(GLuint shader, char *intro);
 
 // events
 void		events(t_glfw *glfw, t_gl_env *gl_e, char **boolens);
-
-//rotations matricielles
-void	rot_vector2(t_vector2 *src, t_vector2 *dst, float rad, float rot_direction);
-void	rot_vector3_bis(t_vector3 *src, t_vector3 *dst, t_vector3 rad, float rot_direction);
-void	rot_vector3(t_vector3 *src, t_vector3 *dst, t_vector3 rad, float rot_direction);
-void	revrot_vector3(t_vector3 *src, t_vector3 *dst, t_vector3 rad, float rot_direction);
 
 #endif

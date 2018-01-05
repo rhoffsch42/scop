@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_free_list.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/01/05 17:07:09 by rhoffsch          #+#    #+#             */
+/*   Updated: 2018/01/05 17:07:13 by rhoffsch         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <scop.h>
 
 t_void	*free_t_str(t_void *list)
@@ -18,7 +30,7 @@ t_void	*free_t_str(t_void *list)
 	return (next);
 }
 
-void	ft_free_list(void *list, t_void* (custom_free)(t_void*))
+void	ft_free_list(void *list, t_void *(custom_free)(t_void*))
 {
 	t_void	*ptr;
 	t_void	*f;

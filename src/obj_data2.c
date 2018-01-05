@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   obj_data2.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/01/05 17:08:52 by rhoffsch          #+#    #+#             */
+/*   Updated: 2018/01/05 17:08:55 by rhoffsch         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <scop.h>
 
-t_str	*add_objname(t_obj *obj, t_str *ptr)
+t_str			*add_objname(t_obj *obj, t_str *ptr)
 {
 	char	token[100];
 	char	name[500];
@@ -16,7 +28,7 @@ t_str	*add_objname(t_obj *obj, t_str *ptr)
 	return (ptr->next);
 }
 
-void		translate_obj(t_vertix *vertix, float x, float y, float z)
+static void		translate_obj(t_vertix *vertix, float x, float y, float z)
 {
 	while (vertix)
 	{
@@ -27,7 +39,7 @@ void		translate_obj(t_vertix *vertix, float x, float y, float z)
 	}
 }
 
-static t_void		*center_obj(t_void *objptr)
+static t_void	*center_obj(t_void *objptr)
 {
 	t_vertix	*vertix;
 	float		vmin[3];
@@ -61,7 +73,7 @@ t_void		*rewrite_objects(t_void *objfile)
 	return (for_list((t_void*)(((t_objfile*)objfile)->obj), center_obj));
 }
 
-void	triangularize(t_obj* obj)
+void		triangularize(t_obj* obj)
 {
 	t_face	*f;
 	t_face	*new_f;
