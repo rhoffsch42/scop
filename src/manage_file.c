@@ -16,9 +16,9 @@ t_mtlfile	*get_mtlfile(t_mtlfile *ptr, char *path)
 {
 	while (ptr)
 	{
-		if (ft_strcmp(path, ptr->path) == 0)
+		if (strcmp(path, ptr->path) == 0)
 		{
-			ft_putendl("Found!");
+			printf("Found mtlfile  s:%s f:%s\n", path, ptr->name);
 			return (ptr);
 		}
 		ptr = ptr->next;
@@ -30,9 +30,9 @@ t_objfile	*get_objfile(t_objfile *ptr, char *path)
 {
 	while (ptr)
 	{
-		if (ft_strcmp(path, ptr->path) == 0)
+		if (strcmp(path, ptr->path) == 0)
 		{
-			ft_putendl("Found!");
+			printf("Found objfile s:%s f:%s\n", path, ptr->name);
 			return (ptr);
 		}
 		ptr = ptr->next;
@@ -47,6 +47,7 @@ void	add_objfile(t_objfile **addr, char *file)
 
 	if (!chk_objfile(*addr, file))
 		return ;
+	startf("add_objfile");
 	new_objfile = (t_objfile*)safe_malloc(sizeof(t_objfile));
 	new_objfile->id = id;
 	new_objfile->path = ft_strdup(file);
@@ -55,6 +56,7 @@ void	add_objfile(t_objfile **addr, char *file)
 	new_objfile->next = *addr;
 	*addr = new_objfile;
 	id++;
+	deep--;
 }
 
 void	add_mtlfile(t_mtlfile **addr, char *file)
@@ -63,6 +65,7 @@ void	add_mtlfile(t_mtlfile **addr, char *file)
 	t_mtlfile	*new_mtlfile;
 
 	startf("add_mtlfile");
+	printf("mtlfile: %s\n", file);
 	if (!chk_mtlfile(*addr, file))
 		return ;
 	new_mtlfile = (t_mtlfile*)safe_malloc(sizeof(t_mtlfile));

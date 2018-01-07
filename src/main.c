@@ -27,55 +27,6 @@ char	*get_line(t_str *lst, int n)
 	return (lst->str);
 }
 
-void	test_texture(char *path)
-{
-	ft_chkptr(path, "FUCK envoie une texture!\n", 1);
-	t_str	*data = ft_getfile(path);
-
-	while (data)
-	{
-		int i = 0;
-		while (data->str[i])
-		{
-			ft_putnbr((unsigned char)(data->str[i]));
-			ft_putchar(32);
-			i++;
-			if (i % 15 == 0)
-				ft_putchar(10);
-		}
-		ft_putchar(10);
-		data = data->next;
-	}
-	exit(0);
-}
-
-void	test_sscanf(t_str *lst)
-{
-	float	x, y, z = 0;
-	char	prefix[10];
-	t_str	*ptr = lst;
-	while (ptr)
-	{
-		sscanf(ptr->str, "%s", prefix);
-		if (strcmp(prefix, OBJ_VERTIX) == 0)
-		{
-			sscanf(ptr->str, "%s %f %f %f", prefix, &x, &y, &z);
-			printf("::\t%s\t%f\t%f\t%f\n", prefix, x, y, z);
-		}
-		else
-			ft_putendl(ptr->str);
-		ptr = ptr->next;
-	}
-	ft_putendl("------------------");
-	ft_putendl(get_line(lst, 0));
-	ft_putendl(get_line(lst, 1));
-	ft_putendl(get_line(lst, 2));
-	ft_putendl(get_line(lst, 3));
-
-	// ft_putendl(get_line(lst, 99));
-	ft_putendl("------------------");
-}
-
 void	dump_data_mtl(t_mat *mat)
 {
 	ft_putendl("\tDATAS :");
@@ -91,7 +42,7 @@ void	dump_data_mtl(t_mat *mat)
 		printf("d:       \t%f\n", mat->d);
 		printf("illum:   \t%d\n", mat->illum);
 		mat = mat->next;
-		ft_putendl("<=============>");
+		printf("<=============>\n");
 	}
 }
 
@@ -129,7 +80,7 @@ void	dump_data_obj(t_obj *obj)
 
 void	dump_datafile(t_objfile *objfile, t_mtlfile *mtlfile, t_str *dir, t_xpm *xpm)
 {
-	ft_putendl("*******************************************");
+	printf("*******************************************\n");
 	while (objfile)
 	{
 		printf("type:   \tobjfile\n");
@@ -138,9 +89,9 @@ void	dump_datafile(t_objfile *objfile, t_mtlfile *mtlfile, t_str *dir, t_xpm *xp
 		printf("name:   \t%s\n", objfile->name);
 		dump_data_obj(objfile->obj);
 		objfile = objfile->next;
-		ft_putendl("- - - - - - - - - - - - - - - - - - - -");
+		printf("- - - - - - - - - - - - - - - - - - - -\n");
 	}
-	ft_putendl("*******************************************");
+	printf("*******************************************\n");
 	while (mtlfile)
 	{
 		printf("type:   \tmtlfile\n");
@@ -149,109 +100,52 @@ void	dump_datafile(t_objfile *objfile, t_mtlfile *mtlfile, t_str *dir, t_xpm *xp
 		printf("name:   \t%s\n", mtlfile->name);
 		dump_data_mtl(mtlfile->mat);
 		mtlfile = mtlfile->next;
-		ft_putendl("- - - - - - - - - - - - - - - - - - - -");
+		printf("- - - - - - - - - - - - - - - - - - - -\n");
 	}
-	ft_putendl("*******************************************");
+	printf("*******************************************\n");
 	while (dir)
 	{
-		ft_putstr("-d ");
-		ft_putendl(dir->str);
+		printf("-d %s\n", dir->str);
 		dir = dir->next;
 	}
 	while (xpm)
 	{
-		ft_putendl(xpm->path);
+		printf("%s\n", xpm->path);
 		xpm = xpm->next;
 	}
-	ft_putendl("*******************************************");
-}
-
-void	print_memory(void)
-{
-	errno = 0;
-	struct rusage* memory = malloc(sizeof(struct rusage));
-	getrusage(RUSAGE_SELF, memory);
-	if(errno == EFAULT)
-		printf("Error: EFAULT\n");
-	else if(errno == EINVAL)
-		printf("Error: EINVAL\n");
-	printf("Usage: %ld\n", memory->ru_ixrss);
-	printf("Usage: %ld\n", memory->ru_isrss);
-	printf("Usage: %ld\n", memory->ru_idrss);
-	printf("Max: %ld\n", memory->ru_maxrss);
-}
-
-void	stacksize()
-{
-	size_t stksize;
-	pthread_attr_t atr;
-	if (pthread_attr_getstacksize(&atr, &stksize) == -1)
-		printf("FUCKING SCOP\n");
-	printf("Current stack size ->\t%lu\n", 140734679836896 - stksize);
+	printf("*******************************************\n");
 }
 
 void	gostack()
 {
-	// struct rlimit limit;
-	// getrlimit (RLIMIT_STACK, &limit);
-	// printf ("\nStack Limit = %llu and %llu max\n", limit.rlim_cur, limit.rlim_max);
-	int x=0;
+	int x = 0;
 	printf("STACK\t%lu\n", (top_of_stack - (size_t) &x));
-	// print_memory();
-}
-void	print_struct_offset()
-{
-	ft_putnbrendl(offsetof(t_rgb, next));
-	ft_putnbrendl(offsetof(t_arg, next));
-	ft_putnbrendl(offsetof(t_vertix, next));
-	ft_putnbrendl(offsetof(t_face, next));
-	ft_putnbrendl(offsetof(t_mat, next));
-	ft_putnbrendl(offsetof(t_mtlfile, next));
-	ft_putnbrendl(offsetof(t_obj, next));
-	ft_putnbrendl(offsetof(t_objfile, next));
-	ft_putnbrendl(offsetof(t_xpm, next));
-
-	ft_putnbrendl(offsetof(t_void, next));
-	ft_putnbrendl(offsetof(t_istr, next));
-	ft_putnbrendl(offsetof(t_list, next));
-	ft_putnbrendl(offsetof(t_str, next));
-	exit(0);
-}
-
-void	test_stack(int i)
-{
-	int	l = i;
-	(void)l;
-	// stacksize();
-	gostack();
-	if (i < 20)
-		test_stack(i+1);
-	exit(0);
 }
 
 void	startf(char *func_name)
 {
+	char str[500];
+	ft_bzero(str, 500);
 	deep++;
-	size_t i = -1;
-	while (++i != deep)
-		printf("_ ");
-	printf("%s", func_name);
-	printf("\t\t\t\tend\n");
+	size_t i = 0;
+	while (i < deep)
+	{
+		str[i] = '_';
+		str[i+1] = ' ';
+		i += 2;
+	}
+	strcpy(str + strlen(str), func_name);
+	strcpy(str + strlen(str), "\t\t\t\t.\n");
+	printf("%s", str);
 }
 
 int		main(int ac, char **av)
 {
 	deep = 0;
-	int x=0;
-	top_of_stack = (size_t) &x;
-	// test_stack(0);
 	gostack();
-	// print_struct_offset();
 	// exit(0);
-	// test_sscanf(lst);
-	// test_texture(av[1]);
 	ft_puttab(av);
-	ft_putendl("________________BEGIN________________");
+	printf("________________BEGIN________________\n");
 	t_env		*e;
 	t_objfile	**object_tab;
 	t_xpm		**texture_tab;
@@ -262,9 +156,9 @@ int		main(int ac, char **av)
 	t_rgb *rgb = get_color(e->chart, "medium slate blue");
 	if (rgb)
 	{
-		ft_putnbrendl(rgb->r);
-		ft_putnbrendl(rgb->g);
-		ft_putnbrendl(rgb->b);
+		printf("%d\n", rgb->r);
+		printf("%d\n", rgb->g);
+		printf("%d\n", rgb->b);
 	}
 	object_tab = (t_objfile**)list_to_tab((t_void*)(e->objfile));
 	texture_tab = (t_xpm**)list_to_tab((t_void*)(e->xpmfile));
@@ -272,8 +166,7 @@ int		main(int ac, char **av)
 	(void)texture_tab;
 	display_object(e->glfw, object_tab, texture_tab, \
 		(int[2]){ft_listlen(e->objfile), ft_listlen(e->xpmfile)});
-	// display_object(e->sdl, e->objfile);
 	// free_t_env((t_void*)e);
-	ft_putendl("________________END________________");
+	printf("________________END________________\n");
 	return (0);
 }

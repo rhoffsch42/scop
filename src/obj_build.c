@@ -54,17 +54,17 @@ static void		build_data(t_obj *obj, t_str *ptr)
 	while (ptr)
 	{
 		sscanf(ptr->str, "%s", keyword);
-		if (ft_strcmp(keyword, OBJ_MTLFILE) == 0)
+		if (strcmp(keyword, OBJ_MTLFILE) == 0)
 			ptr = add_mtlfile_name(obj, ptr);
-		else if (ft_strcmp(keyword, OBJ_NEW) == 0)
+		else if (strcmp(keyword, OBJ_NEW) == 0)
 			ptr = add_objname(obj, ptr);
-		else if (ft_strcmp(keyword, OBJ_VERTIX) == 0)
+		else if (strcmp(keyword, OBJ_VERTIX) == 0)
 			ptr = add_vertix(obj, ptr);
-		else if (ft_strcmp(keyword, OBJ_FACE) == 0)
+		else if (strcmp(keyword, OBJ_FACE) == 0)
 			ptr = add_face(obj, ptr);
-		else if (ft_strcmp(keyword, OBJ_MTLUSE) == 0)
+		else if (strcmp(keyword, OBJ_MTLUSE) == 0)
 			ptr = add_material_name(obj, ptr);
-		else if (ft_strcmp(keyword, OBJ_SMOOTH) == 0)
+		else if (strcmp(keyword, OBJ_SMOOTH) == 0)
 			ptr = add_smooth(obj, ptr);
 		else
 			error_obj(ptr->str, OBJ_ERROR);

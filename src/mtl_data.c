@@ -17,7 +17,7 @@ static void		chk_matname(t_mat *mat, char *name)
 	startf("chk_matname");
 	while (mat)
 	{
-		if (ft_strcmp(mat->name, name) == 0)
+		if (strcmp(mat->name, name) == 0)
 			error_mtl(name, MTL_USED);
 		mat = mat->next;
 	}

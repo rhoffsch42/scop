@@ -22,7 +22,7 @@ INCLUDE			=	-I includes \
 					# -I /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks/OpenGL.framework/Versions/A/Headers
 					# -I /Developer/NVIDIA/CUDA-9.0/extras/CUPTI/include #Mac42
 
-LIBS			=	-L libft/ -lft -L libmath3d/ -lmath3d -lpthread
+LIBS			=	-L libft/ -lft -L libmath3d/ -lmath3d
 
 FRAMEWORKS		=	-framework OpenGL
 

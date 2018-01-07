@@ -46,9 +46,9 @@ t_str	*add_smooth(t_obj *obj, t_str *ptr)
 	ft_bzero(token, 20);
 	ft_bzero(token2, 10);
 	sscanf(ptr->str, "%s %s", token, token2);
-	if (ft_strcmp(token2, "on") == 0)
+	if (strcmp(token2, "on") == 0)
 		obj->smooth = 1;
-	else if (ft_strcmp(token2, "off") == 0)
+	else if (strcmp(token2, "off") == 0)
 		obj->smooth = 0;
 	else
 		error_obj(ptr->str, OBJ_ERROR);
@@ -61,17 +61,16 @@ t_str	*add_vertix(t_obj *obj, t_str *ptr)
 	t_vertix	*v;
 	int			id;
 
-	startf("translate_obj");
-	obj->v = (t_vertix*)safe_malloc(sizeof(t_vertix));
-	id = 0;
-	v = obj->v;
+	startf("add_vertix");
+	v = (t_vertix*)safe_malloc(sizeof(t_vertix));
+	id = 1;
+	obj->v = v;
 	while (ptr)
 	{
-		printf(".");
 		sscanf(ptr->str, "%s", token);
-		if (ft_strcmp(token, OBJ_VERTIX) != 0)
+		if (strcmp(token, OBJ_VERTIX) != 0)
 			break ;
-		if (++id != 1)
+		if (id != 1)
 		{
 			v->next = (t_vertix*)safe_malloc(sizeof(t_vertix));
 			v = v->next;
@@ -82,10 +81,52 @@ t_str	*add_vertix(t_obj *obj, t_str *ptr)
 		v->next = NULL;
 		ptr = ptr->next;
 		obj->v_amount++;
+		id++;
 	}
-	printf("\n");
-	if (obj->v == NULL)
-		printf("OMG\n");
+	deep--;
+	return (ptr);
+}
+
+t_vertix	*init_vertix(int id, float x, float y, float z)
+{
+	t_vertix	*vertix;
+
+	vertix = (t_vertix*)safe_malloc(sizeof(t_vertix));
+	ft_bzero(vertix, sizeof(t_vertix));
+	vertix->next = NULL;
+	vertix->x = x;
+	vertix->y = y;
+	vertix->z = z;
+	vertix->id = id;
+	return (vertix);
+}
+t_str	*add_vertix2(t_obj *obj, t_str *ptr)
+{
+	char		token[250];
+	t_vertix	*v;
+	t_vertix	*last;
+	int			id;
+	float		x, y, z;
+
+	startf("add_vertix");
+	id = 1;
+	while (ptr)
+	{
+		sscanf(ptr->str, "%s", token);
+		if (strcmp(token, OBJ_VERTIX) != 0)
+			break ;
+		sscanf(ptr->str, "%s %f %f %f", token, &(x), &(y), &(z));
+		v = init_vertix(id, x, y, z);
+		if (id == 1)
+			obj->v = v;
+		else
+			last->next = v;
+		last = v;
+		//////////////
+		obj->v_amount++;
+		id++;
+		ptr = ptr->next;
+	}
 	deep--;
 	return (ptr);
 }
@@ -102,7 +143,7 @@ t_str	*add_face(t_obj *obj, t_str *ptr)
 	while (ptr)
 	{
 		sscanf(ptr->str, "%s", token);
-		if (ft_strcmp(token, OBJ_FACE) != 0)
+		if (strcmp(token, OBJ_FACE) != 0)
 			break ;
 		if (++id != 1 && (f->next = (t_face*)safe_malloc(sizeof(t_face))))
 			f = f->next;

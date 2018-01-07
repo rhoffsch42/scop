@@ -53,7 +53,7 @@ t_xpm	*get_xpmfile(t_xpm *ptr, char *path)
 	startf("get_xpmfile");
 	while (ptr)
 	{
-		if (ft_strcmp(path, ptr->path) == 0)
+		if (strcmp(path, ptr->path) == 0)
 		{
 			ft_putendl("Found!");
 			deep--;

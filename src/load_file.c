@@ -70,7 +70,7 @@ void			load_file(t_env *e, int ac, char **av)
 	while (av[++i])
 	{
 		printf("%s\n", av[i]);
-		if (ft_strcmp(av[i], SCOP_DIR) == 0)
+		if (strcmp(av[i], SCOP_DIR) == 0)
 			add_directory(av, i++, &(e->dir));
 		else if (is_typefile(av[i], ".obj") && is_readable(av[i]))
 			add_objfile(&(e->objfile), av[i]);
@@ -86,5 +86,5 @@ void			load_file(t_env *e, int ac, char **av)
 	mtl_checks(e->mtlfile);
 	for_list((t_void*)(e->objfile), rewrite_objects);
 	deep--;
-	printf("OKOKOKOK\n");exit(0);
+	// printf("OKOKOKOK\n");exit(0);
 }

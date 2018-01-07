@@ -28,7 +28,7 @@ static void		check_directory(t_env *e, char *filename)
 		printf("dir: %s\n", dir->str);
 		if (bigpath)
 			ft_strdel(&bigpath);
-		len[0] = len[1] + ft_strlen(dir->str) + 1;
+		len[0] = len[1] + ft_strlen(dir->str) + 2;
 		bigpath = (char*)safe_malloc(sizeof(char) * len[0]);
 		ft_bzero(bigpath, len[0]);
 		ft_strcat(bigpath, dir->str);

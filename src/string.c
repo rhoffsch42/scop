@@ -16,9 +16,11 @@ char	*basename(char *path)
 {
 	char	*ptr;
 
+	startf("basename");
 	ptr = ft_strrchr(path, '/');
 	if (ptr)
 		return (ptr + 1);
+	deep--;
 	return (path);
 }
 
@@ -52,7 +54,7 @@ int		is_typefile(char *file, char *type)
 	char	*ptr;
 
 	ptr = ft_strstr(file, type);
-	if (ptr && ft_strcmp(ptr, type) == 0 && ft_strlen(file) > ft_strlen(type))
+	if (ptr && strcmp(ptr, type) == 0 && ft_strlen(file) > ft_strlen(type))
 		return (1);
 	return (0);
 }

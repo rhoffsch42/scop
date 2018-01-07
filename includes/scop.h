@@ -33,12 +33,6 @@
 */
 # include <sys/stat.h>
 
-//memory
-# include <sys/resource.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <pthread.h>
-
 // #define IGNORE_PRINTF
 #ifdef IGNORE_PRINTF
 #define printf(fmt, ...) (0)

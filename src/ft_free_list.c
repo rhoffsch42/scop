@@ -38,19 +38,12 @@ void	ft_free_list(void *list, t_void *(custom_free)(t_void*))
 	t_void	*f;
 
 	startf("ft_free_list");
-	if (!list)printf("FUCK\n");else printf("OK\n");
-	if (!custom_free)printf("FUCK\n");else printf("OK\n");
-
-	printf(".");
 	ptr = (t_void*)list;
-	printf(".");
 	while (ptr)
 	{
-		printf(".");
 		f = ptr;
 		ptr = ptr->next;
 		custom_free(f);
 	}
-	printf("\n");
 	deep--;
 }

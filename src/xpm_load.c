@@ -39,24 +39,24 @@ char	*chk_separator(char *str)
 **	"%1[].+@#$\%&*=-;:>,<!~`^/()_'|{} a-zA-Z0-9[] %s %s\0"
 */
 
-t_str	*build_tokens(t_rgb **rgb_ptr, int token_amount, t_str *ptr, int t_size)
+t_str	*build_tokens(t_rgb **rgb_ptr, int tok_amount, t_str *ptr, int tok_size)
 {
 	int		id;
 	char	*s;
 
 	startf("build_tokens");
 	id = 0;
-	while (token_amount > 0)
+	while (tok_amount > 0)
 	{
 		s = chk_separator(ptr->str);
 		rgb_ptr[0]->next = NULL;
 		rgb_ptr[0]->id = id++;
 		rgb_ptr[0]->name = ft_strdup(s);
-		rgb_ptr[0]->name[t_size] = '\0';
-		if (s[3 + t_size] == '#')
-			hex_to_rgb((unsigned char*)&(rgb_ptr[0]->r), s + 4 + t_size);
+		rgb_ptr[0]->name[tok_size] = '\0';
+		if (s[3 + tok_size] == '#')
+			hex_to_rgb((unsigned char*)&(rgb_ptr[0]->r), s + 4 + tok_size);
 		// hex_to_rgb: attention au padding dans la structure, comportement aleatoire ?
-		else if ((rgb_ptr[2] = get_color(rgb_ptr[1], s + 3 + t_size)) != NULL)
+		else if ((rgb_ptr[2] = get_color(rgb_ptr[1], s + 3 + tok_size)) != NULL)
 		{
 			rgb_ptr[0]->r = rgb_ptr[2]->r;
 			rgb_ptr[0]->g = rgb_ptr[2]->g;
@@ -65,13 +65,16 @@ t_str	*build_tokens(t_rgb **rgb_ptr, int token_amount, t_str *ptr, int t_size)
 		else
 			error_xpm(s, XPM_ERROR);
 		// ft_putstr(rgb_ptr[0]->name);SPACE
-		// ft_putstr(s + 3 + t_size);SPACE
+		// ft_putstr(s + 3 + tok_size);SPACE
 		// ft_putnbr(rgb_ptr[0]->r);SPACE
 		// ft_putnbr(rgb_ptr[0]->g);SPACE
 		// ft_putnbr(rgb_ptr[0]->b);ENDL
-		rgb_ptr[0]->next = (t_rgb*)safe_malloc(sizeof(t_rgb));
-		rgb_ptr[0] = rgb_ptr[0]->next;
-		token_amount--;
+		tok_amount--;
+		if (tok_amount)
+		{
+			rgb_ptr[0]->next = (t_rgb*)safe_malloc(sizeof(t_rgb));
+			rgb_ptr[0] = rgb_ptr[0]->next;
+		}
 		ptr = ptr->next;
 	}
 	deep--;
@@ -80,8 +83,8 @@ t_str	*build_tokens(t_rgb **rgb_ptr, int token_amount, t_str *ptr, int t_size)
 
 static void		build_xpm(t_xpm *x, t_str *ptr, t_rgb *chart)
 {
-	int		token_amount;
-	int		t_size;
+	int		tok_amount;
+	int		tok_size;
 	t_rgb	*rgb_tokens[4];
 	t_str	*line;
 
@@ -89,16 +92,16 @@ static void		build_xpm(t_xpm *x, t_str *ptr, t_rgb *chart)
 	if (strncmp("static", ptr->str, ft_strlen("static")) != 0)
 		error_xpm(ptr->str, XPM_ERROR);
 	if (sscanf(chk_separator(ptr->next->str), "%d %d %d %d", \
-		&(x->width), &(x->height), &token_amount, &t_size) != 4)
+		&(x->width), &(x->height), &tok_amount, &tok_size) != 4)
 		error_xpm(ptr->next->str, XPM_ERROR);
-	if (token_amount <= 0 || t_size <= 0 || x->width <= 0 || x->height <= 0)
+	if (tok_amount <= 0 || tok_size <= 0 || x->width <= 0 || x->height <= 0)
 		error_xpm(ptr->next->str, XPM_ERROR);
 	rgb_tokens[3] = (t_rgb*)safe_malloc(sizeof(t_rgb));
 	rgb_tokens[0] = rgb_tokens[3];
 	rgb_tokens[1] = chart;
 	rgb_tokens[2] = NULL;
-	line = build_tokens(rgb_tokens, token_amount, ptr->next->next, t_size);
-	line = build_pixels(x, rgb_tokens[3], t_size, line);
+	line = build_tokens(rgb_tokens, tok_amount, ptr->next->next, tok_size);
+	line = build_pixels(x, rgb_tokens[3], tok_size, line);
 	ft_free_list(rgb_tokens[3], free_t_rgb);
 	deep--;
 }

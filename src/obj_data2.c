@@ -49,20 +49,6 @@ static t_void	*center_obj(t_void *objptr)
 
 	startf("center_obj");
 	vertix = ((t_obj*)objptr)->v;
-
-	printf("wat\n");
-	gostack();
-
-	if (vertix == NULL)
-	{
-		if (objptr == NULL)
-			printf("FUCK !");
-		t_obj *o = (t_obj*)objptr;(void)o;
-		printf("FUCK2:\nid\t%d\nname\t%s\nv#\t%d\n", o->id, o->name, o->v_amount);
-	}
-	else
-		printf("FUCK yea vertix: %d\n", vertix->id);
-
 	vmin[0] = vertix->x;
 	vmin[1] = vertix->y;
 	vmin[2] = vertix->z;
