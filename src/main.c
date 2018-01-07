@@ -235,7 +235,8 @@ void	startf(char *func_name)
 	size_t i = -1;
 	while (++i != deep)
 		printf("_ ");
-	printf("%s\n", func_name);
+	printf("%s", func_name);
+	printf("\t\t\t\tend\n");
 }
 
 int		main(int ac, char **av)
