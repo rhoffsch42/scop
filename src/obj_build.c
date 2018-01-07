@@ -53,6 +53,7 @@ static void			build_data(t_obj *obj, t_str *ptr)
 	startf("build_data (obj)");
 	while (ptr)
 	{
+		// printf("%s\n", ptr->str);
 		sscanf(ptr->str, "%s", keyword);
 		if (strcmp(keyword, OBJ_MTLFILE) == 0)
 			ptr = add_mtlfile_name(obj, ptr);
@@ -71,18 +72,24 @@ static void			build_data(t_obj *obj, t_str *ptr)
 	}
 }
 
+/*
+**	build_objects :
+**	pour l instant un seul objet est cree, il faudra faire une boucle (ou autre)
+**	pour avoir plusieurs objects dans un objfile
+*/
+
 t_obj				*build_objects(char *path)
 {
 	t_str	*lst;
 	t_obj	*new_obj;
 
-	startf("build_data (obj)");
+	startf("build_objects");
 	lst = ft_getfile(path);
 	remove_comments(lst, COMMENT_CHAR);
 	remove_white_spaces(lst);
 	lst = (t_str*)remove_list((t_void*)lst, is_empty, free_t_str);
-	// pour l instant un seul objet est cree, il faudra faire une boucle (ou autre)
-	// pour avoir plusieurs objects dans un objfile
+	if (!lst)
+		return (NULL);
 	new_obj = init_obj();
 	build_data(new_obj, lst);
 	triangularize(new_obj);

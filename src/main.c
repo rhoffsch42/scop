@@ -142,17 +142,11 @@ int		main(int ac, char **av)
 	load_file(e, ac, av);
 	printf("___ dump_datafile\n");
 	dump_datafile(e->objfile, e->mtlfile, e->dir, e->xpmfile);
-	t_rgb *rgb = get_color(e->chart, "medium slate blue");
-	if (rgb)
-	{
-		printf("%d\n", rgb->r);
-		printf("%d\n", rgb->g);
-		printf("%d\n", rgb->b);
-	}
+	if (!e->objfile)
+		ft_errexit(SCOP_NO_OBJ, RED, BAD_ARGS);
 	object_tab = (t_objfile**)list_to_tab((t_void*)(e->objfile));
 	texture_tab = (t_xpm**)list_to_tab((t_void*)(e->xpmfile));
 	e->glfw = init_glfw(NULL);
-	(void)texture_tab;
 	display_object(e->glfw, object_tab, texture_tab, \
 		(int[2]){ft_listlen(e->objfile), ft_listlen(e->xpmfile)});
 	// free_t_env((t_void*)e);

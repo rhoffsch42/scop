@@ -33,6 +33,8 @@ t_str			*add_mtlname(t_mat **mat, t_str *ptr)
 	ft_bzero(token, 100);
 	ft_bzero(name, 500);
 	sscanf(ptr->str, "%s %s", token, name);
+	if (ft_strlen(name) == 0)
+		error_mtl(ptr->str, MTL_NO_NAME);
 	chk_matname(*mat, name);
 	new_mat = init_mat();
 	new_mat->next = *mat;

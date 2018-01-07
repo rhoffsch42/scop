@@ -47,6 +47,7 @@ t_void		*check_objfile(t_void *link)
 	if (objfile->obj == NULL)
 	{
 		ft_putstr_fd(objfile->path, STDERR_FILENO);
+		ft_putchar_fd('\n', STDERR_FILENO);
 		ft_errexit(OBJF_NO_OBJ, RED, OBJ_BAD_FORMAT);
 	}
 	return (for_list((t_void*)(objfile->obj), &check_obj));

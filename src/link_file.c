@@ -44,7 +44,7 @@ static void		link_material(t_obj *obj, t_mtlfile *mtlf)
 {
 	t_mat	*mat;
 
-	if (obj->mat_name == NULL)
+	if (obj->mat_name == NULL || obj->mtllib == NULL)
 		return ;
 	while (mtlf)
 	{

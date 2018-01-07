@@ -19,6 +19,16 @@ void			error_mtl(char *s1, char *s2)
 	ft_errexit(s2, RED, MTL_BAD_FORMAT);
 }
 
+int				chk_mat(t_mat *mat, char *str)
+{
+	if (!mat)
+	{
+		error_mtl(str, MTL_NO_NAME);
+		return (0);
+	}
+	return (1);
+}
+
 static void		build_data(t_mat **mat, t_str *ptr)
 {
 	char	keyword[100];
@@ -29,19 +39,19 @@ static void		build_data(t_mat **mat, t_str *ptr)
 		sscanf(ptr->str, "%s", keyword);
 		if (strcmp(keyword, MTL_MAT) == 0)
 			ptr = add_mtlname(mat, ptr);
-		else if (strcmp(keyword, MTL_AMBIANT) == 0)
+		else if (strcmp(keyword, MTL_AMBIANT) == 0 && chk_mat(*mat, ptr->str))
 			ptr = add_color(ptr, (*mat)->ka);
-		else if (strcmp(keyword, MTL_DIFFUSE) == 0)
+		else if (strcmp(keyword, MTL_DIFFUSE) == 0 && chk_mat(*mat, ptr->str))
 			ptr = add_color(ptr, (*mat)->kd);
-		else if (strcmp(keyword, MTL_SPECULAR) == 0)
+		else if (strcmp(keyword, MTL_SPECULAR) == 0 && chk_mat(*mat, ptr->str))
 			ptr = add_color(ptr, (*mat)->ks);
-		else if (strcmp(keyword, MTL_SPEC_EXP) == 0)
+		else if (strcmp(keyword, MTL_SPEC_EXP) == 0 && chk_mat(*mat, ptr->str))
 			ptr = add_value_f(ptr, &((*mat)->ns));
-		else if (strcmp(keyword, MTL_DENSITY) == 0)
+		else if (strcmp(keyword, MTL_DENSITY) == 0 && chk_mat(*mat, ptr->str))
 			ptr = add_value_f(ptr, &((*mat)->ni));
-		else if (strcmp(keyword, MTL_OPACITY) == 0)
+		else if (strcmp(keyword, MTL_OPACITY) == 0 && chk_mat(*mat, ptr->str))
 			ptr = add_value_f(ptr, &((*mat)->d));
-		else if (strcmp(keyword, MTL_ILLUM) == 0)
+		else if (strcmp(keyword, MTL_ILLUM) == 0 && chk_mat(*mat, ptr->str))
 			ptr = add_value(ptr, &((*mat)->illum));
 		else
 			error_mtl(ptr->str, MTL_ERROR);

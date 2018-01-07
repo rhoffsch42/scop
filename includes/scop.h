@@ -113,10 +113,12 @@
 # define OBJF_NO_OBJ		"Error : This file has no valid object"
 # define MTLF_NO_MAT		"Error : This file has no valid material"
 # define MTL_ERROR			"Error : bad mtl format"
+# define MTL_NO_NAME		"Error : bad mtl format (missing material name)"
 # define MTL_USED			"Error : name already in use"
 # define DATA_CORRUPT_MSG	"Error : data corrupt"
-# define SCOP_DIR_ERR		"option -d : missing argument\nUsage: scop file.obj [file.mtl] [-d path]"
+# define SCOP_DIR_ERR		"Option -d : missing argument\nUsage: scop file.obj [file.mtl] [-d path]"
 # define SCOP_BAD_ARG		" : invalid argument\nUsage: scop file.obj [file.mtl] [file.xpm] [-d path]"
+# define SCOP_NO_OBJ		"No object file found\nUsage: scop file.obj [file.mtl] [file.xpm] [-d path]"
 # define XPM_ERROR			"Error : bad xpm format"
 # define XPM_TOKEN_ERR		"Bad token for remove_comments_vl : "
 

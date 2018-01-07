@@ -34,8 +34,7 @@ bonus a faire:
 		? maximum X objets/textures (depend de la taille de la fenetre et de la police)
 bonus faits:
 	- option -d : indiquer le dossier dans lequel chercher les assets (.mtl)
-		! si on indique un fichier et pas un dossier -> pas grave: example_file/target_file.obj ne sera pas readable
-			-> pas propre, ca rajoute example_file dans la liste des dossier, il faut le filtrer
+		! si on indique un fichier et pas un dossier, check fait
 		! si on indique un .mtl + un dossier dans lequel il y a aussi ce .mtl mais cest pas le meme
 			ex: ./scop [...] ./42.mtl -d ./assets/		$(ls ./assets/) = "42.mtl"
 			- lequel prendre ? -> cherche d'abord dans les arguments, si rien: cherche dans le dossier -d
@@ -49,6 +48,7 @@ bonus faits:
 OpenGL 4.1 (glfw + glew)
 
 a faire:
+	FRAME_TICK FPS compteur etc
 	texture gl:
 		pas d'ettirement: actuellement le dessin se fait sur le plan XY
 		faire en sorte que les faces ne faisant pas parti du plan utilisé aient une texture pas etiree.

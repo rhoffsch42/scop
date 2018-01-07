@@ -73,6 +73,7 @@ t_void		*check_mtlfile(t_void *link)
 	if (mtlfile->mat == NULL)
 	{
 		ft_putstr_fd(mtlfile->path, STDERR_FILENO);
+		ft_putchar_fd('\n', STDERR_FILENO);
 		ft_errexit(MTLF_NO_MAT, RED, MTL_BAD_FORMAT);
 	}
 	return (for_list((t_void*)(mtlfile->mat), &check_mat));

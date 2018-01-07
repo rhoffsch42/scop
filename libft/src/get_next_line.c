@@ -55,8 +55,6 @@ static int		ft_read(char **tab, int bytes, int const fd)
 	s = tab[0];
 	tab[1] = (char*)malloc(sizeof(char) * BUFF_SIZE + 1);
 	bytes = read(fd, tab[1], BUFF_SIZE);
-	if (bytes == -1)
-		ft_putendl("fuck");
 	tab[1][bytes] = 0;
 	tab[0] = ft_strjoin(tab[0], tab[1]);
 	if (s)
