@@ -28,7 +28,6 @@ t_void	*free_t_str(t_void *list)
 	free(list);
 	ptr = NULL;
 	list = NULL;
-	// deep--;
 	return (next);
 }
 
@@ -45,5 +44,4 @@ void	ft_free_list(void *list, t_void *(custom_free)(t_void*))
 		ptr = ptr->next;
 		custom_free(f);
 	}
-	deep--;
 }

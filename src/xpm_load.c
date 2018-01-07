@@ -12,14 +12,14 @@
 
 #include <scop.h>
 
-void	error_xpm(char *s1, char *s2)
+void			error_xpm(char *s1, char *s2)
 {
 	ft_putstr_fd(s1, STDERR_FILENO);
 	ft_putchar_fd(10, STDERR_FILENO);
 	ft_errexit(s2, RED, XPM_BAD_FORMAT);
 }
 
-char	*chk_separator(char *str)
+char			*chk_separator(char *str)
 {
 	int	len;
 	int	i;
@@ -39,7 +39,8 @@ char	*chk_separator(char *str)
 **	"%1[].+@#$\%&*=-;:>,<!~`^/()_'|{} a-zA-Z0-9[] %s %s\0"
 */
 
-t_str	*build_tokens(t_rgb **rgb_ptr, int tok_amount, t_str *ptr, int tok_size)
+t_str			*build_tokens(t_rgb **rgb_ptr, int tok_amount, t_str *ptr, \
+								int tok_size)
 {
 	int		id;
 	char	*s;
@@ -55,7 +56,7 @@ t_str	*build_tokens(t_rgb **rgb_ptr, int tok_amount, t_str *ptr, int tok_size)
 		rgb_ptr[0]->name[tok_size] = '\0';
 		if (s[3 + tok_size] == '#')
 			hex_to_rgb((unsigned char*)&(rgb_ptr[0]->r), s + 4 + tok_size);
-		// hex_to_rgb: attention au padding dans la structure, comportement aleatoire ?
+		// hex_to_rgb: attention au padding, comportement aleatoire ?
 		else if ((rgb_ptr[2] = get_color(rgb_ptr[1], s + 3 + tok_size)) != NULL)
 		{
 			rgb_ptr[0]->r = rgb_ptr[2]->r;
@@ -64,11 +65,6 @@ t_str	*build_tokens(t_rgb **rgb_ptr, int tok_amount, t_str *ptr, int tok_size)
 		}
 		else
 			error_xpm(s, XPM_ERROR);
-		// ft_putstr(rgb_ptr[0]->name);SPACE
-		// ft_putstr(s + 3 + tok_size);SPACE
-		// ft_putnbr(rgb_ptr[0]->r);SPACE
-		// ft_putnbr(rgb_ptr[0]->g);SPACE
-		// ft_putnbr(rgb_ptr[0]->b);ENDL
 		tok_amount--;
 		if (tok_amount)
 		{
@@ -77,7 +73,6 @@ t_str	*build_tokens(t_rgb **rgb_ptr, int tok_amount, t_str *ptr, int tok_size)
 		}
 		ptr = ptr->next;
 	}
-	deep--;
 	return (ptr);
 }
 
@@ -103,10 +98,9 @@ static void		build_xpm(t_xpm *x, t_str *ptr, t_rgb *chart)
 	line = build_tokens(rgb_tokens, tok_amount, ptr->next->next, tok_size);
 	line = build_pixels(x, rgb_tokens[3], tok_size, line);
 	ft_free_list(rgb_tokens[3], free_t_rgb);
-	deep--;
 }
 
-t_xpm		*load_xpm(char *path, t_rgb *chart)
+t_xpm			*load_xpm(char *path, t_rgb *chart)
 {
 	t_str	*str;
 	t_str	*lst;
@@ -133,6 +127,5 @@ t_xpm		*load_xpm(char *path, t_rgb *chart)
 	ft_free_list(lst, free_t_str);
 	ft_free_list(str, free_t_str);
 	free(all);
-	deep--;
 	return (xpm);
 }

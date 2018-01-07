@@ -73,7 +73,6 @@ static t_logs	init_logs(void)
 	logs.actual_length = 64;
 	logs.size = 0;
 	logs.i = -1;
-	exit(0);
 	return (logs);
 }
 

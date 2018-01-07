@@ -12,7 +12,7 @@
 
 #include <scop.h>
 
-t_str	*add_mtlfile_name(t_obj *obj, t_str *ptr)
+t_str		*add_mtlfile_name(t_obj *obj, t_str *ptr)
 {
 	char	token[100];
 	char	path[500];
@@ -25,7 +25,7 @@ t_str	*add_mtlfile_name(t_obj *obj, t_str *ptr)
 	return (ptr->next);
 }
 
-t_str	*add_material_name(t_obj *obj, t_str *ptr)
+t_str		*add_material_name(t_obj *obj, t_str *ptr)
 {
 	char	token[100];
 	char	path[500];
@@ -38,7 +38,7 @@ t_str	*add_material_name(t_obj *obj, t_str *ptr)
 	return (ptr->next);
 }
 
-t_str	*add_smooth(t_obj *obj, t_str *ptr)
+t_str		*add_smooth(t_obj *obj, t_str *ptr)
 {
 	char	token[20];
 	char	token2[10];
@@ -55,7 +55,7 @@ t_str	*add_smooth(t_obj *obj, t_str *ptr)
 	return (ptr->next);
 }
 
-t_str	*add_vertix(t_obj *obj, t_str *ptr)
+t_str		*add_vertix(t_obj *obj, t_str *ptr)
 {
 	char		token[100];
 	t_vertix	*v;
@@ -83,7 +83,6 @@ t_str	*add_vertix(t_obj *obj, t_str *ptr)
 		obj->v_amount++;
 		id++;
 	}
-	deep--;
 	return (ptr);
 }
 
@@ -100,7 +99,8 @@ t_vertix	*init_vertix(int id, float x, float y, float z)
 	vertix->id = id;
 	return (vertix);
 }
-t_str	*add_vertix2(t_obj *obj, t_str *ptr)
+
+t_str		*add_vertix2(t_obj *obj, t_str *ptr)
 {
 	char		token[250];
 	t_vertix	*v;
@@ -122,16 +122,14 @@ t_str	*add_vertix2(t_obj *obj, t_str *ptr)
 		else
 			last->next = v;
 		last = v;
-		//////////////
 		obj->v_amount++;
 		id++;
 		ptr = ptr->next;
 	}
-	deep--;
 	return (ptr);
 }
 
-t_str	*add_face(t_obj *obj, t_str *ptr)
+t_str		*add_face(t_obj *obj, t_str *ptr)
 {
 	char		token[100];
 	t_face		*f;

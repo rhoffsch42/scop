@@ -40,7 +40,7 @@ t_objfile	*get_objfile(t_objfile *ptr, char *path)
 	return (NULL);
 }
 
-void	add_objfile(t_objfile **addr, char *file)
+void		add_objfile(t_objfile **addr, char *file)
 {
 	static int	id = 0;
 	t_objfile	*new_objfile;
@@ -56,10 +56,9 @@ void	add_objfile(t_objfile **addr, char *file)
 	new_objfile->next = *addr;
 	*addr = new_objfile;
 	id++;
-	deep--;
 }
 
-void	add_mtlfile(t_mtlfile **addr, char *file)
+void		add_mtlfile(t_mtlfile **addr, char *file)
 {
 	static int	id = 0;
 	t_mtlfile	*new_mtlfile;
@@ -76,5 +75,4 @@ void	add_mtlfile(t_mtlfile **addr, char *file)
 	new_mtlfile->next = *addr;
 	*addr = new_mtlfile;
 	id++;
-	deep--;
 }

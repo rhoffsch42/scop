@@ -50,6 +50,7 @@ void	dump_data_obj(t_obj *obj)
 {
 	t_vertix	*v;
 	t_face		*f;
+
 	ft_putendl("\tDATAS :");
 	printf("ID:      \t%d\n", obj->id);
 	printf("Name:    \t%s\n", obj->name);
@@ -116,24 +117,13 @@ void	dump_datafile(t_objfile *objfile, t_mtlfile *mtlfile, t_str *dir, t_xpm *xp
 	printf("*******************************************\n");
 }
 
-void	gostack()
-{
-	int x = 0;
-	printf("STACK\t%lu\n", (top_of_stack - (size_t) &x));
-}
-
 void	startf(char *func_name)
 {
-	char str[500];
+	char	str[500];
+
 	ft_bzero(str, 500);
-	deep++;
-	size_t i = 0;
-	while (i < deep)
-	{
-		str[i] = '_';
-		str[i+1] = ' ';
-		i += 2;
-	}
+	str[0] = '_';
+	str[1] = ' ';
 	strcpy(str + strlen(str), func_name);
 	strcpy(str + strlen(str), "\t\t\t\t.\n");
 	printf("%s", str);
@@ -141,14 +131,13 @@ void	startf(char *func_name)
 
 int		main(int ac, char **av)
 {
-	deep = 0;
-	gostack();
 	// exit(0);
 	ft_puttab(av);
 	printf("________________BEGIN________________\n");
 	t_env		*e;
 	t_objfile	**object_tab;
 	t_xpm		**texture_tab;
+
 	e = init_env();
 	load_file(e, ac, av);
 	printf("___ dump_datafile\n");

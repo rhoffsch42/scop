@@ -38,7 +38,6 @@ static void		check_directory(t_env *e, char *filename)
 			add_mtlfile(&(e->mtlfile), bigpath);
 		dir = dir->next;
 	}
-	deep--;
 }
 
 static void		link_material(t_obj *obj, t_mtlfile *mtlf)
@@ -93,5 +92,4 @@ void			link_file(t_env *e)
 		}
 		objf = objf->next;
 	}
-	deep--;
 }

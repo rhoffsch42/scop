@@ -41,7 +41,7 @@ void	draw_glfour(t_obj *obj, t_gl_env *gl_e)
 	glBindBuffer(GL_ARRAY_BUFFER, gl_e->colors_vbo);
 	glBufferData(GL_ARRAY_BUFFER, obj->f_amount * 9 * sizeof(float), \
 	colors, GL_STATIC_DRAW);
-	if (gl_e->tex_id)//que faire si pas de texture ? voir les shaders glsl
+	if (gl_e->tex_id)
 	{
 		glBindBuffer(GL_ARRAY_BUFFER, gl_e->tex_vbo);
 		glBufferData(GL_ARRAY_BUFFER, obj->f_amount * 6 * sizeof(float), \
@@ -77,5 +77,4 @@ void	display_object(t_glfw *glfw, t_objfile **objf, t_xpm **xpm, int *len)
 		glfwPollEvents();
 		events(glfw, gl_e, &boolens);
 	}
-	deep--;
 }

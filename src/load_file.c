@@ -55,7 +55,6 @@ static void		add_directory(char **av, int i, t_str **dir)
 		else
 			*dir = new_dir;
 	}
-	deep--;
 }
 
 void			load_file(t_env *e, int ac, char **av)
@@ -85,6 +84,4 @@ void			load_file(t_env *e, int ac, char **av)
 	obj_checks(e->objfile);
 	mtl_checks(e->mtlfile);
 	for_list((t_void*)(e->objfile), rewrite_objects);
-	deep--;
-	// printf("OKOKOKOK\n");exit(0);
 }

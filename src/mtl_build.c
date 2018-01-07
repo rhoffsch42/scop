@@ -12,7 +12,7 @@
 
 #include <scop.h>
 
-void		error_mtl(char *s1, char *s2)
+void			error_mtl(char *s1, char *s2)
 {
 	ft_putstr_fd(s1, STDERR_FILENO);
 	ft_putchar_fd(10, STDERR_FILENO);
@@ -46,7 +46,6 @@ static void		build_data(t_mat **mat, t_str *ptr)
 		else
 			error_mtl(ptr->str, MTL_ERROR);
 	}
-	deep--;
 }
 
 t_mat			*build_material(char *path)
@@ -63,6 +62,5 @@ t_mat			*build_material(char *path)
 	build_data(&new_mat, lst);
 	ft_free_list(lst, free_t_str);
 	lst = NULL;
-	deep--;
 	return (new_mat);
 }

@@ -26,7 +26,6 @@ t_xpm	*init_xpm(void)
 	xpm->data = NULL;
 	xpm->id = id;
 	id++;
-	deep--;
 	return (xpm);
 }
 
@@ -42,7 +41,6 @@ t_env	*init_env(void)
 	e->dir = NULL;
 	e->glfw = NULL;
 	e->chart = init_rgb();
-	deep--;
 	return (e);
 }
 
@@ -65,7 +63,6 @@ t_obj	*init_obj(void)
 	object->f = NULL;
 	object->next = NULL;
 	id++;
-	deep--;
 	return (object);
 }
 
@@ -82,6 +79,5 @@ t_mat	*init_mat(void)
 	material->name = ft_strjoin("Material #", material->id_char);
 	material->next = NULL;
 	id++;
-	deep--;
 	return (material);
 }

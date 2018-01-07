@@ -21,10 +21,9 @@ static void		chk_matname(t_mat *mat, char *name)
 			error_mtl(name, MTL_USED);
 		mat = mat->next;
 	}
-	deep--;
 }
 
-t_str	*add_mtlname(t_mat **mat, t_str *ptr)
+t_str			*add_mtlname(t_mat **mat, t_str *ptr)
 {
 	t_mat	*new_mat;
 	char	token[100];
@@ -40,22 +39,20 @@ t_str	*add_mtlname(t_mat **mat, t_str *ptr)
 	*mat = new_mat;
 	if (ft_strlen(name) > 0)
 		new_mat->name = ft_strdup(name);
-	deep--;
 	return (ptr->next);
 }
 
-t_str	*add_color(t_str *ptr, float *color)
+t_str			*add_color(t_str *ptr, float *color)
 {
 	char	token[100];
 
 	startf("add_color");
 	sscanf(ptr->str, "%s %f %f %f", token, \
 		&(color[0]), &(color[1]), &(color[2]));
-	deep--;
 	return (ptr->next);
 }
 
-t_str	*add_value_f(t_str *ptr, float *var)
+t_str			*add_value_f(t_str *ptr, float *var)
 {
 	char	token[100];
 
@@ -63,7 +60,7 @@ t_str	*add_value_f(t_str *ptr, float *var)
 	return (ptr->next);
 }
 
-t_str	*add_value(t_str *ptr, int *var)
+t_str			*add_value(t_str *ptr, int *var)
 {
 	char	token[100];
 

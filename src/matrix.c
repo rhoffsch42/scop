@@ -59,8 +59,8 @@ static t_matrix4	view_matrix(void)
 static t_matrix4	pro_matrix(float radx, float rady, float far, float near)
 {
 	t_matrix4	promatrix;
-	float	ratiox;
-	float	ratioy;
+	float		ratiox;
+	float		ratioy;
 
 	ratiox = 1.0f / tanf(radx / 2.0f);
 	ratioy = 1.0f / tanf(rady / 2.0f);

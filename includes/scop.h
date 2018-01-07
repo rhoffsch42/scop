@@ -329,13 +329,7 @@ typedef struct			s_logs
 	int					j;
 }						t_logs;
 
-size_t top_of_stack;
-size_t deep;
-
 ////debug, a delete apres
-void		print_memory(void);
-void		gostack(void);
-void		stacksize(void);
 void		startf(char *func_name);
 
 // libft

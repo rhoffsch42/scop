@@ -12,7 +12,7 @@
 
 #include <scop.h>
 
-void		error_obj(char *s1, char *s2)
+void				error_obj(char *s1, char *s2)
 {
 	ft_putstr_fd(s1, STDERR_FILENO);
 	ft_putchar_fd(10, STDERR_FILENO);
@@ -46,7 +46,7 @@ static t_void		*link_vertix(t_void *f, t_arg args)
 	return (NULL);
 }
 
-static void		build_data(t_obj *obj, t_str *ptr)
+static void			build_data(t_obj *obj, t_str *ptr)
 {
 	char	keyword[100];
 
@@ -69,10 +69,9 @@ static void		build_data(t_obj *obj, t_str *ptr)
 		else
 			error_obj(ptr->str, OBJ_ERROR);
 	}
-	deep--;
 }
 
-t_obj		*build_objects(char *path)
+t_obj				*build_objects(char *path)
 {
 	t_str	*lst;
 	t_obj	*new_obj;
@@ -94,6 +93,5 @@ t_obj		*build_objects(char *path)
 	lst = NULL;
 	for_list_args((t_void*)(new_obj->f), \
 		init_args(new_obj->v, NULL, NULL, NULL), link_vertix);
-	deep--;
 	return (new_obj);
 }

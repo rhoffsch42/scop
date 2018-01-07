@@ -21,7 +21,6 @@ t_sdl_env	*init_sdl_env(void)
 	ft_bzero(sdl_e, sizeof(t_sdl_env));
 	sdl_e->tick = FRAME_TICK;
 	sdl_e->last_time = 0;
-	deep--;
 	return (sdl_e);
 }
 
@@ -51,7 +50,6 @@ t_gl_env	*init_gl_env(t_objfile **objf, t_xpm **xpm, int *len)
 	gl_e->angle = 10;
 	gl_e->vector = 0.1f;
 	gl_e->scale = 0.20f;
-	deep--;
 	return (gl_e);
 }
 
@@ -102,6 +100,5 @@ t_glfw		*init_glfw(t_glfw *glfw)
 	if (glewInit() != GLEW_OK)
 		ft_errexit(GLEW_WIN_FAIL, RED, GLEW_FAIL);
 	printf("GL version: %s\n", glGetString(GL_VERSION));
-	deep--;
 	return (glfw);
 }

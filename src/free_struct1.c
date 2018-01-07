@@ -69,7 +69,6 @@ t_void	*free_t_rgb(t_void *list)
 	free(list);
 	ptr = NULL;
 	list = NULL;
-	// deep--;
 	return (next);
 }
 

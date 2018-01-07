@@ -12,7 +12,7 @@
 
 #include <scop.h>
 
-int		regularize(float *v, float min, float max)
+int			regularize(float *v, float min, float max)
 {
 	if (*v < min)
 	{
@@ -27,7 +27,7 @@ int		regularize(float *v, float min, float max)
 	return (1);
 }
 
-void	regularize_values(t_mat *mat, char *error)
+void		regularize_values(t_mat *mat, char *error)
 {
 	if (!regularize(&(mat->ka[0]), 0, 1) || !regularize(&(mat->ka[1]), 0, 1) \
 		|| !regularize(&(mat->ka[2]), 0, 1))
@@ -78,7 +78,7 @@ t_void		*check_mtlfile(t_void *link)
 	return (for_list((t_void*)(mtlfile->mat), &check_mat));
 }
 
-void	mtl_checks(t_mtlfile *mtlfile)
+void		mtl_checks(t_mtlfile *mtlfile)
 {
 	COLOR(YELLOW, STDERR_FILENO);
 	for_list((t_void*)mtlfile, &check_mtlfile);

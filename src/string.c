@@ -20,7 +20,6 @@ char	*basename(char *path)
 	ptr = ft_strrchr(path, '/');
 	if (ptr)
 		return (ptr + 1);
-	deep--;
 	return (path);
 }
 

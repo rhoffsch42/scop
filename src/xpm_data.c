@@ -32,7 +32,7 @@ static void		print_data(t_xpm *xpm)
 	ft_putchar(10);
 }
 
-t_str	*build_pixels(t_xpm *xpm, t_rgb *rgb_tokens, int t_size, t_str *ptr)
+t_str			*build_pixels(t_xpm *xpm, t_rgb *rgb_tokens, int t_size, t_str *ptr)
 {
 	t_rgb	*rgb;
 	char	tok[3];
@@ -71,6 +71,5 @@ t_str	*build_pixels(t_xpm *xpm, t_rgb *rgb_tokens, int t_size, t_str *ptr)
 	}
 	// print_data(xpm);
 	(void)print_data;
-	deep--;
 	return (ptr);
 }

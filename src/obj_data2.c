@@ -38,7 +38,6 @@ static void		translate_obj(t_vertix *vertix, float x, float y, float z)
 		vertix->z += z;
 		vertix = vertix->next;
 	}
-	deep--;
 }
 
 static t_void	*center_obj(t_void *objptr)
@@ -66,13 +65,11 @@ static t_void	*center_obj(t_void *objptr)
 		vertix = vertix->next;
 	}
 	translate_obj(((t_obj*)objptr)->v, -(vmin[0] + vmax[0]) / 2, \
-										-(vmin[1] + vmax[1]) / 2, \
-										-(vmin[2] + vmax[2]) / 2);
-	deep--;
+				-(vmin[1] + vmax[1]) / 2, -(vmin[2] + vmax[2]) / 2);
 	return (NULL);
 }
 
-t_void		*rewrite_objects(t_void *objfile)
+t_void			*rewrite_objects(t_void *objfile)
 {
 	t_objfile	*objf;
 	t_obj		*obj;
@@ -80,11 +77,10 @@ t_void		*rewrite_objects(t_void *objfile)
 	startf("rewrite_objects");
 	objf = (t_objfile*)objfile;
 	obj = (t_obj*)objf->obj;
-	deep--;
 	return (for_list((t_void*)obj, center_obj));
 }
 
-void		triangularize(t_obj* obj)
+void			triangularize(t_obj *obj)
 {
 	t_face	*f;
 	t_face	*new_f;
