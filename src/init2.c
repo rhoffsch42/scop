@@ -16,11 +16,12 @@ t_sdl_env	*init_sdl_env(void)
 {
 	t_sdl_env	*sdl_e;
 
-	printf("__ init_sdl_env\n");
+	startf("init_sdl_env");
 	sdl_e = (t_sdl_env*)safe_malloc(sizeof(t_sdl_env));
 	ft_bzero(sdl_e, sizeof(t_sdl_env));
 	sdl_e->tick = FRAME_TICK;
 	sdl_e->last_time = 0;
+	deep--;
 	return (sdl_e);
 }
 
@@ -29,7 +30,7 @@ t_gl_env	*init_gl_env(t_objfile **objf, t_xpm **xpm, int *len)
 	t_gl_env	*gl_e;
 	int			i;
 
-	printf("__ init_gl_env\n");
+	startf("init_gl_env");
 	gl_e = (t_gl_env*)safe_malloc(sizeof(t_gl_env));
 	ft_bzero(gl_e, sizeof(t_gl_env));
 	gl_e->objf = objf;
@@ -50,6 +51,7 @@ t_gl_env	*init_gl_env(t_objfile **objf, t_xpm **xpm, int *len)
 	gl_e->angle = 10;
 	gl_e->vector = 0.1f;
 	gl_e->scale = 0.20f;
+	deep--;
 	return (gl_e);
 }
 
@@ -76,7 +78,7 @@ void		key_callback(GLFWwindow *window, int key, int scancode, \
 
 t_glfw		*init_glfw(t_glfw *glfw)
 {
-	printf("__ init_glfw\n");
+	startf("init_glfw");
 	glfw = (t_glfw*)safe_malloc(sizeof(t_glfw));
 	ft_bzero((void*)glfw, sizeof(t_glfw));
 	glfw->size[0] = DEF_WIN_X;
@@ -100,5 +102,6 @@ t_glfw		*init_glfw(t_glfw *glfw)
 	if (glewInit() != GLEW_OK)
 		ft_errexit(GLEW_WIN_FAIL, RED, GLEW_FAIL);
 	printf("GL version: %s\n", glGetString(GL_VERSION));
+	deep--;
 	return (glfw);
 }

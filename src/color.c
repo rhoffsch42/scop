@@ -28,17 +28,18 @@ static void		build_rgb(t_rgb *rgb, t_str *ptr)
 	static int	id = 0;
 	char		color[100];
 
-	ft_bzero(color, sizeof(char) * 100);
-	rgb->next = NULL;
-	rgb->id = id;
-	id++;
-	sscanf(ptr->str, "%hhu %hhu %hhu %100[0-9a-zA-Z ]", \
-		&(rgb->r), &(rgb->g), &(rgb->b), color);
-	rgb->name = ft_strdup(color);
-	if (ptr->next)
+	while (ptr)
 	{
+		ft_bzero(color, sizeof(char) * 100);
+		rgb->next = NULL;
+		rgb->id = id;
+		id++;
+		sscanf(ptr->str, "%hhu %hhu %hhu %100[0-9a-zA-Z ]", \
+			&(rgb->r), &(rgb->g), &(rgb->b), color);
+		rgb->name = ft_strdup(color);
 		rgb->next = (t_rgb*)safe_malloc(sizeof(t_rgb));
-		build_rgb(rgb->next, ptr->next);
+		rgb = rgb->next;
+		ptr = ptr->next;
 	}
 }
 

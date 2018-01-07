@@ -61,11 +61,13 @@ t_str	*add_vertix(t_obj *obj, t_str *ptr)
 	t_vertix	*v;
 	int			id;
 
+	startf("translate_obj");
 	obj->v = (t_vertix*)safe_malloc(sizeof(t_vertix));
 	id = 0;
 	v = obj->v;
 	while (ptr)
 	{
+		printf(".");
 		sscanf(ptr->str, "%s", token);
 		if (ft_strcmp(token, OBJ_VERTIX) != 0)
 			break ;
@@ -81,6 +83,10 @@ t_str	*add_vertix(t_obj *obj, t_str *ptr)
 		ptr = ptr->next;
 		obj->v_amount++;
 	}
+	printf("\n");
+	if (obj->v == NULL)
+		printf("OMG\n");
+	deep--;
 	return (ptr);
 }
 

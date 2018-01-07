@@ -17,6 +17,7 @@ t_void		*check_obj(t_void *objptr)
 	t_obj	*obj;
 	char	error[300];
 
+	startf("check_obj");
 	obj = (t_obj*)objptr;
 	ft_bzero(error, 300);
 	ft_strcat(error, "obj\t");
@@ -35,6 +36,7 @@ t_void		*check_obj(t_void *objptr)
 	ft_putstr_fd(error, STDERR_FILENO);
 	// if (error[ft_strlen(error) - 2] != ':')
 		// return (objptr);
+	deep--;
 	return (NULL);
 }
 
@@ -53,7 +55,9 @@ t_void		*check_objfile(t_void *link)
 
 void	obj_checks(t_objfile *objfile)
 {
+	startf("obj_checks");
 	COLOR(YELLOW, STDERR_FILENO);
 	for_list((t_void*)objfile, &check_objfile);
 	COLOR(NOCOLOR, STDERR_FILENO);
+	deep--;
 }

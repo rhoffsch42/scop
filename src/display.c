@@ -21,6 +21,7 @@ void	gl_compile_error(GLuint shader, char *intro)
 	maxl = 1000;
 	info = safe_malloc(1000);
 	glGetShaderInfoLog(shader, maxl, &l, info);
+	(void)intro;
 	printf("%s\n%s\n", intro, info);
 	ft_errexit(GL_COMPILE_SHADER, RED, GL_ERROR);
 }
@@ -54,7 +55,7 @@ void	display_object(t_glfw *glfw, t_objfile **objf, t_xpm **xpm, int *len)
 	t_gl_env	*gl_e;
 	char		*boolens;
 
-	printf("__ display_object\n");
+	startf("display_object");
 	boolens = (char*)safe_malloc(sizeof(char) * 348);
 	ft_bzero(boolens, sizeof(char) * 348);
 	gl_e = init_gl_env(objf, xpm, len);
@@ -76,4 +77,5 @@ void	display_object(t_glfw *glfw, t_objfile **objf, t_xpm **xpm, int *len)
 		glfwPollEvents();
 		events(glfw, gl_e, &boolens);
 	}
+	deep--;
 }

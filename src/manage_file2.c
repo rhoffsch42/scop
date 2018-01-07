@@ -50,16 +50,18 @@ int		chk_mtlfile(t_mtlfile *mtlfile, char *path)
 
 t_xpm	*get_xpmfile(t_xpm *ptr, char *path)
 {
-	printf("__ get_xpmfile\n");
+	startf("get_xpmfile");
 	while (ptr)
 	{
 		if (ft_strcmp(path, ptr->path) == 0)
 		{
 			ft_putendl("Found!");
+			deep--;
 			return (ptr);
 		}
 		ptr = ptr->next;
 	}
+	deep--;
 	return (NULL);
 }
 
@@ -67,7 +69,7 @@ int		chk_xpmfile(t_xpm *xpmfile, char *path)
 {
 	t_xpm	*ptr;
 
-	printf("__ chk_xpmfile\n");
+	startf("chk_xpmfile");
 	ptr = get_xpmfile(xpmfile, path);
 	if (ptr)
 	{
@@ -77,8 +79,10 @@ int		chk_xpmfile(t_xpm *xpmfile, char *path)
 		ft_putstr_fd(ptr->path, STDERR_FILENO);
 		ft_putstr_fd(")\nEntry ignored\n\n", STDERR_FILENO);
 		COLOR(NOCOLOR, STDERR_FILENO);
+		deep--;
 		return (0);
 	}
+	deep--;
 	return (1);
 }
 
@@ -87,7 +91,7 @@ void	add_xpmfile(t_xpm **addr, char *file, t_rgb *chart)
 	static int	id = 0;
 	t_xpm	*new_xpmfile;
 
-	printf("__ add_xpmfile\n");
+	startf("add_xpmfile");
 	if (!chk_xpmfile(*addr, file))
 		return ;
 	new_xpmfile = load_xpm(file, chart);
@@ -95,4 +99,5 @@ void	add_xpmfile(t_xpm **addr, char *file, t_rgb *chart)
 	id++;
 	new_xpmfile->next = *addr;
 	*addr = new_xpmfile;
+	deep--;
 }

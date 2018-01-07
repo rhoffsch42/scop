@@ -17,7 +17,7 @@ t_xpm	*init_xpm(void)
 	static int	id = 0;
 	t_xpm		*xpm;
 
-	printf("__ init_xpm\n");
+	startf("init_xpm");
 	xpm = (t_xpm*)safe_malloc(sizeof(t_xpm));
 	ft_bzero((void*)xpm, sizeof(t_xpm));
 	xpm->next = NULL;
@@ -26,6 +26,7 @@ t_xpm	*init_xpm(void)
 	xpm->data = NULL;
 	xpm->id = id;
 	id++;
+	deep--;
 	return (xpm);
 }
 
@@ -33,7 +34,7 @@ t_env	*init_env(void)
 {
 	t_env	*e;
 
-	printf("__ init_env\n");
+	startf("init_env");
 	e = (t_env*)safe_malloc(sizeof(t_env));
 	e->objfile = NULL;
 	e->mtlfile = NULL;
@@ -41,6 +42,7 @@ t_env	*init_env(void)
 	e->dir = NULL;
 	e->glfw = NULL;
 	e->chart = init_rgb();
+	deep--;
 	return (e);
 }
 
@@ -49,7 +51,7 @@ t_obj	*init_obj(void)
 	static int	id = 0;
 	t_obj		*object;
 
-	printf("__ init_obj\n");
+	startf("init_obj");
 	object = (t_obj*)safe_malloc(sizeof(t_obj));
 	ft_bzero((void*)object, sizeof(t_obj));
 	object->id = id;
@@ -63,6 +65,7 @@ t_obj	*init_obj(void)
 	object->f = NULL;
 	object->next = NULL;
 	id++;
+	deep--;
 	return (object);
 }
 
@@ -71,7 +74,7 @@ t_mat	*init_mat(void)
 	static int	id = 0;
 	t_mat		*material;
 
-	printf("__ init_mat\n");
+	startf("init_mat");
 	material = (t_mat*)safe_malloc(sizeof(t_mat));
 	ft_bzero((void*)material, sizeof(t_mat));
 	material->id = id;
@@ -79,5 +82,6 @@ t_mat	*init_mat(void)
 	material->name = ft_strjoin("Material #", material->id_char);
 	material->next = NULL;
 	id++;
+	deep--;
 	return (material);
 }

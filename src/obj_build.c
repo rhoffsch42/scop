@@ -50,7 +50,7 @@ static void		build_data(t_obj *obj, t_str *ptr)
 {
 	char	keyword[100];
 
-	printf("__ build_data (obj)\n");
+	startf("build_data (obj)");
 	while (ptr)
 	{
 		sscanf(ptr->str, "%s", keyword);
@@ -69,6 +69,7 @@ static void		build_data(t_obj *obj, t_str *ptr)
 		else
 			error_obj(ptr->str, OBJ_ERROR);
 	}
+	deep--;
 }
 
 t_obj		*build_objects(char *path)
@@ -76,6 +77,7 @@ t_obj		*build_objects(char *path)
 	t_str	*lst;
 	t_obj	*new_obj;
 
+	startf("build_data (obj)");
 	lst = ft_getfile(path);
 	remove_comments(lst, COMMENT_CHAR);
 	remove_white_spaces(lst);
@@ -92,5 +94,6 @@ t_obj		*build_objects(char *path)
 	lst = NULL;
 	for_list_args((t_void*)(new_obj->f), \
 		init_args(new_obj->v, NULL, NULL, NULL), link_vertix);
+	deep--;
 	return (new_obj);
 }

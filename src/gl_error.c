@@ -84,6 +84,7 @@ static void		program_logs(GLuint programme, GLenum pname, \
 
 	l = init_logs();
 	glGetProgramiv(programme, pname, &l.params);
+	(void)msg;
 	printf(msg, l.params);
 	while (++l.i < l.params)
 	{

@@ -22,9 +22,17 @@ char	*basename(char *path)
 	return (path);
 }
 
-int		is_dir(void)
+int		is_directory(const char *path)
 {
-	return (1);
+	int			i;
+	struct stat	*buf;
+
+	buf = (struct stat*)safe_malloc(sizeof(struct stat));
+	if (lstat(path, buf) == -1)
+		return (-1);
+	i = (S_ISDIR(buf->st_mode)) ? 1 : 0;
+	free(buf);
+	return (i);
 }
 
 int		is_readable(char *path)

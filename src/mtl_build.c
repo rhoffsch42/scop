@@ -23,7 +23,7 @@ static void		build_data(t_mat **mat, t_str *ptr)
 {
 	char	keyword[100];
 
-	printf("__ build_data (mtl)\n");
+	startf("build_data");
 	while (ptr)
 	{
 		sscanf(ptr->str, "%s", keyword);
@@ -46,6 +46,7 @@ static void		build_data(t_mat **mat, t_str *ptr)
 		else
 			error_mtl(ptr->str, MTL_ERROR);
 	}
+	deep--;
 }
 
 t_mat			*build_material(char *path)
@@ -53,7 +54,7 @@ t_mat			*build_material(char *path)
 	t_str	*lst;
 	t_mat	*new_mat;
 
-	printf("__ build_material\n");
+	startf("build_material");
 	lst = ft_getfile(path);
 	remove_comments(lst, COMMENT_CHAR);
 	remove_white_spaces(lst);
@@ -62,6 +63,6 @@ t_mat			*build_material(char *path)
 	build_data(&new_mat, lst);
 	ft_free_list(lst, free_t_str);
 	lst = NULL;
-	printf("__ build_material end\n");
+	deep--;
 	return (new_mat);
 }

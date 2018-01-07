@@ -34,6 +34,8 @@ bonus a faire:
 		? maximum X objets/textures (depend de la taille de la fenetre et de la police)
 bonus faits:
 	- option -d : indiquer le dossier dans lequel chercher les assets (.mtl)
+		! si on indique un fichier et pas un dossier -> pas grave: example_file/target_file.obj ne sera pas readable
+			-> pas propre, ca rajoute example_file dans la liste des dossier, il faut le filtrer
 		! si on indique un .mtl + un dossier dans lequel il y a aussi ce .mtl mais cest pas le meme
 			ex: ./scop [...] ./42.mtl -d ./assets/		$(ls ./assets/) = "42.mtl"
 			- lequel prendre ? -> cherche d'abord dans les arguments, si rien: cherche dans le dossier -d
@@ -89,3 +91,47 @@ Couleur (triangularisation OK, reste a choisir definitivement le mode de couleur
 	2 + -d parameter
 	3 + zoom via le FOV
 ------------------------------------------------------------------------------------------------------------
+__ check_directory: 42.mtl
+dir: resources
+__ add_mtlfile
+zsh: segmentation fault  ./scop resources/*.obj -d resources/ -d textures -d Makefile
+-----------------------
+[...]2677 2678 2679 zsh: segmentation fault  ./scop resources/*.obj -d resources/ -d textures -d Makefile
+-----------------------
+2x
+[...]1038 1039 1040 104zsh: segmentation fault  ./scop resources/*.obj -d resources/ -d textures -d Makefile
+-----------------------
+[...]1859 1860zsh: segmentation fault  ./scop resources/*.obj -d resources/ -d textures -d Makefile
+-----------------------
+wat
+wat end
+zsh: segmentation fault  ./scop resources/*.obj -d resources/ -d textures -d Makefile
+-----------------------
+wat
+Stack Limit = 8388608 and 67104768 max
+FUCK2
+zsh: segmentation fault  ./scop resources/*.obj -d resources/ -d textures -d Makefile
+-----------------------
+__ check_directory: 42.mtl
+dir: resources
+__ add_mtlfile
+__ chk_mtlfile
+__ chk_mtlfile end
+__ ft_strdup(basename(file)
+__ ft_strdup(basename(file) end
+__ build_material
+__ build_material
+__ build_data (mtl)
+__ add_mtlname
+__ chk_matname
+__ init_mat
+__ add_color
+__ add_color
+__ add_color
+__ build_material end
+__ build_material end
+__ add_mtlfile end
+dir: (null)
+zsh: segmentation fault  ./scop resources/*.obj -d resources/ -d textures -d Makefile
+-----------------------
+-----------------------

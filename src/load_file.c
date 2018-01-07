@@ -36,10 +36,10 @@ static void		add_directory(char **av, int i, t_str **dir)
 	t_str	*new_dir;
 	t_str	*ptr;
 
-	printf("__ add_directory\n");
+	startf("add_directory");
 	if (av[i + 1] == NULL)
 		ft_errexit(SCOP_DIR_ERR, RED, BAD_ARGS);
-	if (check_perm(av[i + 1]) && is_dir())
+	if (check_perm(av[i + 1]) && is_directory(av[i + 1]))
 	{
 		new_dir = (t_str*)safe_malloc(sizeof(t_str));
 		new_dir->next = NULL;
@@ -55,24 +55,23 @@ static void		add_directory(char **av, int i, t_str **dir)
 		else
 			*dir = new_dir;
 	}
+	deep--;
 }
 
 void			load_file(t_env *e, int ac, char **av)
 {
 	int		i;
 
-	printf("____ load_file\n");
+	startf("load_file");
 	if (ac == 1)
 		error_arg(av[0], SCOP_BAD_ARG);
-	i = 1;
-	while (av[i])
+	add_xpmfile(&(e->xpmfile), PONY_FILE, e->chart);
+	i = 0;
+	while (av[++i])
 	{
 		printf("%s\n", av[i]);
 		if (ft_strcmp(av[i], SCOP_DIR) == 0)
-		{
-			add_directory(av, i, &(e->dir));
-			i++;
-		}
+			add_directory(av, i++, &(e->dir));
 		else if (is_typefile(av[i], ".obj") && is_readable(av[i]))
 			add_objfile(&(e->objfile), av[i]);
 		else if (is_typefile(av[i], ".mtl") && is_readable(av[i]))
@@ -81,13 +80,11 @@ void			load_file(t_env *e, int ac, char **av)
 			add_xpmfile(&(e->xpmfile), av[i], e->chart);
 		else
 			error_arg(av[i], SCOP_BAD_ARG);
-		i++;
 	}
-	printf("__ _______ 1endl load file\n");
 	link_file(e);
-	printf("__ _______ 2endl load file\n");
 	obj_checks(e->objfile);
 	mtl_checks(e->mtlfile);
 	for_list((t_void*)(e->objfile), rewrite_objects);
-	printf("__ 3endl load file\n");
+	deep--;
+	printf("OKOKOKOK\n");exit(0);
 }

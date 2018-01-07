@@ -18,7 +18,8 @@ static void		check_directory(t_env *e, char *filename)
 	t_str	*dir;
 	int		len[2];
 
-	printf("__ check_directory: %s\n", filename);
+	printf("_ _ _ check_directory for :\n");
+	startf(filename);
 	dir = e->dir;
 	bigpath = NULL;
 	len[1] = ft_strlen(filename);
@@ -37,6 +38,7 @@ static void		check_directory(t_env *e, char *filename)
 			add_mtlfile(&(e->mtlfile), bigpath);
 		dir = dir->next;
 	}
+	deep--;
 }
 
 static void		link_material(t_obj *obj, t_mtlfile *mtlf)
@@ -73,7 +75,7 @@ void			link_file(t_env *e)
 	t_objfile	*objf;
 	t_obj		*obj;
 
-	printf("__ link_file\n");
+	startf("link_file");
 	objf = e->objfile;
 	while (objf)
 	{
@@ -91,4 +93,5 @@ void			link_file(t_env *e)
 		}
 		objf = objf->next;
 	}
+	deep--;
 }

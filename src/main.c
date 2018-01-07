@@ -181,8 +181,71 @@ void	print_memory(void)
 	printf("Max: %ld\n", memory->ru_maxrss);
 }
 
+void	stacksize()
+{
+	size_t stksize;
+	pthread_attr_t atr;
+	if (pthread_attr_getstacksize(&atr, &stksize) == -1)
+		printf("FUCKING SCOP\n");
+	printf("Current stack size ->\t%lu\n", 140734679836896 - stksize);
+}
+
+void	gostack()
+{
+	// struct rlimit limit;
+	// getrlimit (RLIMIT_STACK, &limit);
+	// printf ("\nStack Limit = %llu and %llu max\n", limit.rlim_cur, limit.rlim_max);
+	int x=0;
+	printf("STACK\t%lu\n", (top_of_stack - (size_t) &x));
+	// print_memory();
+}
+void	print_struct_offset()
+{
+	ft_putnbrendl(offsetof(t_rgb, next));
+	ft_putnbrendl(offsetof(t_arg, next));
+	ft_putnbrendl(offsetof(t_vertix, next));
+	ft_putnbrendl(offsetof(t_face, next));
+	ft_putnbrendl(offsetof(t_mat, next));
+	ft_putnbrendl(offsetof(t_mtlfile, next));
+	ft_putnbrendl(offsetof(t_obj, next));
+	ft_putnbrendl(offsetof(t_objfile, next));
+	ft_putnbrendl(offsetof(t_xpm, next));
+
+	ft_putnbrendl(offsetof(t_void, next));
+	ft_putnbrendl(offsetof(t_istr, next));
+	ft_putnbrendl(offsetof(t_list, next));
+	ft_putnbrendl(offsetof(t_str, next));
+	exit(0);
+}
+
+void	test_stack(int i)
+{
+	int	l = i;
+	(void)l;
+	// stacksize();
+	gostack();
+	if (i < 20)
+		test_stack(i+1);
+	exit(0);
+}
+
+void	startf(char *func_name)
+{
+	deep++;
+	size_t i = -1;
+	while (++i != deep)
+		printf("_ ");
+	printf("%s\n", func_name);
+}
+
 int		main(int ac, char **av)
 {
+	deep = 0;
+	int x=0;
+	top_of_stack = (size_t) &x;
+	// test_stack(0);
+	gostack();
+	// print_struct_offset();
 	// exit(0);
 	// test_sscanf(lst);
 	// test_texture(av[1]);

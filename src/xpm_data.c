@@ -42,6 +42,7 @@ t_str	*build_pixels(t_xpm *xpm, t_rgb *rgb_tokens, int t_size, t_str *ptr)
 	int		index;
 	int		line_count;
 
+	startf("build_pixels");
 	ft_bzero(tok, 3);
 	len = sizeof(unsigned char) * (xpm->width * xpm->height * byte + 1);
 	xpm->data = (unsigned char*)safe_malloc(len);
@@ -70,5 +71,6 @@ t_str	*build_pixels(t_xpm *xpm, t_rgb *rgb_tokens, int t_size, t_str *ptr)
 	}
 	// print_data(xpm);
 	(void)print_data;
+	deep--;
 	return (ptr);
 }

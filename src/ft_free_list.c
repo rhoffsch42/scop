@@ -35,6 +35,7 @@ void	ft_free_list(void *list, t_void *(custom_free)(t_void*))
 	t_void	*ptr;
 	t_void	*f;
 
+	startf("ft_free_list");
 	ptr = (t_void*)list;
 	while (ptr)
 	{
@@ -42,4 +43,5 @@ void	ft_free_list(void *list, t_void *(custom_free)(t_void*))
 		ptr = ptr->next;
 		custom_free(f);
 	}
+	deep--;
 }

@@ -30,6 +30,7 @@ t_str			*add_objname(t_obj *obj, t_str *ptr)
 
 static void		translate_obj(t_vertix *vertix, float x, float y, float z)
 {
+	startf("translate_obj");
 	while (vertix)
 	{
 		vertix->x += x;
@@ -37,6 +38,7 @@ static void		translate_obj(t_vertix *vertix, float x, float y, float z)
 		vertix->z += z;
 		vertix = vertix->next;
 	}
+	deep--;
 }
 
 static t_void	*center_obj(t_void *objptr)
@@ -45,7 +47,22 @@ static t_void	*center_obj(t_void *objptr)
 	float		vmin[3];
 	float		vmax[3];
 
+	startf("center_obj");
 	vertix = ((t_obj*)objptr)->v;
+
+	printf("wat\n");
+	gostack();
+
+	if (vertix == NULL)
+	{
+		if (objptr == NULL)
+			printf("FUCK !");
+		t_obj *o = (t_obj*)objptr;(void)o;
+		printf("FUCK2:\nid\t%d\nname\t%s\nv#\t%d\n", o->id, o->name, o->v_amount);
+	}
+	else
+		printf("FUCK yea vertix: %d\n", vertix->id);
+
 	vmin[0] = vertix->x;
 	vmin[1] = vertix->y;
 	vmin[2] = vertix->z;
@@ -65,12 +82,20 @@ static t_void	*center_obj(t_void *objptr)
 	translate_obj(((t_obj*)objptr)->v, -(vmin[0] + vmax[0]) / 2, \
 										-(vmin[1] + vmax[1]) / 2, \
 										-(vmin[2] + vmax[2]) / 2);
+	deep--;
 	return (NULL);
 }
 
 t_void		*rewrite_objects(t_void *objfile)
 {
-	return (for_list((t_void*)(((t_objfile*)objfile)->obj), center_obj));
+	t_objfile	*objf;
+	t_obj		*obj;
+
+	startf("rewrite_objects");
+	objf = (t_objfile*)objfile;
+	obj = (t_obj*)objf->obj;
+	deep--;
+	return (for_list((t_void*)obj, center_obj));
 }
 
 void		triangularize(t_obj* obj)
@@ -79,30 +104,32 @@ void		triangularize(t_obj* obj)
 	t_face	*new_f;
 	int		id;
 
-	f = obj->f;
-	while (f->next)
-		f = f->next;
-	id = f->id;
-	f = obj->f;
-	while (f)
+	while (obj)
 	{
-		if (f->d != 0)
+		f = obj->f;
+		while (f->next)
+			f = f->next;
+		id = f->id;
+		f = obj->f;
+		while (f)
 		{
-			id++;
-			new_f = (t_face*)safe_malloc(sizeof(t_face));
-			new_f->next = f->next;
-			new_f->id = id;
-			new_f->a = f->b;
-			new_f->b = f->c;
-			new_f->c = f->d;
-			new_f->d = 0;
-			f->c = f->d;
-			f->d = 0;
-			f->next = new_f;
-			obj->f_amount++;
+			if (f->d != 0)
+			{
+				id++;
+				new_f = (t_face*)safe_malloc(sizeof(t_face));
+				new_f->next = f->next;
+				new_f->id = id;
+				new_f->a = f->b;
+				new_f->b = f->c;
+				new_f->c = f->d;
+				new_f->d = 0;
+				f->c = f->d;
+				f->d = 0;
+				f->next = new_f;
+				obj->f_amount++;
+			}
+			f = f->next;
 		}
-		f = f->next;
+		obj = obj->next;
 	}
-	if (obj->next)
-		triangularize(obj->next);
 }

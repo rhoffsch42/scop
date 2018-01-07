@@ -27,9 +27,22 @@
 # include <stddef.h>
 # include <math.h>
 
+/*
+**	BONUS
+**	<sys/stat.h>	lstat	string.c
+*/
+# include <sys/stat.h>
+
 //memory
-#include <sys/resource.h>
-#include <errno.h>
+# include <sys/resource.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <pthread.h>
+
+// #define IGNORE_PRINTF
+#ifdef IGNORE_PRINTF
+#define printf(fmt, ...) (0)
+#endif
 
 /*
 0	GL_POINTS
@@ -68,6 +81,7 @@
 # define COLOR_RGB_2	"/usr/share/emacs/26.0.50/etc/rgb.txt" //MAC 42
 # define VSHADER_FILE	"./shaders/vertex_shader.glsl"
 # define FSHADER_FILE	"./shaders/fragment_shader.glsl"
+# define PONY_FILE		"./textures/pony.xpm"
 # define DEF_WIN_TITLE	"Default title"
 # define DEF_WIN_X		800
 # define DEF_WIN_Y		600
@@ -307,22 +321,28 @@ typedef struct			s_cam
 	t_vector3			front;
 }						t_cam;
 
-typedef struct	s_logs
+typedef struct			s_logs
 {
-	int		params;;
-	char	name[64];
-	char	long_name[64];
-	int		length;
-	int		actual_length;
-	int		size;
-	int		location;
-	GLenum	type;
-	int		i;
-	int		j;
-}				t_logs;
+	int					params;;
+	char				name[64];
+	char				long_name[64];
+	int					length;
+	int					actual_length;
+	int					size;
+	int					location;
+	GLenum				type;
+	int					i;
+	int					j;
+}						t_logs;
+
+size_t top_of_stack;
+size_t deep;
 
 ////debug, a delete apres
 void		print_memory(void);
+void		gostack(void);
+void		stacksize(void);
+void		startf(char *func_name);
 
 // libft
 void		ft_free_list(void *list, t_void* (custom_free)(t_void*));
@@ -330,6 +350,7 @@ t_void		*free_t_str(t_void *list);
 int			safe_open(char *path);
 void		hex_to_rgb(unsigned char *rgb, char *s);
 t_void		**list_to_tab(t_void *list);
+int			is_directory(const char *path);
 
 // misc
 void		vertix_to_vector3(t_vertix *vertix, t_vector3 *vector);

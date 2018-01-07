@@ -62,7 +62,7 @@ void	add_mtlfile(t_mtlfile **addr, char *file)
 	static int	id = 0;
 	t_mtlfile	*new_mtlfile;
 
-	printf("__ add_mtlfile\n");
+	startf("add_mtlfile");
 	if (!chk_mtlfile(*addr, file))
 		return ;
 	new_mtlfile = (t_mtlfile*)safe_malloc(sizeof(t_mtlfile));
@@ -73,5 +73,5 @@ void	add_mtlfile(t_mtlfile **addr, char *file)
 	new_mtlfile->next = *addr;
 	*addr = new_mtlfile;
 	id++;
-	printf("__ add_mtlfile end\n");
+	deep--;
 }
