@@ -34,8 +34,6 @@ t_void		*check_obj(t_void *objptr)
 	if (obj->f == NULL)
 		ft_strcat(error, "\t - has no valid faces\n");
 	ft_putstr_fd(error, STDERR_FILENO);
-	// if (error[ft_strlen(error) - 2] != ':')
-		// return (objptr);
 	return (NULL);
 }
 

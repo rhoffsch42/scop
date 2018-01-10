@@ -41,12 +41,14 @@ void	hex_to_rgb(unsigned char *rgb, char *s)
 	while (j < 3)
 	{
 		i = 0;
-		while (s[j * 2] != hexmap[i])
+		while (s[j * 2] != hexmap[i] && hexmap[i])
 			i++;
+		(hexmap[i] == '\0') ? error_xpm(s, XPM_ERROR) : (void)i;
 		rgb[j] += i * 16;
 		i = 0;
-		while (s[j * 2 + 1] != hexmap[i])
+		while (s[j * 2 + 1] != hexmap[i] && hexmap[i])
 			i++;
+		(hexmap[i] == '\0') ? error_xpm(s, XPM_ERROR) : (void)i;
 		rgb[j] += i;
 		j++;
 	}

@@ -14,24 +14,13 @@
 
 char	*ft_strnew(size_t size)
 {
-	char	*s;
-	int		i;
+	char		*s;
 
-	if (size <= 2147483647)
+	s = (char*)safe_malloc(sizeof(char) * size);
+	while (size)
 	{
-		i = 0;
-		s = (char*)malloc(sizeof(char) * size + 1);
-		if (!s)
-			return (NULL);
-		while (0 < size)
-		{
-			s[i] = '\0';
-			i++;
-			size--;
-		}
-		s[i] = '\0';
-		return (s);
+		s[size - 1] = '\0';
+		size--;
 	}
-	s = NULL;
 	return (s);
 }

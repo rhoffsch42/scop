@@ -63,6 +63,8 @@ void			create_program(t_gl_env *gl_e)
 	glGetProgramiv(gl_e->shader_programme, GL_LINK_STATUS, &params);
 	if (GL_TRUE != params)
 		print_programme_info_log(gl_e->shader_programme);
-	// glDeleteVertexArrays(1, &gl_e->vao);
-	// glDeleteProgram(gl_e->shader_programme);
 }
+/*
+**	glDeleteVertexArrays(1, &gl_e->vao);
+**	glDeleteProgram(gl_e->shader_programme);
+*/

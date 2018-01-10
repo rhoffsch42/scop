@@ -37,8 +37,11 @@ static void		build_rgb(t_rgb *rgb, t_str *ptr)
 		sscanf(ptr->str, "%hhu %hhu %hhu %100[0-9a-zA-Z ]", \
 			&(rgb->r), &(rgb->g), &(rgb->b), color);
 		rgb->name = ft_strdup(color);
-		rgb->next = (t_rgb*)safe_malloc(sizeof(t_rgb));
-		rgb = rgb->next;
+		if (ptr->next != NULL)
+		{
+			rgb->next = (t_rgb*)safe_malloc(sizeof(t_rgb));
+			rgb = rgb->next;
+		}
 		ptr = ptr->next;
 	}
 }

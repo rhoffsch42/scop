@@ -52,21 +52,14 @@ t_str			*build_tokens(t_rgb **rgb_ptr, int tok_amount, t_str *ptr, \
 		s = chk_separator(ptr->str);
 		rgb_ptr[0]->next = NULL;
 		rgb_ptr[0]->id = id++;
-		rgb_ptr[0]->name = ft_strdup(s);
-		rgb_ptr[0]->name[tok_size] = '\0';
+		rgb_ptr[0]->name = strndup(s, tok_size);
 		if (s[3 + tok_size] == '#')
 			hex_to_rgb((unsigned char*)&(rgb_ptr[0]->r), s + 4 + tok_size);
-		// hex_to_rgb: attention au padding, comportement aleatoire ?
 		else if ((rgb_ptr[2] = get_color(rgb_ptr[1], s + 3 + tok_size)) != NULL)
-		{
-			rgb_ptr[0]->r = rgb_ptr[2]->r;
-			rgb_ptr[0]->g = rgb_ptr[2]->g;
-			rgb_ptr[0]->b = rgb_ptr[2]->b;
-		}
+			memcpy((void*)&(rgb_ptr[0]->r), (void*)&(rgb_ptr[2]->r), 3);
 		else
 			error_xpm(s, XPM_ERROR);
-		tok_amount--;
-		if (tok_amount)
+		if (--tok_amount)
 		{
 			rgb_ptr[0]->next = (t_rgb*)safe_malloc(sizeof(t_rgb));
 			rgb_ptr[0] = rgb_ptr[0]->next;
@@ -109,10 +102,7 @@ t_xpm			*load_xpm(char *path, t_rgb *chart)
 
 	startf("load_xpm");
 	if (!is_typefile(path, ".xpm"))
-	{
-		ft_putstr_fd(path, STDERR_FILENO);
-		ft_errexit(" is not a valid xpm file", RED, BAD_ARGS);
-	}
+		ft_errexit(ft_strjoin(path, " is not a valid xpm file"), RED, BAD_ARGS);
 	str = ft_getfile(path);
 	all = t_str_to_char(str);
 	remove_comments_vl(all, "/*", "*/", "//");

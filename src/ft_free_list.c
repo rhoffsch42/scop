@@ -17,7 +17,6 @@ t_void	*free_t_str(t_void *list)
 	t_str	*ptr;
 	t_void	*next;
 
-	// startf("free_t_str");
 	if (!list)
 		return (NULL);
 	next = list->next;

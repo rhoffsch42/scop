@@ -76,6 +76,5 @@ void	display_object(t_glfw *glfw, t_objfile **objf, t_xpm **xpm, int *len)
 		glfwSwapBuffers(glfw->win);
 		glfwPollEvents();
 		events(glfw, gl_e, &boolens);
-		exit(0);
 	}
 }

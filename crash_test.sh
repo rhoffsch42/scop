@@ -11,7 +11,7 @@ function mytest {
 }
 
 cmd2="./scop resources/*.obj resources/*.mtl textures/*.xpm"
-cmd="./scop resources/*.obj -d resources/ -d textures -d Makefile"
+cmd="./scop resources/*.obj -d resources/ -d assets -d textures -d Makefile"
 
 i="1"
 target="1000"

@@ -53,7 +53,6 @@ static void			build_data(t_obj *obj, t_str *ptr)
 	startf("build_data (obj)");
 	while (ptr)
 	{
-		// printf("%s\n", ptr->str);
 		sscanf(ptr->str, "%s", keyword);
 		if (strcmp(keyword, OBJ_MTLFILE) == 0)
 			ptr = add_mtlfile_name(obj, ptr);

@@ -30,6 +30,7 @@ GLFW			=	/Users/rhoffsch/.brew/Cellar/glfw/3.2.1/lib/libglfw.dylib
 GLEW			=	/Users/rhoffsch/.brew/Cellar/glew/2.1.0/lib/libGLEW.2.1.dylib
 
 SRC_FILE		=	main.c \
+					dump_data.c \
 					init1.c \
 					init2.c \
 					load_file.c \
@@ -39,6 +40,7 @@ SRC_FILE		=	main.c \
 					obj_build.c\
 					obj_data.c \
 					obj_data2.c \
+					triangularize_face.c \
 					obj_checks.c \
 					mtl_build.c \
 					mtl_data.c \

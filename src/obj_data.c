@@ -65,9 +65,8 @@ t_str		*add_vertix(t_obj *obj, t_str *ptr)
 	v = (t_vertix*)safe_malloc(sizeof(t_vertix));
 	id = 1;
 	obj->v = v;
-	while (ptr)
+	while (ptr && sscanf(ptr->str, "%s", token))
 	{
-		sscanf(ptr->str, "%s", token);
 		if (strcmp(token, OBJ_VERTIX) != 0)
 			break ;
 		if (id != 1)
@@ -76,55 +75,11 @@ t_str		*add_vertix(t_obj *obj, t_str *ptr)
 			v = v->next;
 		}
 		ft_bzero(v, sizeof(t_vertix));
-		v->id = id;
+		v->id = id++;
 		sscanf(ptr->str, "%s %f %f %f", token, &(v->x), &(v->y), &(v->z));
 		v->next = NULL;
 		ptr = ptr->next;
 		obj->v_amount++;
-		id++;
-	}
-	return (ptr);
-}
-
-t_vertix	*init_vertix(int id, float x, float y, float z)
-{
-	t_vertix	*vertix;
-
-	vertix = (t_vertix*)safe_malloc(sizeof(t_vertix));
-	ft_bzero(vertix, sizeof(t_vertix));
-	vertix->next = NULL;
-	vertix->x = x;
-	vertix->y = y;
-	vertix->z = z;
-	vertix->id = id;
-	return (vertix);
-}
-
-t_str		*add_vertix2(t_obj *obj, t_str *ptr)
-{
-	char		token[250];
-	t_vertix	*v;
-	t_vertix	*last;
-	int			id;
-	float		x, y, z;
-
-	startf("add_vertix");
-	id = 1;
-	while (ptr)
-	{
-		sscanf(ptr->str, "%s", token);
-		if (strcmp(token, OBJ_VERTIX) != 0)
-			break ;
-		sscanf(ptr->str, "%s %f %f %f", token, &(x), &(y), &(z));
-		v = init_vertix(id, x, y, z);
-		if (id == 1)
-			obj->v = v;
-		else
-			last->next = v;
-		last = v;
-		obj->v_amount++;
-		id++;
-		ptr = ptr->next;
 	}
 	return (ptr);
 }

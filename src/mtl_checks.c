@@ -60,8 +60,6 @@ t_void		*check_mat(t_void *matptr)
 	ft_strcat(error, ") :\n");
 	regularize_values(mat, error);
 	ft_putstr_fd(error, STDERR_FILENO);
-	// if (error[ft_strlen(error) - 2] != ':')
-		// return (matptr);
 	return (NULL);
 }
 

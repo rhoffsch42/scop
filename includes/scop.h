@@ -33,11 +33,6 @@
 */
 # include <sys/stat.h>
 
-// #define IGNORE_PRINTF
-#ifdef IGNORE_PRINTF
-#define printf(fmt, ...) (0)
-#endif
-
 /*
 0	GL_POINTS
 1	GL_LINES
@@ -52,27 +47,18 @@
 */
 
 # define DATA			0
-# define ENDL			ft_putchar(10);
-# define SPACE			ft_putchar(32);
-# define TAB			ft_putchar('\t');
 
-// # define RGB(r, g, b)	(65536 * (int)(r) + 256 * (int)(g) + (int)(b))
-// # define RTOD(x)		((x) * (180.0f / M_PI))
-// # define DTOR(x)		((x) * M_PI / 180.0f)
 # define RAD			0.017453f
 # define ROT_WAY		1
-# define ROT_RIGHT		-1
-# define ROT_LEFT		1
 
-# define DRAW_MODE		GL_POINTS
-// # define DRAW_MODE		GL_LINE_STRIP
-# define FPS			40
+# define DRAW_MODE_1	GL_POINTS
+# define DRAW_MODE_2	GL_LINE_STRIP
+# define FPS			60
 # define FRAME_TICK		(1000 / FPS)
 
-
 # define COLOR_RGB_1	"/etc/X11/rgb.txt"
-// # define COLOR_RGB_2	"/usr/share/X11/rgb.txt"
-# define COLOR_RGB_2	"/usr/share/emacs/26.0.50/etc/rgb.txt" //MAC 42
+# define COLOR_RGB_2	"/usr/share/emacs/26.0.50/etc/rgb.txt"
+# define COLOR_RGB_3	"/usr/share/X11/rgb.txt"
 # define VSHADER_FILE	"./shaders/vertex_shader.glsl"
 # define FSHADER_FILE	"./shaders/fragment_shader.glsl"
 # define PONY_FILE		"./textures/pony.xpm"
@@ -83,6 +69,7 @@
 # define MAX_WIN_Y		1080
 # define MIN_WIN_X		800
 # define MIN_WIN_Y		600
+# define BYTE			3
 # define FLOAT_MAX_LEN	7
 # define COLOR_MAX		255
 # define TITLE_MAX_LEN	50
@@ -120,6 +107,7 @@
 # define SCOP_BAD_ARG		" : invalid argument\nUsage: scop file.obj [file.mtl] [file.xpm] [-d path]"
 # define SCOP_NO_OBJ		"No object file found\nUsage: scop file.obj [file.mtl] [file.xpm] [-d path]"
 # define XPM_ERROR			"Error : bad xpm format"
+# define XPM_COLOR_TOKEN	"Error : bad xpm format (unknow color token)"
 # define XPM_TOKEN_ERR		"Bad token for remove_comments_vl : "
 
 # define COMMENT_CHAR		"#"
@@ -143,11 +131,15 @@
 # define MTL_OPACITY		"d"
 # define MTL_ILLUM			"illum"
 
-#define MODS				3
-#define DISPLAY_TEXTURE		0
-#define DISPLAY_COLOR		1
-#define DISPLAY_MATERIAL	2
+# define MODS				3
+# define DISPLAY_TEXTURE	0
+# define DISPLAY_COLOR		1
+# define DISPLAY_MATERIAL	2
 
+/*
+**	s_rgb: ne pas modifier la structure (padding, comportement aleatoire ?)
+**	voir fonction build_tokens(...) (xpm_load.c)
+*/
 typedef struct			s_rgb
 {
 	struct s_rgb		*next;
@@ -173,6 +165,10 @@ typedef struct			s_vertix
 	float				z;
 }						t_vertix;
 
+/*
+**	s_face: ne pas modifier la structure (padding, comportement aleatoire ?)
+**	voir fonction triangularize(...) (obj_data2.c)
+*/
 typedef struct			s_face
 {
 	struct s_face		*next;
@@ -187,22 +183,31 @@ typedef struct			s_face
 	t_vertix			*v4;
 }						t_face;
 
+/*
+**	s_mat :
+**	float				ka[3];// color ambiant (0.0 - 1.0) x3
+**	float				kd[3];// color diffuse (0.0 - 1.0) x3
+**	float				ks[3];// color specular (0.0 - 1.0) x3
+**	float				ns;// specular exponent (0 - 100)
+**	float				ni;// densite optique
+**	float				d;// opacite (0.0 - 1.0)
+**	int					illum;// lumiere param
+*/
 typedef struct			s_mat
 {
 	struct s_mat		*next;
 	int					id;
 	char				*id_char;
 	char				*name;
-	float				ka[3];// color ambiant (0.0 - 1.0) x3
-	float				kd[3];// color diffuse (0.0 - 1.0) x3
-	float				ks[3];// color specular (0.0 - 1.0) x3
-	float				ns;// specular exponent (0 - 100)
-	float				ni;// densite optique
-	float				d;// opacite (0.0 - 1.0)
-	int					illum;// lumiere param
+	float				ka[3];
+	float				kd[3];
+	float				ks[3];
+	float				ns;
+	float				ni;
+	float				d;
+	int					illum;
 }						t_mat;
 
-//un materiaux d'un fichier peut avoir le meme nom qu un autre dans un fichier different
 typedef struct			s_mtlfile
 {
 	struct s_mtlfile	*next;
@@ -229,7 +234,6 @@ typedef struct			s_obj
 	int					f_amount;
 }						t_obj;
 
-//un object d'un fichier peut avoir le meme nom qu un autre dans un fichier different ?
 typedef struct			s_objfile
 {
 	struct s_objfile	*next;
@@ -269,7 +273,6 @@ typedef struct			s_env
 
 typedef struct			s_sdl_env
 {
-	// SDL_Event			event;
 	int					quit;
 	int					virtual_time;
 	int					frame;
@@ -331,21 +334,27 @@ typedef struct			s_logs
 	int					j;
 }						t_logs;
 
-////debug, a delete apres
-void		startf(char *func_name);
-
-// libft
-void		ft_free_list(void *list, t_void* (custom_free)(t_void*));
+/*
+**	libft
+*/
+void		ft_free_list(void *list, t_void *(custom_free)(t_void*));
 t_void		*free_t_str(t_void *list);
 int			safe_open(char *path);
 void		hex_to_rgb(unsigned char *rgb, char *s);
 t_void		**list_to_tab(t_void *list);
 int			is_directory(const char *path);
 
-// misc
+/*
+**	misc
+*/
+void		startf(char *func_name);
 void		vertix_to_vector3(t_vertix *vertix, t_vector3 *vector);
+void		dump_datafile(t_objfile *objfile, t_mtlfile *mtlfile, t_str *dir, \
+							t_xpm *xpm);
 
-// free structure
+/*
+**	free structure
+*/
 t_void		*free_t_env(t_void *list);
 t_void		*free_t_xpm(t_void	*list);
 t_void		*free_t_rgb(t_void *list);
@@ -357,33 +366,42 @@ t_void		*free_t_obj(t_void *list);
 t_void		*free_t_objfile(t_void *list);
 t_void		*free_t_glfw(t_void *list);
 
-// color
+/*
+**	color
+*/
 t_rgb		*init_rgb(void);
 t_rgb		*get_color(t_rgb *rgb, char *name);
 
-// file manipulation
+/*
+**	file manipulation
+*/
 t_void		*del(t_void *ptr);
 int			is_empty(t_void *ptr);
-t_void		*remove_list(t_void *ptr, int (condition)(t_void*), t_void* (del)(t_void*));
+t_void		*remove_list(t_void *ptr, int (condition)(t_void*), \
+						t_void *(del)(t_void*));
 char		*basename(char *path);
 int			is_dir(void);
 int			is_readable(char *path);
 int			is_typefile(char *file, char *type);
 char		*remove_trailing_slach(char *str);
-t_void		*for_list(t_void *list, t_void* (*func)(t_void*));
-t_void		*for_list_args(t_void *list, t_arg args, t_void* (*func)(t_void*, t_arg args));
+t_void		*for_list(t_void *list, t_void *(*func)(t_void*));
+t_void		*for_list_args(t_void *list, t_arg args, \
+							t_void *(*func)(t_void*, t_arg args));
 t_arg		init_args(void *a1, void *a2, void *a3, void *a4);
-t_void		*get_link(t_void* list, int index);
+t_void		*get_link(t_void *list, int index);
 
-
-// parsing char* / t_str
+/*
+** parsing char* / t_str
+*/
 void		remove_comments_l(t_str *ptr, char *comment_str);
 void		remove_comments_vl(char *str, char *start, char *end, char *front);
 char		*t_str_to_char(t_str *ptr);
 t_str		*char_to_t_str(char *str);
 void		remove_comments_str(char *str, char *comm);
 
-// inits
+/*
+** inits
+*/
 t_env		*init_env(void);
 t_obj		*init_obj(void);
 t_mat		*init_mat(void);
@@ -392,7 +410,9 @@ t_glfw		*init_glfw(t_glfw *glfw);
 t_sdl_env	*init_sdl_env(void);
 t_gl_env	*init_gl_env(t_objfile **objf, t_xpm **xpm, int *len);
 
-// parsing args
+/*
+** parsing args
+*/
 void		load_file(t_env *e, int ac, char **av);
 int			is_typefile(char *file, char *type);
 void		add_objfile(t_objfile **addr, char *file);
@@ -405,27 +425,35 @@ int			chk_mtlfile(t_mtlfile *mtlfile, char *path);
 int			chk_xpmfile(t_xpm *xpmfile, char *path);
 void		link_file(t_env *e);
 
-// parsing .xpm
+/*
+** parsing .xpm
+*/
 void		error_xpm(char *s1, char *s2);
 t_xpm		*load_xpm(char *path, t_rgb *chart);
-t_str		*build_pixels(t_xpm *xpm, t_rgb *rgb_tokens, int t_size, t_str *ptr);
+t_str		*build_pixels(t_xpm *xpm, t_rgb *rgb_tokens, int t_size, \
+							t_str *ptr);
 char		*chk_separator(char *str);
 GLuint		xpm_to_glid(t_xpm *xpm);
 
-// parsing .obj
+/*
+** parsing .obj
+*/
 t_obj		*build_objects(char *path);
 void		error_obj(char *s1, char *s2);
 t_str		*add_vertix(t_obj *obj, t_str *ptr);
 t_str		*add_face(t_obj *obj, t_str *ptr);
+void		triangularize(t_obj *obj);
 t_str		*add_mtlfile_name(t_obj *obj, t_str *ptr);
 t_str		*add_material_name(t_obj *obj, t_str *ptr);
 t_str		*add_smooth(t_obj *obj, t_str *ptr);
 t_str		*add_objname(t_obj *obj, t_str *ptr);
 void		obj_checks(t_objfile *objfile);
 t_void		*rewrite_objects(t_void *objfile);
-void		triangularize(t_obj* obj);
+void		triangularize(t_obj *obj);
 
-// parsing .mtl
+/*
+** parsing .mtl
+*/
 t_mat		*build_material(char *path);
 t_str		*add_mtlname(t_mat **mat, t_str *ptr);
 t_str		*add_color(t_str *ptr, float *color);
@@ -434,19 +462,26 @@ t_str		*add_value_f(t_str *ptr, float *var);
 void		error_mtl(char *s1, char *s2);
 void		mtl_checks(t_mtlfile *mtlfile);
 
-// glfw
-void		display_object(t_glfw *glfw, t_objfile **objf, t_xpm **xpm, int *len);
+/*
+** glfw
+*/
+void		display_object(t_glfw *glfw, t_objfile **objf, t_xpm **xpm, \
+							int *len);
 void		fill_color_array(float *arr, t_face *face);
 void		fill_tex_array(float *arr, t_face *face);
 void		fill_points_array(float *arr, t_face *face, t_gl_env *gl_e);
 void		load_matrix(GLuint projection);
 void		create_program(t_gl_env *gl_e);
 
-// error OpenGL
-void 		print_programme_info_log(GLuint programme);
+/*
+** error OpenGL
+*/
+void		print_programme_info_log(GLuint programme);
 void		gl_compile_error(GLuint shader, char *intro);
 
-// events
+/*
+** events
+*/
 void		events(t_glfw *glfw, t_gl_env *gl_e, char **boolens);
 
 #endif

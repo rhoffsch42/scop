@@ -79,39 +79,3 @@ t_void			*rewrite_objects(t_void *objfile)
 	obj = (t_obj*)objf->obj;
 	return (for_list((t_void*)obj, center_obj));
 }
-
-void			triangularize(t_obj *obj)
-{
-	t_face	*f;
-	t_face	*new_f;
-	int		id;
-
-	while (obj)
-	{
-		f = obj->f;
-		while (f->next)
-			f = f->next;
-		id = f->id;
-		f = obj->f;
-		while (f)
-		{
-			if (f->d != 0)
-			{
-				id++;
-				new_f = (t_face*)safe_malloc(sizeof(t_face));
-				new_f->next = f->next;
-				new_f->id = id;
-				new_f->a = f->b;
-				new_f->b = f->c;
-				new_f->c = f->d;
-				new_f->d = 0;
-				f->c = f->d;
-				f->d = 0;
-				f->next = new_f;
-				obj->f_amount++;
-			}
-			f = f->next;
-		}
-		obj = obj->next;
-	}
-}

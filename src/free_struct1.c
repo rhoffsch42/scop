@@ -60,7 +60,6 @@ t_void	*free_t_rgb(t_void *list)
 
 	if (!list)
 		return (NULL);
-	// startf("free_t_rgb");
 	next = list->next;
 	ptr = (t_rgb*)list;
 	ptr->next = NULL;
