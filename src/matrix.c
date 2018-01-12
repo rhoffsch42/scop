@@ -56,17 +56,15 @@ static t_matrix4	view_matrix(void)
 	return (viewmatrix);
 }
 
-static t_matrix4	pro_matrix(float radx, float rady, float far, float near)
+static t_matrix4	pro_matrix(float rad, float far, float near)
 {
 	t_matrix4	promatrix;
-	float		ratiox;
-	float		ratioy;
+	float		ratio;
 
-	ratiox = 1.0f / tanf(radx / 2.0f);
-	ratioy = 1.0f / tanf(rady / 2.0f);
+	ratio = 1.0f / tanf(rad / 2.0f);
 	promatrix = matrix4(0, MATRIX_ROW_MAJOR);
-	promatrix.m.tab[0][0] = ratiox / (DEF_WIN_X / DEF_WIN_Y);
-	promatrix.m.tab[1][1] = ratioy;
+	promatrix.m.tab[0][0] = ratio / (DEF_WIN_X / DEF_WIN_Y);
+	promatrix.m.tab[1][1] = ratio;
 	promatrix.m.tab[2][2] = -(far + near) / (far - near);
 	promatrix.m.tab[2][3] = -2.0f * far * near / (far - near);
 	promatrix.m.tab[3][2] = -1.0f;
@@ -74,15 +72,18 @@ static t_matrix4	pro_matrix(float radx, float rady, float far, float near)
 	return (promatrix);
 }
 
-void				load_matrix(GLuint projection)
+void				load_matrix(GLuint projection, float fov)
 {
 	t_matrix4	promatrix;
 	t_matrix4	viewmatrix;
 
 	viewmatrix = view_matrix();
-	promatrix = pro_matrix(DTOR(FOVX), DTOR(FOVY), FAR, NEAR);
+	promatrix = pro_matrix(DTOR(fov), FAR, NEAR);
 	promatrix = matrix4_mult(promatrix, viewmatrix);
-	printf("Projection * View Matrix:\n");
-	matrix4_print(promatrix);
+	if (DATA)
+	{
+		printf("Projection * View Matrix:\n");
+		matrix4_print(promatrix);
+	}
 	glUniformMatrix4fv(projection, 1, GL_FALSE, promatrix.m.e);
 }

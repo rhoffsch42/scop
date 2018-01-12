@@ -53,9 +53,8 @@
 # define RAD_DELTA		1.0f
 # define POS_DELTA		0.5f
 # define ROT_WAY		1
+# define MOD_LINE		10
 
-# define DRAW_MODE_1	GL_POINTS
-# define DRAW_MODE_2	GL_LINE_STRIP
 # define FPS			60
 # define MAX_FPS		60
 
@@ -79,6 +78,7 @@
 # define TITLE_TRUNC	"[...]"
 # define FAR			0.01f
 # define NEAR			10.0f
+# define FOV			90.0f
 # define FOVX			90.0f
 # define FOVY			90.0f
 # define MAX_FOV		200.0f
@@ -277,7 +277,7 @@ void		display_object(t_glfw *glfw, t_objfile **objf, t_xpm **xpm, \
 void		fill_color_array(float *arr, t_face *face);
 void		fill_tex_array(float *arr, t_face *face);
 void		fill_points_array(float *arr, t_face *face, t_gl_env *gl_e);
-void		load_matrix(GLuint projection);
+void		load_matrix(GLuint projection, float fov);
 void		create_program(t_gl_env *gl_e);
 
 /*

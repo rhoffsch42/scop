@@ -49,6 +49,12 @@ static void		events_one_press(t_glfw *glfw, t_gl_env *gl_e, char **boolens)
 	}
 	if ((val = is_first_press(glfw, GLFW_KEY_SPACE, boolens)) == 1)
 		gl_e->rotate = !gl_e->rotate;
+	if ((val = is_first_press(glfw, GLFW_KEY_O, boolens)) == 1)
+		gl_e->face_drawed = (int)scale_d(gl_e->face_drawed + 1, 1, 40);
+	if ((val = is_first_press(glfw, GLFW_KEY_K, boolens)) == 1)
+		gl_e->face_drawed = (int)scale_d(gl_e->face_drawed - 1, 1, 40);
+	if ((val = is_first_press(glfw, GLFW_KEY_M, boolens)) == 1)
+		gl_e->face_drawed = 1;
 }
 
 static void		events_movements(t_glfw *glfw, t_gl_env *gl_e, t_fps *fps)
@@ -79,7 +85,7 @@ static void		events_movements(t_glfw *glfw, t_gl_env *gl_e, t_fps *fps)
 		gl_e->rot.z -= RAD_DELTA * fps->tick;
 }
 
-static void		events_parameters(t_glfw *glfw, t_fps *fps)
+static void		events_parameters(t_glfw *glfw, t_gl_env *gl_e, t_fps *fps)
 {
 	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_P))
 	{
@@ -93,6 +99,16 @@ static void		events_parameters(t_glfw *glfw, t_fps *fps)
 		fps->tick = 1.0 / fps->fps;
 		glfwSetWindowTitle(glfw->win, ft_itoa(fps->fps));
 	}
+	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_SUBTRACT))
+		gl_e->fov = (float)scale_d(gl_e->fov + 40 * fps->tick, 10, 120);
+	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_ADD))
+		gl_e->fov = (float)scale_d(gl_e->fov - 40 * fps->tick, 10, 120);
+	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_1))
+		gl_e->draw_mod = GL_POINTS;
+	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_2))
+		gl_e->draw_mod = 10;
+	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_3))
+		gl_e->draw_mod = GL_TRIANGLES;
 }
 
 /*
@@ -117,7 +133,7 @@ void			events(t_glfw *glfw, t_gl_env *gl_e, char **boolens, t_fps *fps)
 	}
 	events_one_press(glfw, gl_e, boolens);
 	events_movements(glfw, gl_e, fps);
-	events_parameters(glfw, fps);
+	events_parameters(glfw, gl_e, fps);
 	if (gl_e->rotate)
 		gl_e->rot.y += RAD_DELTA * fps->tick;
 }

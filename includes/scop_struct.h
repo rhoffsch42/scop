@@ -182,6 +182,9 @@ typedef struct			s_gl_env
 	int					angle;
 	float				vector;
 	float				scale;
+	float				fov;
+	int					draw_mod;
+	int					face_drawed;
 }						t_gl_env;
 
 typedef struct			s_cam

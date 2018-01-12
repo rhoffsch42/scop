@@ -37,12 +37,9 @@ t_gl_env	*init_gl_env(t_objfile **objf, t_xpm **xpm, int *len)
 	gl_e->tex_id = NULL;
 	if (len[1] > 0)
 		gl_e->tex_id = (GLuint*)safe_malloc(sizeof(GLuint) * len[1]);
-	i = 0;
-	while (i < len[1])
-	{
+	i = -1;
+	while (++i < len[1])
 		gl_e->tex_id[i] = xpm_to_glid(xpm[i]);
-		i++;
-	}
 	gl_e->obj_len = len[0];
 	gl_e->xpm_len = len[1];
 	gl_e->pos.z = -1.0f;
@@ -50,6 +47,8 @@ t_gl_env	*init_gl_env(t_objfile **objf, t_xpm **xpm, int *len)
 	gl_e->angle = 10;
 	gl_e->vector = 0.1f;
 	gl_e->scale = 0.20f;
+	gl_e->fov = FOV;
+	gl_e->draw_mod = GL_TRIANGLES;
 	return (gl_e);
 }
 
