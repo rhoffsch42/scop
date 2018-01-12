@@ -22,7 +22,8 @@ int		is_empty(t_void *ptr)
 	return (0);
 }
 
-t_void	*remove_list(t_void *ptr, int (condition)(t_void*), t_void* (delf)(t_void*))
+t_void	*remove_list(t_void *ptr, int (condition)(t_void*), \
+						t_void *(delf)(t_void*))
 {
 	t_void	*before;
 	t_void	*current;
@@ -32,8 +33,8 @@ t_void	*remove_list(t_void *ptr, int (condition)(t_void*), t_void* (delf)(t_void
 	while (current)
 		if (condition(current) && before == NULL)
 		{
-				ptr = delf(current);
-				current = ptr;
+			ptr = delf(current);
+			current = ptr;
 		}
 		else
 		{

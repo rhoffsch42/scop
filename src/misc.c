@@ -60,3 +60,10 @@ void	vertix_to_vector3(t_vertix *vertix, t_vector3 *vector)
 	vector->y = vertix->y;
 	vector->z = vertix->z;
 }
+
+double	scale_d(double val, double min, double max)
+{
+	val = (val > max) ? max : val;
+	val = (val < min) ? min : val;
+	return (val);
+}

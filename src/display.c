@@ -12,7 +12,21 @@
 
 #include <scop.h>
 
-void	gl_compile_error(GLuint shader, char *intro)
+static int		wait_for_next_frame(t_fps *fps)
+{
+	fps->ellapsed_time = glfwGetTime() - fps->last_time;
+	if (fps->ellapsed_time >= fps->tick)
+	{
+		printf("FPS: %d\n", (int)fps->fps);
+		fps->last_time += fps->ellapsed_time;
+		fps->ellapsed_time = 0.0;
+		return (1);
+	}
+	else
+		return (0);
+}
+
+void			gl_compile_error(GLuint shader, char *intro)
 {
 	GLsizei		maxl;
 	GLsizei		l;
@@ -21,12 +35,11 @@ void	gl_compile_error(GLuint shader, char *intro)
 	maxl = 1000;
 	info = safe_malloc(1000);
 	glGetShaderInfoLog(shader, maxl, &l, info);
-	(void)intro;
 	printf("%s\n%s\n", intro, info);
 	ft_errexit(GL_COMPILE_SHADER, RED, GL_ERROR);
 }
 
-void	draw_glfour(t_obj *obj, t_gl_env *gl_e)
+void			draw_glfour(t_obj *obj, t_gl_env *gl_e)
 {
 	float	points[obj->f_amount * 9];
 	float	colors[obj->f_amount * 9];
@@ -50,14 +63,25 @@ void	draw_glfour(t_obj *obj, t_gl_env *gl_e)
 	}
 }
 
-void	display_object(t_glfw *glfw, t_objfile **objf, t_xpm **xpm, int *len)
+static void		draw_frame(t_objfile **objf, t_gl_env *gl_e, t_glfw *glfw)
+{
+	draw_glfour(objf[gl_e->obj_i]->obj, gl_e);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glBindVertexArray(gl_e->vao);
+	glDrawArrays(GL_TRIANGLES, 0, objf[gl_e->obj_i]->obj->f_amount * 3);
+	glBindVertexArray(0);
+	glfwSwapBuffers(glfw->win);
+}
+
+void			display_object(t_glfw *glfw, t_objfile **objf, t_xpm **xpm, \
+								int *len)
 {
 	t_gl_env	*gl_e;
 	char		*boolens;
+	t_fps		*fps;
 
 	startf("display_object");
-	boolens = (char*)safe_malloc(sizeof(char) * 348);
-	ft_bzero(boolens, sizeof(char) * 348);
+	boolens = ft_strnew(sizeof(char) * 348);
 	gl_e = init_gl_env(objf, xpm, len);
 	glEnable(GL_DEPTH_TEST);
 	glClearDepth(-1.0f);
@@ -66,15 +90,14 @@ void	display_object(t_glfw *glfw, t_objfile **objf, t_xpm **xpm, int *len)
 	create_program(gl_e);
 	glUseProgram(gl_e->shader_programme);
 	load_matrix(gl_e->projection);
+	fps = init_t_fps();
 	while (!glfwWindowShouldClose(glfw->win))
 	{
-		draw_glfour(objf[gl_e->obj_i]->obj, gl_e);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		glBindVertexArray(gl_e->vao);
-		glDrawArrays(GL_TRIANGLES, 0, objf[gl_e->obj_i]->obj->f_amount * 3);
-		glBindVertexArray(0);
-		glfwSwapBuffers(glfw->win);
-		glfwPollEvents();
-		events(glfw, gl_e, &boolens);
+		if (wait_for_next_frame(fps))
+		{
+			draw_frame(objf, gl_e, glfw);
+			glfwPollEvents();
+			events(glfw, gl_e, &boolens, fps);
+		}
 	}
 }

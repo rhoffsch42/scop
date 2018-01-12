@@ -89,8 +89,8 @@ Couleur (triangularisation OK, reste a choisir definitivement le mode de couleur
 *autre ? (5 bonus)
 	1 ++ multiple objet/mtl/texture
 	2 + -d parameter
-	3 + zoom via le FOV
-	-4 + fps
-	-5 draw mode (point/line/face)
+	-3 + zoom via le FOV
+	4 ++ fps + deltaTime
+	-5 + draw mode (point/line/face)
 ------------------------------------------------------------------------------------------------------------
 -----------------------

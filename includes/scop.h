@@ -49,12 +49,14 @@
 # define DATA			0
 
 # define RAD			0.017453f
+# define RAD_DELTA		1.0f
+# define POS_DELTA		0.5f
 # define ROT_WAY		1
 
 # define DRAW_MODE_1	GL_POINTS
 # define DRAW_MODE_2	GL_LINE_STRIP
 # define FPS			60
-# define FRAME_TICK		(1000 / FPS)
+# define MAX_FPS		60
 
 # define COLOR_RGB_1	"/etc/X11/rgb.txt"
 # define COLOR_RGB_2	"/usr/share/emacs/26.0.50/etc/rgb.txt"
@@ -89,6 +91,7 @@
 # define XPM_BAD_FORMAT		105
 # define RGB_FILE_ERR		106
 # define GL_ERROR			107
+# define USAGE			"Usage: scop file.obj [file.mtl] [file.xpm] [-d path]"
 # define RGB_FILE_OPEN		"Error : can't open rgb.txt"
 # define RGB_FILE_EMPTY		"Error : rgb.txt is empty"
 # define OBJ_ERROR			"Error : bad obj format"
@@ -271,17 +274,13 @@ typedef struct			s_env
 	t_rgb				*chart;
 }						t_env;
 
-typedef struct			s_sdl_env
+typedef struct			s_fps
 {
-	int					quit;
-	int					virtual_time;
-	int					frame;
-	int					tick;
-	int					start_time;
-	int					current_time;
-	int					ellapsed_time;
-	int					last_time;
-}						t_sdl_env;
+	double				fps;
+	double				tick;
+	double				ellapsed_time;
+	double				last_time;
+}						t_fps;
 
 typedef struct			s_gl_env
 {
@@ -322,7 +321,7 @@ typedef struct			s_cam
 
 typedef struct			s_logs
 {
-	int					params;;
+	int					params;
 	char				name[64];
 	char				long_name[64];
 	int					length;
@@ -347,6 +346,7 @@ int			is_directory(const char *path);
 /*
 **	misc
 */
+double		scale_d(double val, double min, double max);
 void		startf(char *func_name);
 void		vertix_to_vector3(t_vertix *vertix, t_vector3 *vector);
 void		dump_datafile(t_objfile *objfile, t_mtlfile *mtlfile, t_str *dir, \
@@ -407,8 +407,8 @@ t_obj		*init_obj(void);
 t_mat		*init_mat(void);
 t_xpm		*init_xpm(void);
 t_glfw		*init_glfw(t_glfw *glfw);
-t_sdl_env	*init_sdl_env(void);
 t_gl_env	*init_gl_env(t_objfile **objf, t_xpm **xpm, int *len);
+t_fps		*init_t_fps(void);
 
 /*
 ** parsing args
@@ -482,6 +482,6 @@ void		gl_compile_error(GLuint shader, char *intro);
 /*
 ** events
 */
-void		events(t_glfw *glfw, t_gl_env *gl_e, char **boolens);
+void		events(t_glfw *glfw, t_gl_env *gl_e, char **boolens, t_fps *fps);
 
 #endif

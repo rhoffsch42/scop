@@ -12,16 +12,16 @@
 
 #include <scop.h>
 
-t_sdl_env	*init_sdl_env(void)
+t_fps		*init_t_fps(void)
 {
-	t_sdl_env	*sdl_e;
+	t_fps	*fps;
 
-	startf("init_sdl_env");
-	sdl_e = (t_sdl_env*)safe_malloc(sizeof(t_sdl_env));
-	ft_bzero(sdl_e, sizeof(t_sdl_env));
-	sdl_e->tick = FRAME_TICK;
-	sdl_e->last_time = 0;
-	return (sdl_e);
+	fps = (t_fps*)ft_strnew(sizeof(t_fps));
+	fps->fps = FPS;
+	fps->tick = 1.0 / fps->fps;
+	fps->last_time = glfwGetTime();
+	fps->ellapsed_time = 0.0;
+	return (fps);
 }
 
 t_gl_env	*init_gl_env(t_objfile **objf, t_xpm **xpm, int *len)

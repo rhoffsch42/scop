@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_getfile.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/01/05 17:07:58 by rhoffsch          #+#    #+#             */
+/*   Updated: 2018/01/05 17:09:41 by rhoffsch         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <libft.h>
 
 t_str		*ft_getfile(char *filename)
@@ -29,7 +41,7 @@ t_str		*ft_getfile(char *filename)
 	return (ptr[2]);
 }
 
-void			remove_comments(t_str *ptr, char *comment_str)
+void		remove_comments(t_str *ptr, char *comment_str)
 {
 	char	*ptr1;
 
@@ -42,7 +54,7 @@ void			remove_comments(t_str *ptr, char *comment_str)
 	}
 }
 
-void	remove_white_spaces(t_str *ptr)
+void		remove_white_spaces(t_str *ptr)
 {
 	char	*str;
 

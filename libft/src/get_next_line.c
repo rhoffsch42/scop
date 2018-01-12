@@ -31,7 +31,7 @@ static void		ft_write(char **tab, char **s, int count)
 	j = 0;
 	if (count > 1)
 		free(*s);
-	*s = (char*)malloc(sizeof(char) * ft_linelen(tab[0]) + 1);
+	*s = (char*)safe_malloc(sizeof(char) * ft_linelen(tab[0]) + 1);
 	while (tab[0][i] != '\n' && tab[0][i] != 0)
 	{
 		(*s)[i] = tab[0][i];
@@ -53,7 +53,7 @@ static int		ft_read(char **tab, int bytes, int const fd)
 	char	*s;
 
 	s = tab[0];
-	tab[1] = (char*)malloc(sizeof(char) * BUFF_SIZE + 1);
+	tab[1] = (char*)safe_malloc(sizeof(char) * BUFF_SIZE + 1);
 	bytes = read(fd, tab[1], BUFF_SIZE);
 	tab[1][bytes] = 0;
 	tab[0] = ft_strjoin(tab[0], tab[1]);
@@ -76,12 +76,10 @@ int				get_next_line(int const fd, char **line)
 
 	if (BUFF_SIZE < 1 || count == -1 || fd < 0)
 		return (-1);
-	count++;
-	if (count == 1)
+	if (++count == 1)
 	{
-		tmp = (char**)malloc(sizeof(char*) * 3);
-		tmp[0] = (char*)malloc(sizeof(char) * 1);
-		tmp[0][0] = 0;
+		tmp = (char**)safe_malloc(sizeof(char*) * 3);
+		tmp[0] = (char*)ft_strnew(1);
 		bytes = 1;
 	}
 	if (bytes == 0)
@@ -89,7 +87,6 @@ int				get_next_line(int const fd, char **line)
 		ft_strclr(tmp[0]);
 		free(tmp[0]);
 		free(tmp);
-		// count = -1;
 		count = 0;
 		return (0);
 	}

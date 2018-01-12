@@ -51,39 +51,53 @@ static void		events_one_press(t_glfw *glfw, t_gl_env *gl_e, char **boolens)
 		gl_e->rotate = !gl_e->rotate;
 }
 
-static void		events_movements(t_glfw *glfw, t_gl_env *gl_e)
+static void		events_movements(t_glfw *glfw, t_gl_env *gl_e, t_fps *fps)
 {
 	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_LEFT))
-		gl_e->pos.x -= 0.01f;
+		gl_e->pos.x -= POS_DELTA * fps->tick;
 	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_RIGHT))
-		gl_e->pos.x += 0.01f;
+		gl_e->pos.x += POS_DELTA * fps->tick;
 	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_DOWN))
-		gl_e->pos.y -= 0.01f;
+		gl_e->pos.y -= POS_DELTA * fps->tick;
 	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_UP))
-		gl_e->pos.y += 0.01f;
+		gl_e->pos.y += POS_DELTA * fps->tick;
 	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_1))
-		gl_e->pos.z -= 0.01f;
+		gl_e->pos.z -= POS_DELTA * fps->tick;
 	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_0))
-		gl_e->pos.z += 0.01f;
+		gl_e->pos.z += POS_DELTA * fps->tick;
 	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_7))
-		gl_e->rot.x += RAD;
+		gl_e->rot.x += RAD_DELTA * fps->tick;
 	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_4))
-		gl_e->rot.x -= RAD;
+		gl_e->rot.x -= RAD_DELTA * fps->tick;
 	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_8))
-		gl_e->rot.y += RAD;
+		gl_e->rot.y += RAD_DELTA * fps->tick;
 	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_5))
-		gl_e->rot.y -= RAD;
+		gl_e->rot.y -= RAD_DELTA * fps->tick;
 	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_9))
-		gl_e->rot.z += RAD;
+		gl_e->rot.z += RAD_DELTA * fps->tick;
 	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_6))
-		gl_e->rot.z -= RAD;
+		gl_e->rot.z -= RAD_DELTA * fps->tick;
+}
+
+static void		events_parameters(t_glfw *glfw, t_fps *fps)
+{
+	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_P))
+	{
+		fps->fps = scale_d(fps->fps + 20 * fps->tick, 1, MAX_FPS);
+		fps->tick = 1.0 / fps->fps;
+	}
+	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_L))
+	{
+		fps->fps = scale_d(fps->fps - 20 * fps->tick, 1, MAX_FPS);
+		fps->tick = 1.0 / fps->fps;
+	}
 }
 
 /*
 **	glFrontFace(GL_CW); // GL_CCW for counter clock-wise
 */
 
-void			events(t_glfw *glfw, t_gl_env *gl_e, char **boolens)
+void			events(t_glfw *glfw, t_gl_env *gl_e, char **boolens, t_fps *fps)
 {
 	int		val;
 
@@ -100,7 +114,8 @@ void			events(t_glfw *glfw, t_gl_env *gl_e, char **boolens)
 		glDisable(GL_CULL_FACE);
 	}
 	events_one_press(glfw, gl_e, boolens);
-	events_movements(glfw, gl_e);
+	events_movements(glfw, gl_e, fps);
+	events_parameters(glfw, fps);
 	if (gl_e->rotate)
-		gl_e->rot.y += RAD;
+		gl_e->rot.y += RAD_DELTA * fps->tick;
 }
