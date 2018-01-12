@@ -85,11 +85,13 @@ static void		events_parameters(t_glfw *glfw, t_fps *fps)
 	{
 		fps->fps = scale_d(fps->fps + 20 * fps->tick, 1, MAX_FPS);
 		fps->tick = 1.0 / fps->fps;
+		glfwSetWindowTitle(glfw->win, ft_itoa(fps->fps));
 	}
 	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_L))
 	{
 		fps->fps = scale_d(fps->fps - 20 * fps->tick, 1, MAX_FPS);
 		fps->tick = 1.0 / fps->fps;
+		glfwSetWindowTitle(glfw->win, ft_itoa(fps->fps));
 	}
 }
 

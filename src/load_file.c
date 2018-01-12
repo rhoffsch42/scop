@@ -37,8 +37,7 @@ static void		add_directory(char **av, int i, t_str **dir)
 	t_str	*ptr;
 
 	startf("add_directory");
-	if (av[i + 1] == NULL)
-		ft_errexit(SCOP_DIR_ERR, RED, BAD_ARGS);
+	ft_chkptr(av[i + 1], ft_strjoin(SCOP_DIR_ERR, USAGE), BAD_ARGS);
 	if (check_perm(av[i + 1]) && is_directory(av[i + 1]))
 	{
 		new_dir = (t_str*)safe_malloc(sizeof(t_str));
@@ -63,7 +62,7 @@ void			load_file(t_env *e, int ac, char **av)
 
 	startf("load_file");
 	if (ac == 1)
-		error_arg(av[0], SCOP_BAD_ARG);
+		error_arg(av[0], ft_strjoin(SCOP_BAD_ARG, USAGE));
 	add_xpmfile(&(e->xpmfile), PONY_FILE, e->chart);
 	i = 0;
 	while (av[++i])
@@ -78,7 +77,7 @@ void			load_file(t_env *e, int ac, char **av)
 		else if (is_typefile(av[i], ".xpm"))
 			add_xpmfile(&(e->xpmfile), av[i], e->chart);
 		else
-			error_arg(av[i], SCOP_BAD_ARG);
+			error_arg(av[i], ft_strjoin(SCOP_BAD_ARG, USAGE));
 	}
 	link_file(e);
 	obj_checks(e->objfile);

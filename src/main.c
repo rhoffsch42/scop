@@ -52,7 +52,7 @@ int		main(int ac, char **av)
 	printf("___ dump_datafile\n");
 	dump_datafile(e->objfile, e->mtlfile, e->dir, e->xpmfile);
 	if (!e->objfile)
-		ft_errexit(SCOP_NO_OBJ, RED, BAD_ARGS);
+		ft_errexit(ft_strjoin(SCOP_NO_OBJ, USAGE), RED, BAD_ARGS);
 	object_tab = (t_objfile**)list_to_tab((t_void*)(e->objfile));
 	texture_tab = (t_xpm**)list_to_tab((t_void*)(e->xpmfile));
 	e->glfw = init_glfw(NULL);

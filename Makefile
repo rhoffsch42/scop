@@ -64,7 +64,8 @@ SRC_FILE		=	main.c \
 					color.c \
 					misc.c
 
-HDR_FILE		=	scop.h
+HDR_FILE		=	scop.h \
+					scop_struct.h
 
 SRC_DIR			=	src
 OBJ_DIR			=	obj

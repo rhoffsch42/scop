@@ -36,7 +36,6 @@
 # define OPEN_FAIL		2
 # define MALLOC_FAIL	3
 
-
 typedef struct		s_void
 {
 	struct s_void	*next;
@@ -56,16 +55,17 @@ typedef struct		s_list
 	size_t			content_size;
 }					t_list;
 
-typedef struct			s_str
+typedef struct		s_str
 {
-	struct s_str		*next;
-	char				*str;
-}						t_str;
+	struct s_str	*next;
+	char			*str;
+}					t_str;
 
 t_str				*ft_getfile(char *filename);
 void				remove_comments(t_str *ptr, char *comment_str);
 void				remove_white_spaces(t_str *ptr);
-t_void				*remove_list(t_void *ptr, int (condition)(t_void*), t_void* (del)(t_void*));
+t_void				*remove_list(t_void *ptr, int (condition)(t_void*), \
+								t_void *(del)(t_void*));
 t_void				*del(t_void *ptr);
 int					is_empty(t_void *ptr);
 int					ft_listlen(void *list);
