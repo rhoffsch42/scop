@@ -106,7 +106,7 @@ static void		events_parameters(t_glfw *glfw, t_gl_env *gl_e, t_fps *fps)
 	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_1))
 		gl_e->draw_mod = GL_POINTS;
 	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_2))
-		gl_e->draw_mod = 10;
+		gl_e->draw_mod = MOD_LINE;
 	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_3))
 		gl_e->draw_mod = GL_TRIANGLES;
 }
