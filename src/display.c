@@ -48,6 +48,7 @@ void			draw_glfour(t_obj *obj, t_gl_env *gl_e)
 	fill_color_array(colors, obj->f);
 	fill_tex_array(tex, obj->f);
 	glBindBuffer(GL_ARRAY_BUFFER, gl_e->vbo);
+	gl_e->face_drawed = (int)scale_d(gl_e->face_drawed, 1, obj->f_amount);
 	glBufferData(GL_ARRAY_BUFFER, gl_e->face_drawed * 9 * sizeof(float), points, GL_STATIC_DRAW);
 	// glBufferData(GL_ARRAY_BUFFER, obj->f_amount * 9 * sizeof(float),
 	// points, GL_STATIC_DRAW);
@@ -89,11 +90,9 @@ void			display_object(t_glfw *glfw, t_objfile **objf, t_xpm **xpm, \
 								int *len)
 {
 	t_gl_env	*gl_e;
-	char		*boolens;
 	t_fps		*fps;
 
 	startf("display_object");
-	boolens = ft_strnew(sizeof(char) * 348);
 	gl_e = init_gl_env(objf, xpm, len);
 	glEnable(GL_DEPTH_TEST);
 	glClearDepth(-1.0f);
@@ -110,7 +109,7 @@ void			display_object(t_glfw *glfw, t_objfile **objf, t_xpm **xpm, \
 			load_matrix(gl_e->projection, gl_e->fov);
 			draw_frame(objf, gl_e, glfw);
 			glfwPollEvents();
-			events(glfw, gl_e, &boolens, fps);
+			events(glfw, gl_e, fps);
 		}
 	}
 }

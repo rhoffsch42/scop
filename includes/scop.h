@@ -54,6 +54,7 @@
 # define POS_DELTA		0.5f
 # define ROT_WAY		1
 # define MOD_LINE		10
+# define MAX_FACE		999999999
 
 # define FPS			60
 # define MAX_FPS		60
@@ -289,6 +290,6 @@ void		gl_compile_error(GLuint shader, char *intro);
 /*
 ** events
 */
-void		events(t_glfw *glfw, t_gl_env *gl_e, char **boolens, t_fps *fps);
+void		events(t_glfw *glfw, t_gl_env *gl_e, t_fps *fps);
 
 #endif
