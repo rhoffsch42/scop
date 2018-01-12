@@ -49,6 +49,7 @@ t_gl_env	*init_gl_env(t_objfile **objf, t_xpm **xpm, int *len)
 	gl_e->scale = 0.20f;
 	gl_e->fov = FOV;
 	gl_e->draw_mod = GL_TRIANGLES;
+	gl_e->face_drawed = MAX_FACE;
 	return (gl_e);
 }
 

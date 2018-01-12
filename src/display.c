@@ -49,19 +49,16 @@ void			draw_glfour(t_obj *obj, t_gl_env *gl_e)
 	fill_tex_array(tex, obj->f);
 	glBindBuffer(GL_ARRAY_BUFFER, gl_e->vbo);
 	gl_e->face_drawed = (int)scale_d(gl_e->face_drawed, 1, obj->f_amount);
-	glBufferData(GL_ARRAY_BUFFER, gl_e->face_drawed * 9 * sizeof(float), points, GL_STATIC_DRAW);
-	// glBufferData(GL_ARRAY_BUFFER, obj->f_amount * 9 * sizeof(float),
-	// points, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, gl_e->face_drawed * 9 * sizeof(float), \
+				points, GL_STATIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, gl_e->colors_vbo);
-	glBufferData(GL_ARRAY_BUFFER, gl_e->face_drawed * 9 * sizeof(float), colors, GL_STATIC_DRAW);
-	// glBufferData(GL_ARRAY_BUFFER, obj->f_amount * 9 * sizeof(float),
-	// colors, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, gl_e->face_drawed * 9 * sizeof(float), \
+				colors, GL_STATIC_DRAW);
 	if (gl_e->tex_id)
 	{
 		glBindBuffer(GL_ARRAY_BUFFER, gl_e->tex_vbo);
-		glBufferData(GL_ARRAY_BUFFER, gl_e->face_drawed * 6 * sizeof(float), tex, GL_STATIC_DRAW);
-		// glBufferData(GL_ARRAY_BUFFER, obj->f_amount * 6 * sizeof(float),
-		// tex, GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, gl_e->face_drawed * 6 * sizeof(float), \
+					tex, GL_STATIC_DRAW);
 		glBindTexture(GL_TEXTURE_2D, gl_e->tex_id[gl_e->tex_i]);
 	}
 }
@@ -70,7 +67,7 @@ static void		draw_frame(t_objfile **objf, t_gl_env *gl_e, t_glfw *glfw)
 {
 	draw_glfour(objf[gl_e->obj_i]->obj, gl_e);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glClearColor(0.0f, 51.0f / 255.0f, 102.0f / 255.0f, 1);
+	glClearColor(0.0f, 0.2f, 0.4f, 1.0f);
 	glBindVertexArray(gl_e->vao);
 	if (gl_e->draw_mod == MOD_LINE)
 	{
@@ -101,7 +98,6 @@ void			display_object(t_glfw *glfw, t_objfile **objf, t_xpm **xpm, \
 	create_program(gl_e);
 	glUseProgram(gl_e->shader_programme);
 	fps = init_t_fps();
-	gl_e->face_drawed = 1;
 	while (!glfwWindowShouldClose(glfw->win))
 	{
 		if (wait_for_next_frame(fps))

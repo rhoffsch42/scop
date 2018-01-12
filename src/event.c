@@ -32,31 +32,27 @@ static int		is_first_press(t_glfw *glfw, int key, t_gl_env *gl_e)
 
 static void		events_one_press(t_glfw *glfw, t_gl_env *gl_e)
 {
-	int		val;
-
-	if ((val = is_first_press(glfw, GLFW_KEY_PAGE_DOWN, gl_e)) == 1)
+	if (is_first_press(glfw, GLFW_KEY_PAGE_DOWN, gl_e))
+	{
 		gl_e->obj_i = (gl_e->obj_i < gl_e->obj_len - 1) ? gl_e->obj_i + 1 : 0;
-	if ((val = is_first_press(glfw, GLFW_KEY_PAGE_UP, gl_e)) == 1)
+		gl_e->face_drawed = MAX_FACE;
+	}
+	if (is_first_press(glfw, GLFW_KEY_PAGE_UP, gl_e))
+	{
 		gl_e->obj_i = (gl_e->obj_i > 0) ? gl_e->obj_i - 1 : gl_e->obj_len - 1;
-	if ((val = is_first_press(glfw, GLFW_KEY_HOME, gl_e)) == 1)
+		gl_e->face_drawed = MAX_FACE;
+	}
+	if (is_first_press(glfw, GLFW_KEY_HOME, gl_e))
 		gl_e->tex_i = (gl_e->tex_i < gl_e->xpm_len - 1) ? gl_e->tex_i + 1 : 0;
-	if ((val = is_first_press(glfw, GLFW_KEY_END, gl_e)) == 1)
+	if (is_first_press(glfw, GLFW_KEY_END, gl_e))
 		gl_e->tex_i = (gl_e->tex_i != 0) ? gl_e->tex_i - 1 : gl_e->xpm_len - 1;
-	if ((val = is_first_press(glfw, GLFW_KEY_ENTER, gl_e)) == 1)
+	if (is_first_press(glfw, GLFW_KEY_ENTER, gl_e))
 	{
 		gl_e->dismod = (gl_e->dismod < MODS - 1) ? gl_e->dismod + 1 : 0;
 		glUniform1i(gl_e->display_mod, gl_e->dismod);
 	}
-	if ((val = is_first_press(glfw, GLFW_KEY_SPACE, gl_e)) == 1)
+	if (is_first_press(glfw, GLFW_KEY_SPACE, gl_e))
 		gl_e->rotate = !gl_e->rotate;
-	if ((val = is_first_press(glfw, GLFW_KEY_EQUAL, gl_e)) == 1)
-		gl_e->face_drawed = (int)scale_d(gl_e->face_drawed + 1, 1, MAX_FACE);
-	if ((val = is_first_press(glfw, GLFW_KEY_MINUS, gl_e)) == 1)
-		gl_e->face_drawed = (int)scale_d(gl_e->face_drawed - 1, 1, MAX_FACE);
-	if ((val = is_first_press(glfw, GLFW_KEY_LEFT_BRACKET, gl_e)) == 1)
-		gl_e->face_drawed = 1;
-	if ((val = is_first_press(glfw, GLFW_KEY_RIGHT_BRACKET, gl_e)) == 1)
-		gl_e->face_drawed = MAX_FACE;
 }
 
 static void		events_movements(t_glfw *glfw, t_gl_env *gl_e, t_fps *fps)
@@ -111,6 +107,8 @@ static void		events_parameters(t_glfw *glfw, t_gl_env *gl_e, t_fps *fps)
 		gl_e->draw_mod = MOD_LINE;
 	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_3))
 		gl_e->draw_mod = GL_TRIANGLES;
+	if (gl_e->rotate)
+		gl_e->rot.y += RAD_DELTA * fps->tick;
 }
 
 /*
@@ -133,9 +131,15 @@ void			events(t_glfw *glfw, t_gl_env *gl_e, t_fps *fps)
 		gl_e->boolens[GLFW_KEY_C] = 0;
 		glDisable(GL_CULL_FACE);
 	}
+	if (is_first_press(glfw, GLFW_KEY_EQUAL, gl_e))
+		gl_e->face_drawed = (int)scale_d(gl_e->face_drawed + 1, 1, MAX_FACE);
+	if (is_first_press(glfw, GLFW_KEY_MINUS, gl_e))
+		gl_e->face_drawed = (int)scale_d(gl_e->face_drawed - 1, 1, MAX_FACE);
+	if (is_first_press(glfw, GLFW_KEY_LEFT_BRACKET, gl_e))
+		gl_e->face_drawed = 1;
+	if (is_first_press(glfw, GLFW_KEY_RIGHT_BRACKET, gl_e))
+		gl_e->face_drawed = MAX_FACE;
 	events_one_press(glfw, gl_e);
 	events_movements(glfw, gl_e, fps);
 	events_parameters(glfw, gl_e, fps);
-	if (gl_e->rotate)
-		gl_e->rot.y += RAD_DELTA * fps->tick;
 }

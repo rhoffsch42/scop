@@ -67,6 +67,9 @@ fait:
 		texture:	home<	end>
 		obj:		PageUp	PageDown
 		fps up/down:		P	L
+		draw N face:
+			up/down:		-|_	+|=
+			0/MAX_FACE:		[{	]}
 		culling on/off:     C (rester appuye)
 		rotation on/off:    SPACE
 		display mod:        ENTER
@@ -93,5 +96,6 @@ Couleur (triangularisation OK, reste a choisir definitivement le mode de couleur
 	3 + zoom via le FOV
 	4 ++ fps + deltaTime
 	5 + draw mode (point/line/triangles)
+	6 + draw N face
 ------------------------------------------------------------------------------------------------------------
 -----------------------
