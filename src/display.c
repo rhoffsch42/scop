@@ -45,7 +45,7 @@ void			draw_glfour(t_obj *obj, t_gl_env *gl_e)
 	float	tex[obj->f_amount * 6];
 
 	fill_points_array(points, obj->f, gl_e);
-	fill_color_array(colors, obj->f);
+	fill_color_array(colors, obj->f, (gl_e->dismod == 1) ? obj->mat : NULL);
 	fill_tex_array(tex, obj->f, gl_e);
 	glBindBuffer(GL_ARRAY_BUFFER, gl_e->vbo);
 	gl_e->face_drawed = (int)scale_d(gl_e->face_drawed, 1, obj->f_amount);

@@ -12,25 +12,29 @@
 
 #include <scop.h>
 
-void		fill_color_array(float *arr, t_face *face)
+void		fill_color_array(float *arr, t_face *face, t_mat *mat)
 {
-	int		i;
-	float	color;
+	int			i;
+	t_vector3	color;
 
 	srand(1);
 	i = 0;
 	while (face)
 	{
-		color = (float)(rand() % 200) / 200.0f;
-		arr[i + 0] = color;
-		arr[i + 1] = color;
-		arr[i + 2] = color;
-		arr[i + 3] = color;
-		arr[i + 4] = color;
-		arr[i + 5] = color;
-		arr[i + 6] = color;
-		arr[i + 7] = color;
-		arr[i + 8] = color;
+		color.x = (float)(rand() % 200) / 200.0f;
+		color.y = color.x;
+		color.z = color.x;
+		if (mat)
+			memcpy(&color, (void*)(mat->kd), 3 * sizeof(float));
+		arr[i + 0] = color.x;
+		arr[i + 1] = color.y;
+		arr[i + 2] = color.z;
+		arr[i + 3] = color.x;
+		arr[i + 4] = color.y;
+		arr[i + 5] = color.z;
+		arr[i + 6] = color.x;
+		arr[i + 7] = color.y;
+		arr[i + 8] = color.z;
 		i += 9;
 		face = face->next;
 	}

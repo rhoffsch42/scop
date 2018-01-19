@@ -275,7 +275,7 @@ void		mtl_checks(t_mtlfile *mtlfile);
 */
 void		display_object(t_glfw *glfw, t_objfile **objf, t_xpm **xpm, \
 							int *len);
-void		fill_color_array(float *arr, t_face *face);
+void		fill_color_array(float *arr, t_face *face, t_mat *mat);
 void		fill_tex_array(float *arr, t_face *face, t_gl_env *gl_e);
 void		fill_points_array(float *arr, t_face *face, t_gl_env *gl_e);
 void		load_matrix(GLuint projection, float fov);
