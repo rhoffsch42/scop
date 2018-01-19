@@ -36,7 +36,7 @@ void		fill_color_array(float *arr, t_face *face)
 	}
 }
 
-void		fill_tex_array(float *arr, t_face *face)
+void		fill_tex_array(float *arr, t_face *face, t_gl_env *gl_e)
 {
 	int			i;
 	float		scale;
@@ -53,6 +53,12 @@ void		fill_tex_array(float *arr, t_face *face)
 		arr[i + 3] = (1 - face->v2->y) * scale + offset_y;
 		arr[i + 4] = (face->v3->z) * scale;
 		arr[i + 5] = (1 - face->v3->y) * scale + offset_y;
+		if (gl_e->texture_mod)
+		{
+			arr[i + 0] = atan2f(face->v1->z, face->v1->x) / M_PI_2;
+			arr[i + 2] = atan2f(face->v2->z, face->v2->x) / M_PI_2;
+			arr[i + 4] = atan2f(face->v3->z, face->v3->x) / M_PI_2;
+		}
 		i += 6;
 		face = face->next;
 	}

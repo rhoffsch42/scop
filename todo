@@ -48,9 +48,12 @@ bonus faits:
 OpenGL 4.1 (glfw + glew)
 
 a faire:
-	FRAME_TICK FPS compteur etc
 	texture gl:
 		pas d'ettirement: actuellement le dessin se fait sur le plan XY
+			(old)	arr[i + 0] = atan2f(face->v1->z, face->v1->x) / M_PI + M_PI * scale;
+					arr[i + 2] = atan2f(face->v2->z, face->v2->x) / M_PI + M_PI * scale;
+					arr[i + 4] = atan2f(face->v3->z, face->v3->x) / M_PI + M_PI * scale;
+
 		faire en sorte que les faces ne faisant pas parti du plan utilisé aient une texture pas etiree.
 			1-> prendre la taille de la face et l'appliquer sur le plan utilisé
 				-> comportement variable en fonctione de la forme de l'objet
@@ -66,6 +69,7 @@ fait:
 	KEYMAP:
 		texture:	home<	end>
 		obj:		PageUp	PageDown
+		fov up/down			+	-
 		fps up/down:		P	L
 		draw N face:
 			up/down:		-|_	+|=
@@ -85,10 +89,10 @@ Couleur (triangularisation OK, reste a choisir definitivement le mode de couleur
 	Controllez avec un objet qui a d'autres facettes que des triangles : on a la meme couleur sur toute la facette.
 	Cette question est consideree comme OK egalement si un algo pour triangulariser les faces qui ne le sont pas, a ete implémenté.
 	Dans ce cas, il sera normal d'avoir des triangles de couleurs differentes.
-*obj files
+*obj files (OK?)
 	Chargement non-trivial des fichiers obj : non coplanaire, faces concaves, triangularisation.
 	Verifier avec teapot.obj et au moins un autre fichier obj ambigus.
-*texture ++
+*texture ++ (cylinder mapping fait)
 	La texture n'est deformee sur aucune des faces
 *autre ? (5 bonus)
 	1 ++ multiple objet/mtl/texture
@@ -98,4 +102,3 @@ Couleur (triangularisation OK, reste a choisir definitivement le mode de couleur
 	5 + draw mode (point/line/triangles)
 	6 + draw N face
 ------------------------------------------------------------------------------------------------------------
------------------------

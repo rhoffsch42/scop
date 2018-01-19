@@ -30,29 +30,32 @@ static int		is_first_press(t_glfw *glfw, int key, t_gl_env *gl_e)
 	return (0);
 }
 
-static void		events_one_press(t_glfw *glfw, t_gl_env *gl_e)
+static void		events_parameters(t_glfw *glfw, t_gl_env *gl_e, t_fps *fps)
 {
-	if (is_first_press(glfw, GLFW_KEY_PAGE_DOWN, gl_e))
+	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_P))
 	{
-		gl_e->obj_i = (gl_e->obj_i < gl_e->obj_len - 1) ? gl_e->obj_i + 1 : 0;
-		gl_e->face_drawed = MAX_FACE;
+		fps->fps = scale_d(fps->fps + 20 * fps->tick, 1, MAX_FPS);
+		fps->tick = 1.0 / fps->fps;
+		glfwSetWindowTitle(glfw->win, ft_itoa(fps->fps));
 	}
-	if (is_first_press(glfw, GLFW_KEY_PAGE_UP, gl_e))
+	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_L))
 	{
-		gl_e->obj_i = (gl_e->obj_i > 0) ? gl_e->obj_i - 1 : gl_e->obj_len - 1;
-		gl_e->face_drawed = MAX_FACE;
+		fps->fps = scale_d(fps->fps - 20 * fps->tick, 1, MAX_FPS);
+		fps->tick = 1.0 / fps->fps;
+		glfwSetWindowTitle(glfw->win, ft_itoa(fps->fps));
 	}
-	if (is_first_press(glfw, GLFW_KEY_HOME, gl_e))
-		gl_e->tex_i = (gl_e->tex_i < gl_e->xpm_len - 1) ? gl_e->tex_i + 1 : 0;
-	if (is_first_press(glfw, GLFW_KEY_END, gl_e))
-		gl_e->tex_i = (gl_e->tex_i != 0) ? gl_e->tex_i - 1 : gl_e->xpm_len - 1;
-	if (is_first_press(glfw, GLFW_KEY_ENTER, gl_e))
-	{
-		gl_e->dismod = (gl_e->dismod < MODS - 1) ? gl_e->dismod + 1 : 0;
-		glUniform1i(gl_e->display_mod, gl_e->dismod);
-	}
-	if (is_first_press(glfw, GLFW_KEY_SPACE, gl_e))
-		gl_e->rotate = !gl_e->rotate;
+	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_SUBTRACT))
+		gl_e->fov = (float)scale_d(gl_e->fov + 40 * fps->tick, 10, 120);
+	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_ADD))
+		gl_e->fov = (float)scale_d(gl_e->fov - 40 * fps->tick, 10, 120);
+	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_1))
+		gl_e->draw_mod = GL_POINTS;
+	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_2))
+		gl_e->draw_mod = MOD_LINE;
+	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_3))
+		gl_e->draw_mod = GL_TRIANGLES;
+	if (gl_e->rotate)
+		gl_e->rot.y += RAD_DELTA * fps->tick;
 }
 
 static void		events_movements(t_glfw *glfw, t_gl_env *gl_e, t_fps *fps)
@@ -81,34 +84,33 @@ static void		events_movements(t_glfw *glfw, t_gl_env *gl_e, t_fps *fps)
 		gl_e->rot.z += RAD_DELTA * fps->tick;
 	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_6))
 		gl_e->rot.z -= RAD_DELTA * fps->tick;
+	events_parameters(glfw, gl_e, fps);
 }
 
-static void		events_parameters(t_glfw *glfw, t_gl_env *gl_e, t_fps *fps)
+static void		events_one_press(t_glfw *glfw, t_gl_env *gl_e, t_fps *fps)
 {
-	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_P))
+	if (is_first_press(glfw, GLFW_KEY_PAGE_DOWN, gl_e))
 	{
-		fps->fps = scale_d(fps->fps + 20 * fps->tick, 1, MAX_FPS);
-		fps->tick = 1.0 / fps->fps;
-		glfwSetWindowTitle(glfw->win, ft_itoa(fps->fps));
+		gl_e->obj_i = (gl_e->obj_i < gl_e->obj_len - 1) ? gl_e->obj_i + 1 : 0;
+		gl_e->face_drawed = MAX_FACE;
 	}
-	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_L))
+	if (is_first_press(glfw, GLFW_KEY_PAGE_UP, gl_e))
 	{
-		fps->fps = scale_d(fps->fps - 20 * fps->tick, 1, MAX_FPS);
-		fps->tick = 1.0 / fps->fps;
-		glfwSetWindowTitle(glfw->win, ft_itoa(fps->fps));
+		gl_e->obj_i = (gl_e->obj_i > 0) ? gl_e->obj_i - 1 : gl_e->obj_len - 1;
+		gl_e->face_drawed = MAX_FACE;
 	}
-	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_SUBTRACT))
-		gl_e->fov = (float)scale_d(gl_e->fov + 40 * fps->tick, 10, 120);
-	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_ADD))
-		gl_e->fov = (float)scale_d(gl_e->fov - 40 * fps->tick, 10, 120);
-	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_1))
-		gl_e->draw_mod = GL_POINTS;
-	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_2))
-		gl_e->draw_mod = MOD_LINE;
-	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_3))
-		gl_e->draw_mod = GL_TRIANGLES;
-	if (gl_e->rotate)
-		gl_e->rot.y += RAD_DELTA * fps->tick;
+	if (is_first_press(glfw, GLFW_KEY_HOME, gl_e))
+		gl_e->tex_i = (gl_e->tex_i < gl_e->xpm_len - 1) ? gl_e->tex_i + 1 : 0;
+	if (is_first_press(glfw, GLFW_KEY_END, gl_e))
+		gl_e->tex_i = (gl_e->tex_i != 0) ? gl_e->tex_i - 1 : gl_e->xpm_len - 1;
+	if (is_first_press(glfw, GLFW_KEY_ENTER, gl_e))
+	{
+		gl_e->dismod = (gl_e->dismod < MODS - 1) ? gl_e->dismod + 1 : 0;
+		glUniform1i(gl_e->display_mod, gl_e->dismod);
+	}
+	if (is_first_press(glfw, GLFW_KEY_SPACE, gl_e))
+		gl_e->rotate = !gl_e->rotate;
+	events_movements(glfw, gl_e, fps);
 }
 
 /*
@@ -139,7 +141,7 @@ void			events(t_glfw *glfw, t_gl_env *gl_e, t_fps *fps)
 		gl_e->face_drawed = 1;
 	if (is_first_press(glfw, GLFW_KEY_RIGHT_BRACKET, gl_e))
 		gl_e->face_drawed = MAX_FACE;
-	events_one_press(glfw, gl_e);
-	events_movements(glfw, gl_e, fps);
-	events_parameters(glfw, gl_e, fps);
+	if (is_first_press(glfw, GLFW_KEY_T, gl_e))
+		gl_e->texture_mod = !gl_e->texture_mod;
+	events_one_press(glfw, gl_e, fps);
 }

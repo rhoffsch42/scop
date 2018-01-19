@@ -184,6 +184,7 @@ typedef struct			s_gl_env
 	float				scale;
 	float				fov;
 	int					draw_mod;
+	int					texture_mod;
 	int					face_drawed;
 	char				boolens[348];
 }						t_gl_env;
