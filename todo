@@ -82,6 +82,45 @@ fait:
 			y: 8 5			y: fleches haut bas
 			z: 9 6			z: 1 0
 ------------------------------------------------------------------------------------------------------------
+void	cyl(void)
+{
+	int		f = 100;
+	float	h = 2.0f;
+	float	r = 2.0f;
+	float	unit = (M_PI * 2) / (float)f;
+
+	int		i = 1;
+	while (i <= f)
+	{
+		float	rad = unit * (float)i;
+		float	x = cosf(rad) * r;
+		float	z = sinf(rad) * r;
+		printf("v %lf %lf %lf\n", x, h, z);
+		printf("v %lf -%lf %lf\n", x, h, z);
+		i++;
+	}
+	printf("v 0.0 %lf 0.0\n", h);
+	printf("v 0.0 -%lf 0.0\n", h);
+	int	end = f * 2;
+	int midup = end + 1;
+	int middown = end + 2;
+	i = 0;
+	int j = 1;
+	while (i < f)
+	{
+		printf("f %d %d %d\n", midup, j + 2, j + 0);
+		printf("f %d %d %d\n", middown, j + 1, j + 3);
+		printf("f %d %d %d %d\n", j + 0, j + 2, j + 3, j + 1);
+		j += 2;
+		i++;
+	}
+	printf("f %d %d %d\n", midup, end - 1, 1);
+	printf("f %d %d %d\n", middown, end, 2);
+	printf("f %d %d %d %d\n", end - 1, 1, 2, end);
+	exit(0);
+}
+------------------------------------------------------------------------------------------------------------
+
 BAREME A FAIRE
 
 Couleur (triangularisation OK, reste a choisir definitivement le mode de couleur)
