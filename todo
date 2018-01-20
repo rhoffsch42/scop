@@ -77,10 +77,14 @@ fait:
 		culling on/off:     C (rester appuye)
 		rotation on/off:    SPACE
 		display mod:        ENTER
+		draw mod:			1 2 3
+
+		pave numerique:
 		rotations:		translations:
 			x: 7 4			x: fleches gauche droite
 			y: 8 5			y: fleches haut bas
 			z: 9 6			z: 1 0
+
 ------------------------------------------------------------------------------------------------------------
 void	cyl(void)
 {
