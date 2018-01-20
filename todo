@@ -121,6 +121,9 @@ void	cyl(void)
 }
 ------------------------------------------------------------------------------------------------------------
 
+=================  > > > LEAKS < < < 
+check xpm, taille puissance 2
+
 BAREME A FAIRE
 
 Couleur (triangularisation OK, reste a choisir definitivement le mode de couleur)

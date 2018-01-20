@@ -12,6 +12,16 @@
 
 #include <scop.h>
 
+char	*get_current_directory(void)
+{
+	char path[1024];
+
+	ft_bzero(&path, sizeof(path));
+	if (getcwd(path, sizeof(path)) == NULL)
+		ft_errexit("getcwd error", RED, UNKNOW_ERROR);
+	return (ft_strdup(path));
+}
+
 int		safe_open(char *path)
 {
 	int		fd;

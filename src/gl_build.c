@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 17:07:14 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/01/05 17:07:18 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/01/20 15:16:26 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,11 @@ static void		create_buffer(GLuint *vbo, int slot, int size, GLenum type)
 
 void			create_program(t_gl_env *gl_e)
 {
-	int		params;
+	int		p;
+	char	*shaders[2];
 
+	shaders[0] = ft_strjoin(gl_e->cwd, VSHADER_FILE);
+	shaders[1] = ft_strjoin(gl_e->cwd, FSHADER_FILE);
 	glGenVertexArrays(1, &gl_e->vao);
 	glBindVertexArray(gl_e->vao);
 	glEnableVertexAttribArray(0);
@@ -51,18 +54,19 @@ void			create_program(t_gl_env *gl_e)
 	create_buffer(&(gl_e->colors_vbo), 1, 3, GL_FLOAT);
 	glEnable(GL_TEXTURE_2D);
 	create_buffer(&(gl_e->tex_vbo), 2, 2, GL_FLOAT);
-	gl_e->vshader = init_shader(VSHADER_FILE, GL_VERTEX_SHADER);
-	gl_e->fshader = init_shader(FSHADER_FILE, GL_FRAGMENT_SHADER);
+	gl_e->vshader = init_shader(shaders[0], GL_VERTEX_SHADER);
+	gl_e->fshader = init_shader(shaders[1], GL_FRAGMENT_SHADER);
 	gl_e->shader_programme = glCreateProgram();
 	glAttachShader(gl_e->shader_programme, gl_e->vshader);
 	glAttachShader(gl_e->shader_programme, gl_e->fshader);
 	glLinkProgram(gl_e->shader_programme);
 	gl_e->display_mod = glGetUniformLocation(gl_e->shader_programme, "dismod");
 	gl_e->projection = glGetUniformLocation(gl_e->shader_programme, "pro");
-	params = -1;
-	glGetProgramiv(gl_e->shader_programme, GL_LINK_STATUS, &params);
-	if (GL_TRUE != params)
-		print_programme_info_log(gl_e->shader_programme);
+	p = -1;
+	glGetProgramiv(gl_e->shader_programme, GL_LINK_STATUS, &p);
+	(GL_TRUE != p) ? print_programme_info_log(gl_e->shader_programme) : (void)p;
+	free(shaders[0]);
+	free(shaders[1]);
 }
 /*
 **	glDeleteVertexArrays(1, &gl_e->vao);

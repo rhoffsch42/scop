@@ -90,7 +90,7 @@ void			display_object(t_glfw *glfw, t_objfile **objf, t_xpm **xpm, \
 	t_fps		*fps;
 
 	startf("display_object");
-	gl_e = init_gl_env(objf, xpm, len);
+	gl_e = init_gl_env(objf, xpm, len, glfw->cwd);
 	glEnable(GL_DEPTH_TEST);
 	glClearDepth(-1.0f);
 	glClear(GL_DEPTH_BUFFER_BIT);

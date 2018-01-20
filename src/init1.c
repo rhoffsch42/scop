@@ -41,6 +41,7 @@ t_env	*init_env(void)
 	e->dir = NULL;
 	e->glfw = NULL;
 	e->chart = init_rgb();
+	e->cwd = get_current_directory();
 	return (e);
 }
 

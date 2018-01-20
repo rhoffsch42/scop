@@ -125,6 +125,7 @@ typedef struct			s_glfw
 	int					size[2];
 	char				*title;
 	GLFWwindow			*win;
+	char				*cwd;
 }						t_glfw;
 
 typedef struct			s_xpm
@@ -146,6 +147,7 @@ typedef struct			s_env
 	t_str				*dir;
 	t_glfw				*glfw;
 	t_rgb				*chart;
+	char				*cwd;
 }						t_env;
 
 typedef struct			s_fps
@@ -187,6 +189,7 @@ typedef struct			s_gl_env
 	int					texture_mod;
 	int					face_drawed;
 	char				boolens[348];
+	char				*cwd;
 }						t_gl_env;
 
 typedef struct			s_cam

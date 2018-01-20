@@ -62,8 +62,8 @@
 # define COLOR_RGB_1	"/etc/X11/rgb.txt"
 # define COLOR_RGB_2	"/usr/share/emacs/26.0.50/etc/rgb.txt"
 # define COLOR_RGB_3	"/usr/share/X11/rgb.txt"
-# define VSHADER_FILE	"./shaders/vertex_shader.glsl"
-# define FSHADER_FILE	"./shaders/fragment_shader.glsl"
+# define VSHADER_FILE	"/shaders/vertex_shader.glsl"
+# define FSHADER_FILE	"/shaders/fragment_shader.glsl"
 # define PONY_FILE		"./textures/pony.xpm"
 # define DEF_WIN_TITLE	"Default title"
 # define DEF_WIN_X		800
@@ -93,6 +93,7 @@
 # define XPM_BAD_FORMAT		105
 # define RGB_FILE_ERR		106
 # define GL_ERROR			107
+# define UNKNOW_ERROR		108
 # define USAGE			"Usage: scop file.obj [file.mtl] [file.xpm] [-d path]"
 # define RGB_FILE_OPEN		"Error : can't open rgb.txt"
 # define RGB_FILE_EMPTY		"Error : rgb.txt is empty"
@@ -150,6 +151,7 @@ int			safe_open(char *path);
 void		hex_to_rgb(unsigned char *rgb, char *s);
 t_void		**list_to_tab(t_void *list);
 int			is_directory(const char *path);
+char		*get_current_directory(void);
 
 /*
 **	misc
@@ -215,7 +217,7 @@ t_obj		*init_obj(void);
 t_mat		*init_mat(void);
 t_xpm		*init_xpm(void);
 t_glfw		*init_glfw(t_glfw *glfw);
-t_gl_env	*init_gl_env(t_objfile **objf, t_xpm **xpm, int *len);
+t_gl_env	*init_gl_env(t_objfile **objf, t_xpm **xpm, int *len, char *cwd);
 t_fps		*init_t_fps(void);
 
 /*

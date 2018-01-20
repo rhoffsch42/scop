@@ -24,14 +24,13 @@ t_fps		*init_t_fps(void)
 	return (fps);
 }
 
-t_gl_env	*init_gl_env(t_objfile **objf, t_xpm **xpm, int *len)
+t_gl_env	*init_gl_env(t_objfile **objf, t_xpm **xpm, int *len, char *cwd)
 {
 	t_gl_env	*gl_e;
 	int			i;
 
 	startf("init_gl_env");
-	gl_e = (t_gl_env*)safe_malloc(sizeof(t_gl_env));
-	ft_bzero(gl_e, sizeof(t_gl_env));
+	gl_e = (t_gl_env*)ft_strnew(sizeof(t_gl_env));
 	gl_e->objf = objf;
 	gl_e->xpm = xpm;
 	gl_e->tex_id = NULL;
@@ -50,6 +49,7 @@ t_gl_env	*init_gl_env(t_objfile **objf, t_xpm **xpm, int *len)
 	gl_e->fov = FOV;
 	gl_e->draw_mod = GL_TRIANGLES;
 	gl_e->face_drawed = MAX_FACE;
+	gl_e->cwd = cwd;
 	return (gl_e);
 }
 
