@@ -37,7 +37,8 @@ static void		add_directory(char **av, int i, t_str **dir)
 	t_str	*ptr;
 
 	startf("add_directory");
-	ft_chkptr(av[i + 1], ft_strjoin(SCOP_DIR_ERR, USAGE), BAD_ARGS);
+	if (av[i + 1] == NULL)
+		ft_errexit(ft_strjoin(SCOP_DIR_ERR, USAGE), RED, BAD_ARGS);
 	if (check_perm(av[i + 1]) && is_directory(av[i + 1]))
 	{
 		new_dir = (t_str*)safe_malloc(sizeof(t_str));

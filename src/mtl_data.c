@@ -40,7 +40,10 @@ t_str			*add_mtlname(t_mat **mat, t_str *ptr)
 	new_mat->next = *mat;
 	*mat = new_mat;
 	if (ft_strlen(name) > 0)
+	{
+		free(new_mat->name);
 		new_mat->name = ft_strdup(name);
+	}
 	return (ptr->next);
 }
 
