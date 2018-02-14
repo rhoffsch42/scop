@@ -1,3 +1,6 @@
+----------------
+-MMD : dependency lors de la conpil
+	ex: x.h modified, et utilised seulement dans x.c, alors seulement x.c est recompiled
 ------------------------------------------------------------------------------------------------------------
 parsing fait:
 	le pgm n accepte que des .obj ou .mtl ou -d dir_path
