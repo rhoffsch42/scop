@@ -12,15 +12,12 @@
 
 NAME			=	scop
 CC				=	gcc
-CFLAGS			=	-Wall -Wextra -Werror -g
+CFLAGS			=	-Wall -Wextra -Werror
 
 INCLUDE			=	-I includes \
 					-I libft/includes -I libmath3d/includes \
 					-I /Users/rhoffsch/.brew/Cellar/glfw/3.2.1/include \
 					-I /Users/rhoffsch/.brew/Cellar/glew/2.1.0/include
-					# -I /System/Library/Frameworks/OpenGL.framework/Versions/A/Headers/
-					# -I /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks/OpenGL.framework/Versions/A/Headers
-					# -I /Developer/NVIDIA/CUDA-9.0/extras/CUPTI/include #Mac42
 
 LIBS			=	-L libft/ -lft -L libmath3d/ -lmath3d
 
@@ -86,8 +83,7 @@ lib:
 	@$(MAKE) -C libft/
 	@$(MAKE) -C libmath3d/
 
-$(NAME): $(SRC) $(OBJ)
-	@#$(CC) $(CFLAGS) $(OBJ) -o $(NAME) -L libft/ -lft $(SDL) -lGL -lGLU #-lglut
+$(NAME): $(SRC) $(OBJ) libft/libft.a libmath3d/libmath3d.a
 	$(CC) $(CFLAGS) $(OBJ) -o $(NAME) $(LIBS) $(FRAMEWORKS) $(GLFW) $(GLEW)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(HDR)

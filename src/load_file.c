@@ -70,28 +70,16 @@ void			load_file(t_env *e, int ac, char **av)
 	{
 		printf("====\t%s\n", av[i]);
 		if (strcmp(av[i], SCOP_DIR) == 0)
-		{
 			add_directory(av, i++, &(e->dir));
-		}
 		else if (is_typefile(av[i], ".obj") && is_readable(av[i]))
-		{
 			add_objfile(&(e->objfile), av[i]);
-			while(1);
-		}
 		else if (is_typefile(av[i], ".mtl") && is_readable(av[i]))
-		{
 			add_mtlfile(&(e->mtlfile), av[i]);
-			while(1);
-		}
 		else if (is_typefile(av[i], ".xpm"))
-		{
 			add_xpmfile(&(e->xpmfile), av[i], e->chart);
-			while(1);
-		}
 		else
 			error_arg(av[i], ft_strjoin(SCOP_BAD_ARG, USAGE));
 	}
-	while(1);
 	link_file(e);
 	obj_checks(e->objfile);
 	mtl_checks(e->mtlfile);

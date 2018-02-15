@@ -12,6 +12,16 @@
 
 #include <libft.h>
 
+static t_str	*init_t_str(void)
+{
+	t_str	*ptr;
+
+	ptr = (t_str*)safe_malloc(sizeof(t_str));
+	ptr->str = NULL;
+	ptr->next = NULL;
+	return (ptr);
+}
+
 t_str		*ft_getfile(char *filename)
 {
 	t_str	*ptr[3];
@@ -23,9 +33,8 @@ t_str		*ft_getfile(char *filename)
 	ptr[2] = NULL;
 	while (get_next_line(fd, &buf) > 0)
 	{
-		ptr[0] = (t_str*)safe_malloc(sizeof(t_str));
+		ptr[0] = init_t_str();
 		ptr[0]->str = ft_strdup(buf);
-		ptr[0]->next = NULL;
 		if (ptr[2] == NULL)
 		{
 			ptr[1] = ptr[0];
@@ -38,6 +47,7 @@ t_str		*ft_getfile(char *filename)
 		}
 	}
 	close(fd);
+	free(buf);
 	return (ptr[2]);
 }
 

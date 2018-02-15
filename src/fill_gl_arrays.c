@@ -68,29 +68,22 @@ void		fill_tex_array(float *arr, t_face *face, t_gl_env *gl_e)
 	}
 }
 
-void		fill_points_array(float *arr, t_face *face, t_gl_env *gl_e)
+void		fill_points_array(float *arr, t_face *face)
 {
 	int			i;
-	t_vector3	tmp;
 
 	i = 0;
 	while (face)
 	{
-		vertix_to_vector3(face->v1, &tmp);
-		tmp = vector3_rot(tmp, gl_e->rot, ROT_WAY);
-		arr[i + 0] = tmp.x * gl_e->scale + gl_e->pos.x;
-		arr[i + 1] = tmp.y * gl_e->scale + gl_e->pos.y;
-		arr[i + 2] = tmp.z * gl_e->scale + gl_e->pos.z;
-		vertix_to_vector3(face->v2, &tmp);
-		tmp = vector3_rot(tmp, gl_e->rot, ROT_WAY);
-		arr[i + 3] = tmp.x * gl_e->scale + gl_e->pos.x;
-		arr[i + 4] = tmp.y * gl_e->scale + gl_e->pos.y;
-		arr[i + 5] = tmp.z * gl_e->scale + gl_e->pos.z;
-		vertix_to_vector3(face->v3, &tmp);
-		tmp = vector3_rot(tmp, gl_e->rot, ROT_WAY);
-		arr[i + 6] = tmp.x * gl_e->scale + gl_e->pos.x;
-		arr[i + 7] = tmp.y * gl_e->scale + gl_e->pos.y;
-		arr[i + 8] = tmp.z * gl_e->scale + gl_e->pos.z;
+		arr[i + 0] = face->v1->x;
+		arr[i + 1] = face->v1->y;
+		arr[i + 2] = face->v1->z;
+		arr[i + 3] = face->v2->x;
+		arr[i + 4] = face->v2->y;
+		arr[i + 5] = face->v2->z;
+		arr[i + 6] = face->v3->x;
+		arr[i + 7] = face->v3->y;
+		arr[i + 8] = face->v3->z;
 		i += 9;
 		face = face->next;
 	}

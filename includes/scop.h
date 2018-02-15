@@ -47,17 +47,17 @@
 **	9	GL_POLYGON
 */
 
-# define DATA			0
+# define DATA			1
 
 # define RAD			0.017453f
 # define RAD_DELTA		1.0f
-# define POS_DELTA		0.5f
+# define POS_DELTA		2.5f
 # define ROT_WAY		1
 # define MOD_LINE		10
 # define MAX_FACE		999999999
 
 # define FPS			60
-# define MAX_FPS		60
+# define MAX_FPS		120
 
 # define COLOR_RGB_1	"/etc/X11/rgb.txt"
 # define COLOR_RGB_2	"/usr/share/emacs/26.0.50/etc/rgb.txt"
@@ -78,7 +78,7 @@
 # define TITLE_MAX_LEN	50
 # define TITLE_TRUNC	"[...]"
 # define FAR			0.01f
-# define NEAR			10.0f
+# define NEAR			1000.0f
 # define FOV			90.0f
 # define FOVX			90.0f
 # define FOVY			90.0f
@@ -279,8 +279,8 @@ void		display_object(t_glfw *glfw, t_objfile **objf, t_xpm **xpm, \
 							int *len);
 void		fill_color_array(float *arr, t_face *face, t_mat *mat);
 void		fill_tex_array(float *arr, t_face *face, t_gl_env *gl_e);
-void		fill_points_array(float *arr, t_face *face, t_gl_env *gl_e);
-void		load_matrix(GLuint projection, float fov);
+void		fill_points_array(float *arr, t_face *face);
+void		load_matrix(GLuint projection, t_gl_env *gl_e);
 void		create_program(t_gl_env *gl_e);
 
 /*

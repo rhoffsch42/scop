@@ -83,10 +83,7 @@ t_obj				*build_objects(char *path)
 	t_obj	*new_obj;
 
 	startf("build_objects");
-	while(1);
-	//	LEAKS
 	lst = ft_getfile(path);
-	while(1);
 	remove_comments(lst, COMMENT_CHAR);
 	remove_white_spaces(lst);
 	lst = (t_str*)remove_list((t_void*)lst, is_empty, free_t_str);

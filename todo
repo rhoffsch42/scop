@@ -1,6 +1,6 @@
 ----------------
--MMD : dependency lors de la conpil
-	ex: x.h modified, et utilised seulement dans x.c, alors seulement x.c est recompiled
+-MMD : dependency lors de la compil
+	ex: x.h modifié, et utilisé seulement dans x.c, alors seulement x.c est recompilé
 ------------------------------------------------------------------------------------------------------------
 parsing fait:
 	le pgm n accepte que des .obj ou .mtl ou -d dir_path
@@ -25,7 +25,7 @@ parsing a faire:
 un objet peut il etre defini sans faces ?
 on peut voir 2 fichiers .obj pour la teapot:
 	l'un avec le nom (o teapot), lautre non. donc ce keyword ne serait pas obligatoire a priori.
-	dans le cas ou il y a plusieurs objets dans un fichiers est ce que le keyword (o nom_de l'objet) est il obligatoire pour le premier ?
+	dans le cas ou il y a plusieurs objets dans un fichier, est ce que le token (o nom_de l'objet) est il obligatoire pour le premier ?
 
 bonus a faire:
 	- multiples objets (avec texture differente par ex) formant un seul ensemble
@@ -61,9 +61,9 @@ a faire:
 			1-> prendre la taille de la face et l'appliquer sur le plan utilisé
 				-> comportement variable en fonctione de la forme de l'objet
 			2-> trouver un algo
+fait:
 	utilisation du .mtl
 	zoom avec le FOV
-fait:
 	texture gl
 	translation
 	perspective (ce qui est loin est plus petit)
@@ -128,26 +128,13 @@ void	cyl(void)
 }
 ------------------------------------------------------------------------------------------------------------
 
-=================  > > > LEAKS < < < 
 check xpm, taille puissance 2
 
-BAREME A FAIRE
-
-Couleur (triangularisation OK, reste a choisir definitivement le mode de couleur)
-	On a bien des couleurs par facette.
-	Controllez avec un objet qui a d'autres facettes que des triangles : on a la meme couleur sur toute la facette.
-	Cette question est consideree comme OK egalement si un algo pour triangulariser les faces qui ne le sont pas, a ete implémenté.
-	Dans ce cas, il sera normal d'avoir des triangles de couleurs differentes.
-*obj files (OK?)
-	Chargement non-trivial des fichiers obj : non coplanaire, faces concaves, triangularisation.
-	Verifier avec teapot.obj et au moins un autre fichier obj ambigus.
-*texture ++ (cylinder mapping fait)
-	La texture n'est deformee sur aucune des faces
-*autre ? (5 bonus)
+*autre : (5 bonus)
 	1 ++ multiple objet/mtl/texture
 	2 + -d parameter
 	3 + zoom via le FOV
 	4 ++ fps + deltaTime
-	5 + draw mode (point/line/triangles)
+	5 + draw mode (point/line/face)
 	6 + draw N face
 ------------------------------------------------------------------------------------------------------------
