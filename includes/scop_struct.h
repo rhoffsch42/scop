@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/24 14:01:02 by rhoffsch          #+#    #+#             */
-/*   Updated: 2017/05/24 14:02:47 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/02/21 20:39:33 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,6 +160,7 @@ typedef struct			s_fps
 
 typedef struct			s_gl_env
 {
+	////// temporaire struct programm
 	GLuint				tex_vbo;
 	GLuint				colors_vbo;
 	GLuint				vbo;
@@ -167,9 +168,15 @@ typedef struct			s_gl_env
 	GLuint				vshader;
 	GLuint				fshader;
 	GLuint				shader_programme;
+	// struct data ?
+	float				*data_points;
+	float				*data_black_white;
+	float				*data_texture;
+	////// struct program end ?
 	GLint				display_mod;
 	int					dismod;
 	GLint				projection;
+	////// struct program end
 	t_objfile			**objf;
 	t_xpm				**xpm;
 	GLuint				*tex_id;
@@ -190,6 +197,7 @@ typedef struct			s_gl_env
 	int					face_drawed;
 	char				boolens[348];
 	char				*cwd;
+	char				*shaders[2];
 }						t_gl_env;
 
 typedef struct			s_cam

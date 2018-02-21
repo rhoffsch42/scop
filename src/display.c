@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 17:04:35 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/01/05 17:04:48 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/02/21 19:50:41 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,9 +95,14 @@ void			display_object(t_glfw *glfw, t_objfile **objf, t_xpm **xpm, \
 	glClearDepth(-1.0f);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	glDepthFunc(GL_GREATER);
-	create_program(gl_e);
-	glUseProgram(gl_e->shader_programme);
+	create_program(gl_e, objf[gl_e->obj_i]->obj);
+	//
+	// glGetAttribLocation(gl_e->shader_programme, "vertex_position");
+	// glBindAttribLocation(gl_e->shader_programme, 1, "vertex_colour");
+	// glBindAttribLocation(gl_e->shader_programme, 2, "vertexUV");
+	//
 	fps = init_t_fps();
+	// skybox(gl_e);
 	while (!glfwWindowShouldClose(glfw->win))
 	{
 		if (wait_for_next_frame(fps))

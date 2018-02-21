@@ -1,7 +1,7 @@
 #version 410
-layout(location = 0) in vec3 vertex_position;
-layout(location = 1) in vec3 vertex_colour;
-layout(location = 2) in vec2 vertexUV;
+in vec3 vertex_position;
+in vec3 vertex_colour;
+in vec2 vertexUV;
 
 out vec2 UV;
 out vec3 colour;

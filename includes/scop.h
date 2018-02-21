@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/24 14:01:02 by rhoffsch          #+#    #+#             */
-/*   Updated: 2017/05/24 14:02:47 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/02/21 19:53:18 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@
 **	9	GL_POLYGON
 */
 
-# define DATA			1
+# define DATA			0
 
 # define RAD			0.017453f
 # define RAD_DELTA		1.0f
@@ -64,6 +64,7 @@
 # define COLOR_RGB_3	"/usr/share/X11/rgb.txt"
 # define VSHADER_FILE	"/shaders/vertex_shader.glsl"
 # define FSHADER_FILE	"/shaders/fragment_shader.glsl"
+# define ARB_CUBEMAP	"GL_ARB_texture_cube_map_array"
 # define PONY_FILE		"./textures/pony.xpm"
 # define DEF_WIN_TITLE	"Default title"
 # define DEF_WIN_X		800
@@ -101,6 +102,7 @@
 # define GLEW_WIN_FAIL		"Failed initialize GLEW"
 # define GLFW_INIT_FAIL		"Failed initialize GLFW."
 # define GLFW_WIN_FAIL		"Failed to create GLFW window."
+# define ARB_CUBEMAP_MISS	"Extension missing: GL_ARB_texture_cube_map_array"
 # define GL_COMPILE_SHADER	"OpenGL shader error"
 # define OBJ_FACE_ERROR		"Incorrect vertix number"
 # define OBJF_NO_OBJ		"Error : This file has no valid object"
@@ -281,7 +283,8 @@ void		fill_color_array(float *arr, t_face *face, t_mat *mat);
 void		fill_tex_array(float *arr, t_face *face, t_gl_env *gl_e);
 void		fill_points_array(float *arr, t_face *face);
 void		load_matrix(GLuint projection, t_gl_env *gl_e);
-void		create_program(t_gl_env *gl_e);
+void		create_program(t_gl_env *gl_e, t_obj *obj);
+int    		skybox(t_gl_env *gl_e);
 
 /*
 ** error OpenGL
