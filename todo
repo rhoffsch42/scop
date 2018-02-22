@@ -141,5 +141,6 @@ check xpm, taille puissance 2
 OpenGL process
 
 1 program 1 obj					OK
-changer texture mapping (vbo)		
-plusieurs obj dans 1 program
+changer texture mapping (vbo)	OK
+1 program x obj
+skybox

@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/24 14:01:02 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/02/22 13:33:19 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/02/22 20:07:25 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,10 +161,14 @@ typedef struct			s_fps
 typedef struct			s_gl_env
 {
 	////// temporaire struct programm
+	GLuint				vbo;
+	GLuint				colors_vbo;
 	GLuint				tex_vbo;
 	GLuint				tex_cylinder_vbo;
-	GLuint				colors_vbo;
-	GLuint				vbo;
+	int					vbo_slot;
+	int					colors_slot;
+	int					tex_slot;
+	int					tex_cylinder_slot;
 	GLuint				vao;
 	GLuint				vshader;
 	GLuint				fshader;

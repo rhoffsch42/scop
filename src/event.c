@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 17:06:41 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/02/22 19:02:42 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/02/22 20:12:42 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,19 +143,16 @@ void			events(t_glfw *glfw, t_gl_env *gl_e, t_fps *fps)
 		gl_e->face_drawed = gl_e->obj_face_amount;;
 	if (is_first_press(glfw, GLFW_KEY_T, gl_e))
 	{
-		gl_e->texture_mod = !gl_e->texture_mod;
-		//
-			// int slot;
-			// if ((slot = glGetAttribLocation(gl_e->shader_programme, "vertexUV")) == -1)
-			// {
-			// 	glGetError();
-			// 	ft_errexit("glGetAttribLocation failed (-1)", RED, GL_ERROR);
-			// }
-			// printf("slot %d:\t%s\n", slot, "vertexUV");
-			// glBindBuffer(GL_ARRAY_BUFFER, gl_e->tex_vbo);
-			// glVertexAttribPointer(slot, 2, GL_FLOAT, GL_FALSE, 0, NULL);
-			// glEnableVertexAttribArray(slot);
-		//
+		if ((gl_e->texture_mod = !gl_e->texture_mod))
+		{
+			glBindBuffer(GL_ARRAY_BUFFER, gl_e->tex_vbo);
+			glVertexAttribPointer(gl_e->tex_slot, 2, GL_FLOAT, GL_FALSE, 0, NULL);
+		}
+		else
+		{
+			glBindBuffer(GL_ARRAY_BUFFER, gl_e->tex_cylinder_vbo);
+			glVertexAttribPointer(gl_e->tex_cylinder_slot, 2, GL_FLOAT, GL_FALSE, 0, NULL);
+		}
 	}
 	events_one_press(glfw, gl_e, fps);
 }
