@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 17:08:13 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/01/05 17:08:16 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/02/22 13:36:27 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ static t_matrix4	model_matrix(t_gl_env *gl_e, t_matrix4 model)
 	return (model);
 }
 
-void				load_matrix(GLuint projection, t_gl_env *gl_e)
+void				load_matrix(GLuint gl_projection, t_gl_env *gl_e)
 {
 	t_matrix4	promatrix;
 	t_matrix4	viewmatrix;
@@ -127,5 +127,5 @@ void				load_matrix(GLuint projection, t_gl_env *gl_e)
 		matrix4_print(promatrix);
 		printf("===================================\n");
 	}
-	glUniformMatrix4fv(projection, 1, GL_FALSE, promatrix.m.e);
+	glUniformMatrix4fv(gl_projection, 1, GL_FALSE, promatrix.m.e);
 }

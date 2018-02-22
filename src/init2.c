@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 17:07:41 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/02/21 18:20:50 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/02/22 18:27:48 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ t_gl_env	*init_gl_env(t_objfile **objf, t_xpm **xpm, int *len, char *cwd)
 	gl_e->cwd = cwd;
 	gl_e->shaders[0] = ft_strjoin(gl_e->cwd, VSHADER_FILE);
 	gl_e->shaders[1] = ft_strjoin(gl_e->cwd, FSHADER_FILE);
+	gl_e->texture_mod = 1;
 	return (gl_e);
 }
 

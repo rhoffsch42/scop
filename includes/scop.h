@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/24 14:01:02 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/02/21 19:53:18 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/02/22 13:36:51 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -279,10 +279,11 @@ void		mtl_checks(t_mtlfile *mtlfile);
 */
 void		display_object(t_glfw *glfw, t_objfile **objf, t_xpm **xpm, \
 							int *len);
-void		fill_color_array(float *arr, t_face *face, t_mat *mat);
-void		fill_tex_array(float *arr, t_face *face, t_gl_env *gl_e);
+void		fill_color_array(float *arr, t_face *face);
+void		fill_tex_array(float *arr, t_face *face);
+void		fill_tex_cylinder_array(float *arr, t_face *face);
 void		fill_points_array(float *arr, t_face *face);
-void		load_matrix(GLuint projection, t_gl_env *gl_e);
+void		load_matrix(GLuint gl_projection, t_gl_env *gl_e);
 void		create_program(t_gl_env *gl_e, t_obj *obj);
 int    		skybox(t_gl_env *gl_e);
 

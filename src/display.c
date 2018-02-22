@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 17:04:35 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/02/21 19:50:41 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/02/22 19:12:25 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,48 +38,24 @@ void			gl_compile_error(GLuint shader, char *intro)
 	ft_errexit(GL_COMPILE_SHADER, RED, GL_ERROR);
 }
 
-void			draw_glfour(t_obj *obj, t_gl_env *gl_e)
+static void		draw_frame(t_gl_env *gl_e, t_glfw *glfw)
 {
-	float	points[obj->f_amount * 9];
-	float	colors[obj->f_amount * 9];
-	float	tex[obj->f_amount * 6];
-
-	fill_points_array(points, obj->f);
-	fill_color_array(colors, obj->f, (gl_e->dismod == 1) ? obj->mat : NULL);
-	fill_tex_array(tex, obj->f, gl_e);
-	glBindBuffer(GL_ARRAY_BUFFER, gl_e->vbo);
-	gl_e->face_drawed = (int)scale_d(gl_e->face_drawed, 1, obj->f_amount);
-	glBufferData(GL_ARRAY_BUFFER, gl_e->face_drawed * 9 * sizeof(float), \
-				points, GL_STATIC_DRAW);
-	glBindBuffer(GL_ARRAY_BUFFER, gl_e->colors_vbo);
-	glBufferData(GL_ARRAY_BUFFER, gl_e->face_drawed * 9 * sizeof(float), \
-				colors, GL_STATIC_DRAW);
-	if (gl_e->tex_id)
-	{
-		glBindBuffer(GL_ARRAY_BUFFER, gl_e->tex_vbo);
-		glBufferData(GL_ARRAY_BUFFER, gl_e->face_drawed * 6 * sizeof(float), \
-					tex, GL_STATIC_DRAW);
-		glBindTexture(GL_TEXTURE_2D, gl_e->tex_id[gl_e->tex_i]);
-	}
-}
-
-static void		draw_frame(t_objfile **objf, t_gl_env *gl_e, t_glfw *glfw)
-{
-	draw_glfour(objf[gl_e->obj_i]->obj, gl_e);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClearColor(0.0f, 0.2f, 0.4f, 1.0f);
+	glBindTexture(GL_TEXTURE_2D, gl_e->tex_id[gl_e->tex_i]);
 	glBindVertexArray(gl_e->vao);
 	if (gl_e->draw_mod == MOD_LINE)
 	{
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-		glDrawArrays(GL_TRIANGLES, 0, objf[gl_e->obj_i]->obj->f_amount * 3);
+		glDrawArrays(GL_TRIANGLES, 0, gl_e->face_drawed * 3);
 	}
 	else
 	{
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-		glDrawArrays(gl_e->draw_mod, 0, objf[gl_e->obj_i]->obj->f_amount * 3);
+		glDrawArrays(gl_e->draw_mod, 0, gl_e->face_drawed * 3);
 	}
 	glBindVertexArray(0);
+
 	glfwSwapBuffers(glfw->win);
 }
 
@@ -93,24 +69,41 @@ void			display_object(t_glfw *glfw, t_objfile **objf, t_xpm **xpm, \
 	gl_e = init_gl_env(objf, xpm, len, glfw->cwd);
 	glEnable(GL_DEPTH_TEST);
 	glClearDepth(-1.0f);
-	glClear(GL_DEPTH_BUFFER_BIT);
 	glDepthFunc(GL_GREATER);
+	gl_e->obj_i = 0;
 	create_program(gl_e, objf[gl_e->obj_i]->obj);
-	//
-	// glGetAttribLocation(gl_e->shader_programme, "vertex_position");
-	// glBindAttribLocation(gl_e->shader_programme, 1, "vertex_colour");
-	// glBindAttribLocation(gl_e->shader_programme, 2, "vertexUV");
-	//
+	gl_e->obj_face_amount = objf[gl_e->obj_i]->obj->f_amount;
+	gl_e->face_drawed = (int)scale_d(gl_e->face_drawed, 1, gl_e->obj_face_amount);
+
+		// int slot = 0;
+		// if ((slot = glGetAttribLocation(gl_e->shader_programme, "vertexUV")) == -1)
+		// {
+		// 	glGetError();
+		// 	ft_errexit("glGetAttribLocation failed (-1)", RED, GL_ERROR);
+		// }
+		// printf("slot %d:\t%s\n", slot, "vertexUV");
+		// glBindBuffer(GL_ARRAY_BUFFER, gl_e->tex_vbo);
+		// glVertexAttribPointer(slot, 2, GL_FLOAT, GL_FALSE, 0, NULL);
+		// glEnableVertexAttribArray(slot);
+
 	fps = init_t_fps();
 	// skybox(gl_e);
 	while (!glfwWindowShouldClose(glfw->win))
 	{
+		int i = 0;
 		if (wait_for_next_frame(fps))
 		{
-			load_matrix(gl_e->projection, gl_e);
-			draw_frame(objf, gl_e, glfw);
+			i++;
+			load_matrix(gl_e->gl_projection, gl_e);
+			draw_frame(gl_e, glfw);
 			glfwPollEvents();
 			events(glfw, gl_e, fps);
+			// if (i == 1)
+			// {
+			// 	glBindBuffer(GL_ARRAY_BUFFER, gl_e->tex_vbo);
+			// 	glVertexAttribPointer(slot, 2, GL_FLOAT, GL_FALSE, 0, NULL);
+			// 	glEnableVertexAttribArray(slot);
+			// }
 		}
 	}
 }

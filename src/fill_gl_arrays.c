@@ -6,13 +6,13 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 17:06:47 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/02/21 20:17:15 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/02/22 11:31:04 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <scop.h>
 
-void		fill_color_array(float *arr, t_face *face, t_mat *mat)
+void		fill_color_array(float *arr, t_face *face)
 {
 	int			i;
 	t_vector3	color;
@@ -24,8 +24,6 @@ void		fill_color_array(float *arr, t_face *face, t_mat *mat)
 		color.x = (float)(rand() % 200) / 200.0f;
 		color.y = color.x;
 		color.z = color.x;
-		if (mat)
-			memcpy(&color, (void*)(mat->kd), 3 * sizeof(float));
 		arr[i + 0] = color.x;
 		arr[i + 1] = color.y;
 		arr[i + 2] = color.z;
@@ -40,7 +38,7 @@ void		fill_color_array(float *arr, t_face *face, t_mat *mat)
 	}
 }
 
-void		fill_tex_array(float *arr, t_face *face, t_gl_env *gl_e)
+void		fill_tex_array(float *arr, t_face *face)
 {
 	int			i;
 	float		scale;
@@ -57,12 +55,28 @@ void		fill_tex_array(float *arr, t_face *face, t_gl_env *gl_e)
 		arr[i + 3] = (1 - face->v2->y) * scale + offset_y;
 		arr[i + 4] = (face->v3->z) * scale;
 		arr[i + 5] = (1 - face->v3->y) * scale + offset_y;
-		if (gl_e->texture_mod)
-		{
-			arr[i + 0] = atan2f(face->v1->z, face->v1->x) / M_PI_2;
-			arr[i + 2] = atan2f(face->v2->z, face->v2->x) / M_PI_2;
-			arr[i + 4] = atan2f(face->v3->z, face->v3->x) / M_PI_2;
-		}
+		i += 6;
+		face = face->next;
+	}
+}
+
+void		fill_tex_cylinder_array(float *arr, t_face *face)
+{
+	int			i;
+	float		scale;
+	float		offset_y;
+
+	scale = 0.75f;
+	offset_y = -0.5f;
+	i = 0;
+	while (face)
+	{
+		arr[i + 0] = atan2f(face->v1->z, face->v1->x) / M_PI_2;
+		arr[i + 1] = (1 - face->v1->y) * scale + offset_y;
+		arr[i + 2] = atan2f(face->v2->z, face->v2->x) / M_PI_2;
+		arr[i + 3] = (1 - face->v2->y) * scale + offset_y;
+		arr[i + 4] = atan2f(face->v3->z, face->v3->x) / M_PI_2;
+		arr[i + 5] = (1 - face->v3->y) * scale + offset_y;
 		i += 6;
 		face = face->next;
 	}

@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/24 14:01:02 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/02/21 20:39:33 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/02/22 13:33:19 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,20 +162,20 @@ typedef struct			s_gl_env
 {
 	////// temporaire struct programm
 	GLuint				tex_vbo;
+	GLuint				tex_cylinder_vbo;
 	GLuint				colors_vbo;
 	GLuint				vbo;
 	GLuint				vao;
 	GLuint				vshader;
 	GLuint				fshader;
 	GLuint				shader_programme;
-	// struct data ?
-	float				*data_points;
-	float				*data_black_white;
-	float				*data_texture;
+	int					obj_face_amount;
+	t_vector3			plain_color;
 	////// struct program end ?
-	GLint				display_mod;
+	GLint				gl_display_mod;
 	int					dismod;
-	GLint				projection;
+	GLint				gl_plain_color;
+	GLint				gl_projection;
 	////// struct program end
 	t_objfile			**objf;
 	t_xpm				**xpm;

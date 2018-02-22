@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 17:06:41 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/01/05 17:06:43 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/02/22 19:02:42 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,12 +92,12 @@ static void		events_one_press(t_glfw *glfw, t_gl_env *gl_e, t_fps *fps)
 	if (is_first_press(glfw, GLFW_KEY_PAGE_DOWN, gl_e))
 	{
 		gl_e->obj_i = (gl_e->obj_i < gl_e->obj_len - 1) ? gl_e->obj_i + 1 : 0;
-		gl_e->face_drawed = MAX_FACE;
+		gl_e->face_drawed = gl_e->obj_face_amount;
 	}
 	if (is_first_press(glfw, GLFW_KEY_PAGE_UP, gl_e))
 	{
 		gl_e->obj_i = (gl_e->obj_i > 0) ? gl_e->obj_i - 1 : gl_e->obj_len - 1;
-		gl_e->face_drawed = MAX_FACE;
+		gl_e->face_drawed = gl_e->obj_face_amount;;
 	}
 	if (is_first_press(glfw, GLFW_KEY_HOME, gl_e))
 		gl_e->tex_i = (gl_e->tex_i < gl_e->xpm_len - 1) ? gl_e->tex_i + 1 : 0;
@@ -106,7 +106,7 @@ static void		events_one_press(t_glfw *glfw, t_gl_env *gl_e, t_fps *fps)
 	if (is_first_press(glfw, GLFW_KEY_ENTER, gl_e))
 	{
 		gl_e->dismod = (gl_e->dismod < MODS - 1) ? gl_e->dismod + 1 : 0;
-		glUniform1i(gl_e->display_mod, gl_e->dismod);
+		glUniform1i(gl_e->gl_display_mod, gl_e->dismod);
 	}
 	if (is_first_press(glfw, GLFW_KEY_SPACE, gl_e))
 		gl_e->rotate = !gl_e->rotate;
@@ -134,14 +134,28 @@ void			events(t_glfw *glfw, t_gl_env *gl_e, t_fps *fps)
 		glDisable(GL_CULL_FACE);
 	}
 	if (is_first_press(glfw, GLFW_KEY_EQUAL, gl_e))
-		gl_e->face_drawed = (int)scale_d(gl_e->face_drawed + 1, 1, MAX_FACE);
+		gl_e->face_drawed = (int)scale_d(gl_e->face_drawed + 1, 1, gl_e->obj_face_amount);
 	if (is_first_press(glfw, GLFW_KEY_MINUS, gl_e))
-		gl_e->face_drawed = (int)scale_d(gl_e->face_drawed - 1, 1, MAX_FACE);
+		gl_e->face_drawed = (int)scale_d(gl_e->face_drawed - 1, 1, gl_e->obj_face_amount);
 	if (is_first_press(glfw, GLFW_KEY_LEFT_BRACKET, gl_e))
 		gl_e->face_drawed = 1;
 	if (is_first_press(glfw, GLFW_KEY_RIGHT_BRACKET, gl_e))
-		gl_e->face_drawed = MAX_FACE;
+		gl_e->face_drawed = gl_e->obj_face_amount;;
 	if (is_first_press(glfw, GLFW_KEY_T, gl_e))
+	{
 		gl_e->texture_mod = !gl_e->texture_mod;
+		//
+			// int slot;
+			// if ((slot = glGetAttribLocation(gl_e->shader_programme, "vertexUV")) == -1)
+			// {
+			// 	glGetError();
+			// 	ft_errexit("glGetAttribLocation failed (-1)", RED, GL_ERROR);
+			// }
+			// printf("slot %d:\t%s\n", slot, "vertexUV");
+			// glBindBuffer(GL_ARRAY_BUFFER, gl_e->tex_vbo);
+			// glVertexAttribPointer(slot, 2, GL_FLOAT, GL_FALSE, 0, NULL);
+			// glEnableVertexAttribArray(slot);
+		//
+	}
 	events_one_press(glfw, gl_e, fps);
 }
