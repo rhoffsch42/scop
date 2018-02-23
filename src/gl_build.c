@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 17:07:14 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/02/22 20:08:18 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/02/23 13:28:31 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ void			create_program(t_gl_env *gl_e, t_obj *obj)
 
 	glGenVertexArrays(1, &gl_e->vao);
 	glBindVertexArray((&gl_e->vao)[0]);//vao[x] pour object x ? => 1 program pour x objects similaires (ie skybox != teapot) 
-	glEnableVertexAttribArray(0);
+	glEnableVertexAttribArray(0);//utile ?
 	gl_e->vbo_slot = create_buffer(gl_e, "vertex_position", 3, GL_FLOAT, &gl_e->vbo);
 	gl_e->colors_slot = create_buffer(gl_e, "vertex_colour", 3, GL_FLOAT, &gl_e->colors_vbo);
 	glEnable(GL_TEXTURE_2D);

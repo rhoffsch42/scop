@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/24 14:01:02 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/02/22 20:07:25 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/02/23 13:04:44 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,8 +184,8 @@ typedef struct			s_gl_env
 	t_objfile			**objf;
 	t_xpm				**xpm;
 	GLuint				*tex_id;
-	int					obj_len;
-	int					xpm_len;
+	int					obj_len;//si la chaine est terminee par NULL, cela est inutile
+	int					xpm_len;//si la chaine est terminee par NULL, cela est inutile
 	int					obj_i;
 	int					tex_i;
 	int					tex;

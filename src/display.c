@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 17:04:35 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/02/22 20:13:37 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/02/23 16:56:56 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ void			display_object(t_glfw *glfw, t_objfile **objf, t_xpm **xpm, \
 
 	startf("display_object");
 	gl_e = init_gl_env(objf, xpm, len, glfw->cwd);
+	skybox(gl_e, glfw);
 	glEnable(GL_DEPTH_TEST);
 	glClearDepth(-1.0f);
 	glDepthFunc(GL_GREATER);
@@ -76,7 +77,6 @@ void			display_object(t_glfw *glfw, t_objfile **objf, t_xpm **xpm, \
 	gl_e->obj_face_amount = objf[gl_e->obj_i]->obj->f_amount;
 	gl_e->face_drawed = (int)scale_d(gl_e->face_drawed, 1, gl_e->obj_face_amount);
 	fps = init_t_fps();
-	// skybox(gl_e);
 	while (!glfwWindowShouldClose(glfw->win))
 	{
 		if (wait_for_next_frame(fps))

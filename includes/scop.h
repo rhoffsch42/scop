@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/24 14:01:02 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/02/22 13:36:51 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/02/23 15:52:08 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,31 +59,39 @@
 # define FPS			60
 # define MAX_FPS		120
 
-# define COLOR_RGB_1	"/etc/X11/rgb.txt"
-# define COLOR_RGB_2	"/usr/share/emacs/26.0.50/etc/rgb.txt"
-# define COLOR_RGB_3	"/usr/share/X11/rgb.txt"
-# define VSHADER_FILE	"/shaders/vertex_shader.glsl"
-# define FSHADER_FILE	"/shaders/fragment_shader.glsl"
-# define ARB_CUBEMAP	"GL_ARB_texture_cube_map_array"
-# define PONY_FILE		"./textures/pony.xpm"
-# define DEF_WIN_TITLE	"Default title"
-# define DEF_WIN_X		800
-# define DEF_WIN_Y		600
-# define MAX_WIN_X		1920
-# define MAX_WIN_Y		1080
-# define MIN_WIN_X		800
-# define MIN_WIN_Y		600
-# define BYTE			3
-# define FLOAT_MAX_LEN	7
-# define COLOR_MAX		255
-# define TITLE_MAX_LEN	50
-# define TITLE_TRUNC	"[...]"
-# define FAR			0.01f
-# define NEAR			1000.0f
-# define FOV			90.0f
-# define FOVX			90.0f
-# define FOVY			90.0f
-# define MAX_FOV		200.0f
+# define COLOR_RGB_1		"/etc/X11/rgb.txt"
+# define COLOR_RGB_2		"/usr/share/emacs/26.0.50/etc/rgb.txt"
+# define COLOR_RGB_3		"/usr/share/X11/rgb.txt"
+# define VSHADER_FILE		"/shaders/vertex_shader.glsl"
+# define FSHADER_FILE		"/shaders/fragment_shader.glsl"
+# define VSHADER_FILE_CUBE	"/shaders/vertex_shader_cubemap.glsl"
+# define FSHADER_FILE_CUBE	"/shaders/fragment_shader_cubemap.glsl"
+# define ARB_CUBEMAP		"GL_ARB_texture_cube_map_array"
+# define CUBEMAP_NX_TEX		"canyon_lf.xpm"
+# define CUBEMAP_PX_TEX		"canyon_rt.xpm"
+# define CUBEMAP_NY_TEX		"canyon_dn.xpm"
+# define CUBEMAP_PY_TEX		"canyon_up.xpm"
+# define CUBEMAP_NZ_TEX		"canyon_ft.xpm"
+# define CUBEMAP_PZ_TEX		"canyon_bk.xpm"
+# define PONY_FILE			"./textures/pony.xpm"
+# define DEF_WIN_TITLE		"Default title"
+# define DEF_WIN_X			800
+# define DEF_WIN_Y			600
+# define MAX_WIN_X			1920
+# define MAX_WIN_Y			1080
+# define MIN_WIN_X			800
+# define MIN_WIN_Y			600
+# define BYTE				3
+# define FLOAT_MAX_LEN		7
+# define COLOR_MAX			255
+# define TITLE_MAX_LEN		50
+# define TITLE_TRUNC		"[...]"
+# define FAR				0.01f
+# define NEAR				1000.0f
+# define FOV				90.0f
+# define FOVX				90.0f
+# define FOVY				90.0f
+# define MAX_FOV			200.0f
 
 # define SCOP_DIR			"-d"
 # define OBJ_BAD_FORMAT		100
@@ -117,6 +125,7 @@
 # define XPM_ERROR			"Error : bad xpm format"
 # define XPM_COLOR_TOKEN	"Error : bad xpm format (unknow color token)"
 # define XPM_TOKEN_ERR		"Bad token for remove_comments_vl : "
+# define CUBEMAP_MISS_TEX	"Missing texture for the CUBEMAP"
 
 # define COMMENT_CHAR		"#"
 # define DOUBLE_QUOTE		'"'
@@ -285,7 +294,7 @@ void		fill_tex_cylinder_array(float *arr, t_face *face);
 void		fill_points_array(float *arr, t_face *face);
 void		load_matrix(GLuint gl_projection, t_gl_env *gl_e);
 void		create_program(t_gl_env *gl_e, t_obj *obj);
-int    		skybox(t_gl_env *gl_e);
+GLuint    	skybox(t_gl_env *gl_e, t_glfw *glfw);
 
 /*
 ** error OpenGL

@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 17:06:41 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/02/22 20:12:42 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/02/23 16:11:31 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,17 +32,23 @@ static int		is_first_press(t_glfw *glfw, int key, t_gl_env *gl_e)
 
 static void		events_parameters(t_glfw *glfw, t_gl_env *gl_e, t_fps *fps)
 {
+	char *fps_char;
+
 	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_P))
 	{
 		fps->fps = scale_d(fps->fps + 20 * fps->tick, 1, MAX_FPS);
 		fps->tick = 1.0 / fps->fps;
-		glfwSetWindowTitle(glfw->win, ft_itoa(fps->fps));
+		fps_char = ft_itoa(fps->fps);
+		glfwSetWindowTitle(glfw->win, fps_char);
+		free(fps_char);
 	}
 	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_L))
 	{
 		fps->fps = scale_d(fps->fps - 20 * fps->tick, 1, MAX_FPS);
 		fps->tick = 1.0 / fps->fps;
+		fps_char = ft_itoa(fps->fps);
 		glfwSetWindowTitle(glfw->win, ft_itoa(fps->fps));
+		free(fps_char);
 	}
 	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_SUBTRACT))
 		gl_e->fov = (float)scale_d(gl_e->fov + 40 * fps->tick, 10, 120);
