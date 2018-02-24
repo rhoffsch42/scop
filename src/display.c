@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 17:04:35 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/02/23 16:56:56 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/02/24 16:43:54 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,10 @@ void			gl_compile_error(GLuint shader, char *intro)
 	ft_errexit(GL_COMPILE_SHADER, RED, GL_ERROR);
 }
 
-static void		draw_frame(t_gl_env *gl_e, t_glfw *glfw)
+static void		draw_frame(t_gl_env *gl_e)
 {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glClearColor(0.0f, 0.2f, 0.4f, 1.0f);
 	glBindTexture(GL_TEXTURE_2D, gl_e->tex_id[gl_e->tex_i]);
-	// glBindVertexArray(gl_e->vao);
+	glBindVertexArray(gl_e->vao);
 	if (gl_e->draw_mod == MOD_LINE)
 	{
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -56,22 +54,23 @@ static void		draw_frame(t_gl_env *gl_e, t_glfw *glfw)
 	}
 	// glBindVertexArray(0);
 
-	glfwSwapBuffers(glfw->win);
 }
 
 void			display_object(t_glfw *glfw, t_objfile **objf, t_xpm **xpm, \
 								int *len)
 {
 	t_gl_env	*gl_e;
+	t_gl_env	*sky_e;
 	t_fps		*fps;
 
 	startf("display_object");
 	gl_e = init_gl_env(objf, xpm, len, glfw->cwd);
-	skybox(gl_e, glfw);
+	sky_e = init_gl_env(objf, xpm, len, glfw->cwd);
+	skybox(sky_e);
 	glEnable(GL_DEPTH_TEST);
 	glClearDepth(-1.0f);
 	glDepthFunc(GL_GREATER);
-	gl_e->obj_i = 3;//42
+	// gl_e->obj_i = 3;//42
 	gl_e->obj_i = 0;//teapot
 	create_program(gl_e, objf[gl_e->obj_i]->obj);
 	gl_e->obj_face_amount = objf[gl_e->obj_i]->obj->f_amount;
@@ -81,11 +80,28 @@ void			display_object(t_glfw *glfw, t_objfile **objf, t_xpm **xpm, \
 	{
 		if (wait_for_next_frame(fps))
 		{
-			load_matrix(gl_e->gl_projection, gl_e);
-			draw_frame(gl_e, glfw);
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			glClearColor(0.0f, 0.2f, 0.4f, 1.0f);
+
+			if (1)
+			{
+			glUseProgram(gl_e->shader_programme);
+			draw_frame(gl_e);
+			}
+
+			if (0)
+			{
+			glUseProgram(sky_e->shader_programme);
+			glBindTexture(GL_TEXTURE_CUBE_MAP, sky_e->tex_id[0]);
+   			glBindVertexArray(sky_e->vao);
+			glDepthMask(GL_FALSE);
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+            glDepthMask(GL_TRUE);
+			}
+
+			glfwSwapBuffers(glfw->win);
 			glfwPollEvents();
 			events(glfw, gl_e, fps);
-
 		}
 	}
 }

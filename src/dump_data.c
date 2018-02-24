@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   display.c                                          :+:      :+:    :+:   */
+/*   dump_data.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 17:04:35 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/01/05 17:04:48 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/02/24 16:12:47 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	dump_data_obj(t_obj *obj)
 	printf("Smooth: \t%s\n", obj->smooth == 0 ? "off" : "on");
 	printf("Vertix amount:\t%d\n", obj->v_amount);
 	printf("Faces amount:\t%d\n", obj->f_amount);
-	if (DATA == 0)
+	if (DATA == 0 || DATA_RESOURCES == 0)
 		return ;
 	v = obj->v;
 	printf("vertix %d:\t%f\t%f\t%f\n", v->id, v->x, v->y, v->z);

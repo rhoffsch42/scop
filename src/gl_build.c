@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 17:07:14 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/02/23 13:28:31 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/02/24 16:44:05 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,9 @@ void			create_program(t_gl_env *gl_e, t_obj *obj)
 	glUseProgram(gl_e->shader_programme);
 
 	gl_e->gl_display_mod = glGetUniformLocation(gl_e->shader_programme, "dismod");
-	gl_e->gl_projection = glGetUniformLocation(gl_e->shader_programme, "pro");
+	gl_e->gl_m = glGetUniformLocation(gl_e->shader_programme, "M");
+	gl_e->gl_v = glGetUniformLocation(gl_e->shader_programme, "V");
+	gl_e->gl_p = glGetUniformLocation(gl_e->shader_programme, "P");
 	gl_e->gl_plain_color = glGetUniformLocation(gl_e->shader_programme, "plain_color");
 	if (obj->mat)
 		glUniform3f(gl_e->gl_plain_color, obj->mat->kd[0], obj->mat->kd[1], obj->mat->kd[2]);
@@ -108,4 +110,5 @@ void			create_program(t_gl_env *gl_e, t_obj *obj)
 	gl_e->tex_cylinder_slot = create_buffer(gl_e, "vertexUV", 2, GL_FLOAT, &gl_e->tex_cylinder_vbo);
 
 	load_data(gl_e, obj);
+	load_matrix(gl_e);
 }

@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/24 14:01:02 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/02/23 15:52:08 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/02/24 16:52:35 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,10 @@
 **	9	GL_POLYGON
 */
 
-# define DATA			0
+# define DATA			1
+# define DATA_RESOURCES	0
+# define DATA_MATRIX	1
+# define DATA_SKYBOX	0
 
 # define RAD			0.017453f
 # define RAD_DELTA		1.0f
@@ -292,9 +295,10 @@ void		fill_color_array(float *arr, t_face *face);
 void		fill_tex_array(float *arr, t_face *face);
 void		fill_tex_cylinder_array(float *arr, t_face *face);
 void		fill_points_array(float *arr, t_face *face);
-void		load_matrix(GLuint gl_projection, t_gl_env *gl_e);
+void		load_matrix(t_gl_env *gl_e);
+t_matrix4	model_matrix(t_gl_env *gl_e, t_matrix4 model);
 void		create_program(t_gl_env *gl_e, t_obj *obj);
-GLuint    	skybox(t_gl_env *gl_e, t_glfw *glfw);
+void    	skybox(t_gl_env *sky_e);
 
 /*
 ** error OpenGL

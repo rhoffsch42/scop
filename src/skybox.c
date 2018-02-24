@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/20 17:50:42 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/02/23 20:02:00 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/02/24 16:14:03 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 **  index textures: 6 -> 11
 */
 
+/*
 static int		wait_for_next_frame(t_fps *fps)
 {
 	fps->ellapsed_time = glfwGetTime() - fps->last_time;
@@ -28,7 +29,7 @@ static int		wait_for_next_frame(t_fps *fps)
 	else
 		return (0);
 }
-
+*/
 static t_cam		init_cam(float x, float y, float z)
 {
 	t_cam	cam;
@@ -54,7 +55,7 @@ static t_matrix4	view_matrix(void)
 	t_cam		cam;
 	t_matrix4	viewmatrix;
 
-	cam = init_cam(0, 0, 0);
+	cam = init_cam(0, 0, 5);
 	viewmatrix = matrix4(0, MATRIX_ROW_MAJOR);
 	viewmatrix.m.tab[0][0] = cam.right.x;
 	viewmatrix.m.tab[1][0] = cam.right.y;
@@ -65,9 +66,9 @@ static t_matrix4	view_matrix(void)
 	viewmatrix.m.tab[0][2] = cam.forward.x;
 	viewmatrix.m.tab[1][2] = cam.forward.y;
 	viewmatrix.m.tab[2][2] = cam.forward.z;
-	viewmatrix.m.tab[0][3] = cam.pos.x;
-	viewmatrix.m.tab[1][3] = cam.pos.y;
-	viewmatrix.m.tab[2][3] = cam.pos.z;
+	viewmatrix.m.tab[0][3] = -cam.pos.x;
+	viewmatrix.m.tab[1][3] = -cam.pos.y;
+	viewmatrix.m.tab[2][3] = -cam.pos.z;
 	viewmatrix.m.tab[3][3] = 1;
 	viewmatrix = matrix4_set_order(viewmatrix, !viewmatrix.order);
 	return (viewmatrix);
@@ -89,7 +90,7 @@ static t_matrix4	pro_matrix(float rad, float far, float near)
 	return (promatrix);
 }
 
-static void     check_gl_extensions(void)
+static void     check_sky_extensions(void)
 {
     char    *extensions;
     int     i;
@@ -107,6 +108,7 @@ static void     check_gl_extensions(void)
     if (!extensions)
         ft_errexit(ARB_CUBEMAP_MISS, RED, GL_ERROR);
 }
+
 static t_xpm    *get_xpm(t_xpm **textures, int len, const char *name)
 {
     int i;
@@ -141,11 +143,11 @@ static GLuint	init_shader(char *filename, int type)
 	return (shader);
 }
 
-GLuint    skybox(t_gl_env *gl_e, t_glfw *glfw)
+void    skybox(t_gl_env *sky_e)
 {
     int     i;
 
-    check_gl_extensions();
+    check_sky_extensions();
     glActiveTexture(GL_TEXTURE0);
     glEnable(GL_TEXTURE_CUBE_MAP_ARB);
     GLenum  cubemap[6] = {
@@ -157,17 +159,16 @@ GLuint    skybox(t_gl_env *gl_e, t_glfw *glfw)
         GL_TEXTURE_CUBE_MAP_POSITIVE_Z_ARB
     };
     t_xpm   *xpm_ptr[6];
-    ft_chkptr(xpm_ptr[0] = get_xpm(gl_e->xpm, gl_e->xpm_len, CUBEMAP_NX_TEX), CUBEMAP_MISS_TEX, GL_ERROR);
-    ft_chkptr(xpm_ptr[1] = get_xpm(gl_e->xpm, gl_e->xpm_len, CUBEMAP_PX_TEX), CUBEMAP_MISS_TEX, GL_ERROR);
-    ft_chkptr(xpm_ptr[2] = get_xpm(gl_e->xpm, gl_e->xpm_len, CUBEMAP_NY_TEX), CUBEMAP_MISS_TEX, GL_ERROR);
-    ft_chkptr(xpm_ptr[3] = get_xpm(gl_e->xpm, gl_e->xpm_len, CUBEMAP_PY_TEX), CUBEMAP_MISS_TEX, GL_ERROR);
-    ft_chkptr(xpm_ptr[4] = get_xpm(gl_e->xpm, gl_e->xpm_len, CUBEMAP_NZ_TEX), CUBEMAP_MISS_TEX, GL_ERROR);
-    ft_chkptr(xpm_ptr[5] = get_xpm(gl_e->xpm, gl_e->xpm_len, CUBEMAP_PZ_TEX), CUBEMAP_MISS_TEX, GL_ERROR);
+    ft_chkptr(xpm_ptr[0] = get_xpm(sky_e->xpm, sky_e->xpm_len, CUBEMAP_NX_TEX), CUBEMAP_MISS_TEX, GL_ERROR);
+    ft_chkptr(xpm_ptr[1] = get_xpm(sky_e->xpm, sky_e->xpm_len, CUBEMAP_PX_TEX), CUBEMAP_MISS_TEX, GL_ERROR);
+    ft_chkptr(xpm_ptr[2] = get_xpm(sky_e->xpm, sky_e->xpm_len, CUBEMAP_NY_TEX), CUBEMAP_MISS_TEX, GL_ERROR);
+    ft_chkptr(xpm_ptr[3] = get_xpm(sky_e->xpm, sky_e->xpm_len, CUBEMAP_PY_TEX), CUBEMAP_MISS_TEX, GL_ERROR);
+    ft_chkptr(xpm_ptr[4] = get_xpm(sky_e->xpm, sky_e->xpm_len, CUBEMAP_NZ_TEX), CUBEMAP_MISS_TEX, GL_ERROR);
+    ft_chkptr(xpm_ptr[5] = get_xpm(sky_e->xpm, sky_e->xpm_len, CUBEMAP_PZ_TEX), CUBEMAP_MISS_TEX, GL_ERROR);
     printf("Searching CUBEMAP textures\tOK\n");
 
-    GLuint  cubemap_id;
-    glGenTextures(1, &cubemap_id);
-    glBindTexture(GL_TEXTURE_CUBE_MAP_ARB, cubemap_id);
+    glGenTextures(1, &sky_e->tex_id[0]);
+    glBindTexture(GL_TEXTURE_CUBE_MAP_ARB, sky_e->tex_id[0]);
     i = 0;
     while (i < 6)
     {
@@ -183,7 +184,7 @@ GLuint    skybox(t_gl_env *gl_e, t_glfw *glfw)
     glTexParameteri(GL_TEXTURE_CUBE_MAP_ARB, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
     printf("Building OpenGL textures\tOK\n");
 
-    float   l = 1.0f;
+    float   l = 3.0f;
     float   points[] = {
         -l,  l, -l,
         -l, -l, -l,
@@ -230,27 +231,27 @@ GLuint    skybox(t_gl_env *gl_e, t_glfw *glfw)
     ////////////    program et shaders
     char    *shaders[2];
 
-    shaders[0] = ft_strjoin(gl_e->cwd, VSHADER_FILE_CUBE);
+    shaders[0] = ft_strjoin(sky_e->cwd, VSHADER_FILE_CUBE);
     // -> /Users/rhoffsch/projects/scop_github/shaders/vertex_shader_cubemap.glsl
-    shaders[1] = ft_strjoin(gl_e->cwd, FSHADER_FILE_CUBE);
+    shaders[1] = ft_strjoin(sky_e->cwd, FSHADER_FILE_CUBE);
     // -> /Users/rhoffsch/projects/scop_github/shaders/fragment_shader_cubemap.glsl
 
-    gl_e->vshader = init_shader(shaders[0], GL_VERTEX_SHADER);
+    sky_e->vshader = init_shader(shaders[0], GL_VERTEX_SHADER);
     /*
-        gl_e->vshader = glCreateShader(GL_VERTEX_SHADER);
-        glShaderSource(gl_e->vshader, 1, &file_content, NULL);
-        glCompileShader(gl_e->vshader);
+        sky_e->vshader = glCreateShader(GL_VERTEX_SHADER);
+        glShaderSource(sky_e->vshader, 1, &file_content, NULL);
+        glCompileShader(sky_e->vshader);
 
         GLint	ret;
         glGetShaderiv(shader, GL_COMPILE_STATUS, &ret);
 	    if (ret == GL_FALSE)
 		    gl_compile_error(shader, "shader compilation error:");
     */
-	gl_e->fshader = init_shader(shaders[1], GL_FRAGMENT_SHADER);
+	sky_e->fshader = init_shader(shaders[1], GL_FRAGMENT_SHADER);
     /*
-        gl_e->fshader = glCreateShader(GL_FRAGMENT_SHADER);
-        glShaderSource(gl_e->fshader, 1, &file_content, NULL);
-        glCompileShader(gl_e->fshader);
+        sky_e->fshader = glCreateShader(GL_FRAGMENT_SHADER);
+        glShaderSource(sky_e->fshader, 1, &file_content, NULL);
+        glCompileShader(sky_e->fshader);
 
         GLint	ret;
         glGetShaderiv(shader, GL_COMPILE_STATUS, &ret);
@@ -258,34 +259,32 @@ GLuint    skybox(t_gl_env *gl_e, t_glfw *glfw)
 		    gl_compile_error(shader, "shader compilation error:");
     */
 
-	gl_e->shader_programme = glCreateProgram();
-	glAttachShader(gl_e->shader_programme, gl_e->vshader);
-	glAttachShader(gl_e->shader_programme, gl_e->fshader);
-	glLinkProgram(gl_e->shader_programme);
+	sky_e->shader_programme = glCreateProgram();
+	glAttachShader(sky_e->shader_programme, sky_e->vshader);
+	glAttachShader(sky_e->shader_programme, sky_e->fshader);
+	glLinkProgram(sky_e->shader_programme);
 
     int p = -1;
-	glValidateProgram(gl_e->shader_programme);
-	glGetProgramiv(gl_e->shader_programme, GL_LINK_STATUS, &p);
-	(p != GL_TRUE) ? print_programme_info_log(gl_e->shader_programme) : (void)p;
-	glUseProgram(gl_e->shader_programme);
+	glValidateProgram(sky_e->shader_programme);
+	glGetProgramiv(sky_e->shader_programme, GL_LINK_STATUS, &p);
+	(p != GL_TRUE) ? print_programme_info_log(sky_e->shader_programme) : (void)p;
+	glUseProgram(sky_e->shader_programme);
 
     ////////////    vao
-    GLuint vao;
-    glGenVertexArrays(1, &vao);
+    glGenVertexArrays(1, &sky_e->vao);
     glEnableVertexAttribArray(0);//utile ?
 
 
     ////////////    vbo
 	int		slot;
-	if ((slot = glGetAttribLocation(gl_e->shader_programme, "vertex")) == -1)
+	if ((slot = glGetAttribLocation(sky_e->shader_programme, "vertex")) == -1)
 	{
 		glGetError();
 		ft_errexit("glGetAttribLocation failed (-1)", RED, GL_ERROR);
 	}
 	printf("slot %d:\t%s\n", slot, "vertex");
-    GLuint vbo;
-    glGenBuffers(1, &vbo);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glGenBuffers(1, &sky_e->vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, sky_e->vbo);
     glBufferData(GL_ARRAY_BUFFER, 3 * 36 * sizeof(float), &points, GL_STATIC_DRAW);
     glVertexAttribPointer(slot, 3, GL_FLOAT, GL_FALSE, 0, NULL);
 	glEnableVertexAttribArray(slot);
@@ -305,9 +304,9 @@ GLuint    skybox(t_gl_env *gl_e, t_glfw *glfw)
     ////////////    matrice
 	t_matrix4	promatrix;
 	t_matrix4	viewmatrix;
-	promatrix = pro_matrix(DTOR(gl_e->fov), FAR, NEAR);
+	promatrix = pro_matrix(DTOR(sky_e->fov), FAR, NEAR);
 	viewmatrix = view_matrix();
-    if (1)
+    if (DATA && DATA_SKYBOX)
 	{
 		printf("View Matrix:\n");
 		matrix4_print(viewmatrix);
@@ -315,19 +314,21 @@ GLuint    skybox(t_gl_env *gl_e, t_glfw *glfw)
 		matrix4_print(promatrix);
 	}
 
-    GLint projection = glGetUniformLocation(gl_e->shader_programme, "P");
-    GLint view = glGetUniformLocation(gl_e->shader_programme, "V");
+    GLint projection = glGetUniformLocation(sky_e->shader_programme, "P");
+    GLint view = glGetUniformLocation(sky_e->shader_programme, "V");
     glUniformMatrix4fv(projection, 1, GL_FALSE, promatrix.m.e);
     glUniformMatrix4fv(view, 1, GL_FALSE, viewmatrix.m.e);
 
+    matrix4(IDENTITY, MATRIX_COLUMN_MAJOR);
     ////////////    render
+    /*
     t_fps		*fps = init_t_fps();
     glEnable(GL_DEPTH_TEST);
     glClearDepth(-1.0f);
     glDepthFunc(GL_GREATER);
-    glUseProgram(gl_e->shader_programme);
-    glBindTexture(GL_TEXTURE_CUBE_MAP, cubemap_id);
-    glBindVertexArray(vao);
+    glUseProgram(sky_e->shader_programme);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, sky_e->tex_id[0]);
+    glBindVertexArray(sky_e->vao);
     while (!glfwWindowShouldClose(glfw->win))
     {
         if (wait_for_next_frame(fps))
@@ -345,4 +346,5 @@ GLuint    skybox(t_gl_env *gl_e, t_glfw *glfw)
     }
 
     exit(0);
+    */
 }

@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/24 14:01:02 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/02/23 13:04:44 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/02/24 16:54:48 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,7 +179,13 @@ typedef struct			s_gl_env
 	GLint				gl_display_mod;
 	int					dismod;
 	GLint				gl_plain_color;
-	GLint				gl_projection;
+	t_matrix4			matrix_zero;
+	t_matrix4			projection;
+	t_matrix4			view;
+	t_matrix4			model;
+	GLint				gl_m;
+	GLint				gl_v;
+	GLint				gl_p;
 	////// struct program end
 	t_objfile			**objf;
 	t_xpm				**xpm;
@@ -211,6 +217,7 @@ typedef struct			s_cam
 	t_vector3			up;
 	t_vector3			forward;
 	t_vector3			front;
+	t_vector3			rot;
 }						t_cam;
 
 typedef struct			s_logs

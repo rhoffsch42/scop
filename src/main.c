@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 17:07:58 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/01/05 17:09:41 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/02/24 16:14:58 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,30 @@ void	startf(char *func_name)
 	printf("%s", str);
 }
 
+void test_rot(void)
+{
+	float		x = DTOR(90);
+	float		y = DTOR(10);
+	float		z = DTOR(-10);
+	t_vector3	rot = vector3(x, y, z);
+	t_vector3	rotinv = vector3(-x, -y, -z);
+
+	t_vector3	vec1 = vector3(-1, -5, -10);
+	t_vector3	vec2 = vector3_rotZYX(vec1, rot, 1);
+	t_vector3	vec3 = vector3_rotZYX(vec1, rotinv, 1);
+
+	vector3_print(vec1);
+	vector3_print(rot);
+	vector3_print(rotinv);
+	printf("-----\n");
+	vector3_print(vec2);
+	vector3_print(vec3);
+	exit(0);
+}
+
 int		main(int ac, char **av)
 {
+	// test_rot();
 	t_env		*e;
 	t_objfile	**object_tab;
 	t_xpm		**texture_tab;

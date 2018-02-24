@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   scop.h                                             :+:      :+:    :+:   */
+/*   libmath3d.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/24 14:01:02 by rhoffsch          #+#    #+#             */
-/*   Updated: 2017/05/24 14:02:47 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/02/24 15:04:18 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,8 @@ float			vector3_magnitude(const t_vector3 v);
 float			vector3_dot(const t_vector3 v1, const t_vector3 v2);
 t_vector3		vector3_cross(const t_vector3 v1, const t_vector3 v2);
 t_vector3		vector3_rot(const t_vector3 src, t_vector3 rad, float rot_way);
+t_vector3		vector3_rotXYZ(const t_vector3 v, t_vector3 rad, float rot_way);
+t_vector3		vector3_rotZYX(const t_vector3 v, t_vector3 rad, float rot_way);
 
 t_matrix4		matrix4(uint8_t is_identity, uint8_t order);
 t_matrix4		matrix4_set_order(t_matrix4 m, uint8_t order);

@@ -142,5 +142,10 @@ OpenGL process
 
 1 program 1 obj					OK
 changer texture mapping (vbo)	OK
+matrix hors boucle				OK
+model matrix update				OK
+projection matrix update		OK
+view matrix update				
+catch des events souris -> cam	
 1 program x obj
 skybox

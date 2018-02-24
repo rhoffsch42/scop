@@ -6,19 +6,18 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 17:08:13 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/02/22 13:36:27 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/02/24 16:57:14 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <scop.h>
 
-static t_cam		init_cam(float x, float y, float z)
+static t_cam		init_cam(t_vector3 pos, t_vector3 rot)
 {
 	t_cam	cam;
 
-	cam.pos.x = x;
-	cam.pos.y = y;
-	cam.pos.z = z;
+	cam.pos = pos;
+	cam.rot = rot;
 	cam.right.x = 1;
 	cam.right.y = 0;
 	cam.right.z = 0;
@@ -36,21 +35,26 @@ static t_matrix4	view_matrix(void)
 {
 	t_cam		cam;
 	t_matrix4	viewmatrix;
+	t_vector3	res;
 
-	cam = init_cam(0, 0, 0);
+	cam = init_cam((t_vector3){DTOR(0), DTOR(0), DTOR(0)}, \
+					(t_vector3){DTOR(0), DTOR(0), DTOR(0)});
 	viewmatrix = matrix4(0, MATRIX_ROW_MAJOR);
-	viewmatrix.m.tab[0][0] = cam.right.x;
-	viewmatrix.m.tab[1][0] = cam.right.y;
-	viewmatrix.m.tab[2][0] = cam.right.z;
-	viewmatrix.m.tab[0][1] = cam.up.x;
-	viewmatrix.m.tab[1][1] = cam.up.y;
-	viewmatrix.m.tab[2][1] = cam.up.z;
-	viewmatrix.m.tab[0][2] = cam.forward.x;
-	viewmatrix.m.tab[1][2] = cam.forward.y;
-	viewmatrix.m.tab[2][2] = cam.forward.z;
-	viewmatrix.m.tab[0][3] = cam.pos.x;
-	viewmatrix.m.tab[1][3] = cam.pos.y;
-	viewmatrix.m.tab[2][3] = cam.pos.z;
+	res = vector3_rotZYX(cam.right, cam.rot, ROT_WAY);
+	viewmatrix.m.tab[0][0] = res.x;
+	viewmatrix.m.tab[1][0] = res.y;
+	viewmatrix.m.tab[2][0] = res.z;
+	res = vector3_rotZYX(cam.up, cam.rot, ROT_WAY);
+	viewmatrix.m.tab[0][1] = res.x;
+	viewmatrix.m.tab[1][1] = res.y;
+	viewmatrix.m.tab[2][1] = res.z;
+	res = vector3_rotZYX(cam.forward, cam.rot, ROT_WAY);
+	viewmatrix.m.tab[0][2] = res.x;
+	viewmatrix.m.tab[1][2] = res.y;
+	viewmatrix.m.tab[2][2] = res.z;
+	viewmatrix.m.tab[0][3] = -cam.pos.x;
+	viewmatrix.m.tab[1][3] = -cam.pos.y;
+	viewmatrix.m.tab[2][3] = -cam.pos.z;
 	viewmatrix.m.tab[3][3] = 1;
 	viewmatrix = matrix4_set_order(viewmatrix, !viewmatrix.order);
 	return (viewmatrix);
@@ -72,7 +76,14 @@ static t_matrix4	pro_matrix(float rad, float far, float near)
 	return (promatrix);
 }
 
-static t_matrix4	model_matrix(t_gl_env *gl_e, t_matrix4 model)
+#define COS_A	val[0]
+#define SIN_A	val[1]
+#define COS_B	val[2]
+#define SIN_B	val[3]
+#define COS_C	val[4]
+#define SIN_C	val[5]
+
+t_matrix4	model_matrix(t_gl_env *gl_e, t_matrix4 model)
 {
 	float		val[8];
 
@@ -82,17 +93,17 @@ static t_matrix4	model_matrix(t_gl_env *gl_e, t_matrix4 model)
 	val[3] = sinf(gl_e->rot.y);
 	val[4] = cosf(gl_e->rot.z);
 	val[5] = sinf(gl_e->rot.z);
-	val[6] = val[0] * val[3];
-	val[7] = val[1] * val[3];
-	model.m.tab[0][0] = val[2] * val[4];
-	model.m.tab[1][0] = -val[2] * val[5];
-	model.m.tab[2][0] = val[3];
-	model.m.tab[0][1] = val[7] * val[4] + val[0] * val[5];
-	model.m.tab[1][1] = -val[7] * val[5] + val[0] * val[4];
-	model.m.tab[2][1] = -val[1] * val[2];
-	model.m.tab[0][2] = -val[6] * val[4] + val[1] * val[5];
-	model.m.tab[1][2] = val[6] * val[5] + val[1] * val[4];
-	model.m.tab[2][2] = val[0] * val[2];
+	val[6] = COS_A * SIN_B;
+	val[7] = SIN_A * SIN_B;
+	model.m.tab[0][0] = COS_B * COS_C;
+	model.m.tab[1][0] = COS_B * SIN_C;
+	model.m.tab[2][0] = -SIN_B;
+	model.m.tab[0][1] = -SIN_C * COS_A + val[7] * COS_C;
+	model.m.tab[1][1] = COS_A * COS_C + val[7] * SIN_C;
+	model.m.tab[2][1] = SIN_A * COS_B;
+	model.m.tab[0][2] = SIN_C * SIN_A + val[6] * COS_C;
+	model.m.tab[1][2] = -COS_C * SIN_A + val[6] * SIN_C;
+	model.m.tab[2][2] = COS_A * COS_B;
 	model.m.tab[0][3] = gl_e->pos.x;
 	model.m.tab[1][3] = gl_e->pos.y;
 	model.m.tab[2][3] = gl_e->pos.z;
@@ -101,31 +112,22 @@ static t_matrix4	model_matrix(t_gl_env *gl_e, t_matrix4 model)
 	return (model);
 }
 
-void				load_matrix(GLuint gl_projection, t_gl_env *gl_e)
+void				load_matrix(t_gl_env *gl_e)
 {
-	t_matrix4	promatrix;
-	t_matrix4	viewmatrix;
-	t_matrix4	modelmatrix;
-
-	modelmatrix = model_matrix(gl_e, matrix4(0, MATRIX_ROW_MAJOR));
-	viewmatrix = view_matrix();
-	promatrix = pro_matrix(DTOR(gl_e->fov), FAR, NEAR);
-	if (DATA)
+	gl_e->matrix_zero = matrix4(0, MATRIX_COLUMN_MAJOR);
+	gl_e->model = model_matrix(gl_e, gl_e->matrix_zero);
+	gl_e->view = view_matrix();
+	gl_e->projection = pro_matrix(DTOR(gl_e->fov), FAR, NEAR);
+	if (DATA && DATA_MATRIX)
 	{
 		printf("Model Matrix:\n");
-		matrix4_print(modelmatrix);
+		matrix4_print(gl_e->model);
 		printf("View Matrix:\n");
-		matrix4_print(viewmatrix);
+		matrix4_print(gl_e->view);
 		printf("Projection Matrix:\n");
-		matrix4_print(promatrix);
+		matrix4_print(gl_e->projection);
 	}
-	viewmatrix = matrix4_mult(modelmatrix, viewmatrix);
-	promatrix = matrix4_mult(viewmatrix, promatrix);
-	if (DATA)
-	{
-		printf("Projection * View Matrix:\n");
-		matrix4_print(promatrix);
-		printf("===================================\n");
-	}
-	glUniformMatrix4fv(gl_projection, 1, GL_FALSE, promatrix.m.e);
+	glUniformMatrix4fv(gl_e->gl_m, 1, GL_FALSE, gl_e->model.m.e);
+	glUniformMatrix4fv(gl_e->gl_v, 1, GL_FALSE, gl_e->view.m.e);
+	glUniformMatrix4fv(gl_e->gl_p, 1, GL_FALSE, gl_e->projection.m.e);
 }

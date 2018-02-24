@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 17:06:41 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/02/23 16:11:31 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/02/24 17:42:53 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,22 @@ static int		is_first_press(t_glfw *glfw, int key, t_gl_env *gl_e)
 	return (0);
 }
 
+static void		update_model_matrix(t_gl_env *gl_e)
+{
+	gl_e->model = model_matrix(gl_e, gl_e->matrix_zero);
+	glUniformMatrix4fv(gl_e->gl_m, 1, GL_FALSE, gl_e->model.m.e);
+}
+
+static void		update_projection_matrix(t_gl_env *gl_e)
+{
+	float	ratio;
+
+	ratio = 1.0f / tanf(DTOR(gl_e->fov) / 2.0f);
+	gl_e->projection.m.tab[0][0] = ratio / (DEF_WIN_X / DEF_WIN_Y);
+	gl_e->projection.m.tab[1][1] = ratio;
+	glUniformMatrix4fv(gl_e->gl_p, 1, GL_FALSE, gl_e->projection.m.e);
+}
+
 static void		events_parameters(t_glfw *glfw, t_gl_env *gl_e, t_fps *fps)
 {
 	char *fps_char;
@@ -51,45 +67,90 @@ static void		events_parameters(t_glfw *glfw, t_gl_env *gl_e, t_fps *fps)
 		free(fps_char);
 	}
 	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_SUBTRACT))
+	{
 		gl_e->fov = (float)scale_d(gl_e->fov + 40 * fps->tick, 10, 120);
+		update_projection_matrix(gl_e);
+	}
 	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_ADD))
+	{
 		gl_e->fov = (float)scale_d(gl_e->fov - 40 * fps->tick, 10, 120);
+		update_projection_matrix(gl_e);
+	}
 	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_1))
 		gl_e->draw_mod = GL_POINTS;
 	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_2))
 		gl_e->draw_mod = MOD_LINE;
 	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_3))
 		gl_e->draw_mod = GL_TRIANGLES;
-	if (gl_e->rotate)
-		gl_e->rot.y += RAD_DELTA * fps->tick;
 }
 
-static void		events_movements(t_glfw *glfw, t_gl_env *gl_e, t_fps *fps)
+static void		events__obj_movements(t_glfw *glfw, t_gl_env *gl_e, t_fps *fps)
 {
-	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_LEFT))
-		gl_e->pos.x -= POS_DELTA * fps->tick;
-	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_RIGHT))
-		gl_e->pos.x += POS_DELTA * fps->tick;
-	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_DOWN))
-		gl_e->pos.y -= POS_DELTA * fps->tick;
-	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_UP))
-		gl_e->pos.y += POS_DELTA * fps->tick;
-	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_1))
-		gl_e->pos.z -= POS_DELTA * fps->tick;
-	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_0))
-		gl_e->pos.z += POS_DELTA * fps->tick;
-	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_7))
-		gl_e->rot.x += RAD_DELTA * fps->tick;
-	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_4))
-		gl_e->rot.x -= RAD_DELTA * fps->tick;
-	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_8))
+	if (gl_e->rotate)
+	{
 		gl_e->rot.y += RAD_DELTA * fps->tick;
+		update_model_matrix(gl_e);
+	}
+	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_LEFT))
+	{
+		gl_e->pos.x -= POS_DELTA * fps->tick;
+		update_model_matrix(gl_e);
+	}
+	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_RIGHT))
+	{
+		gl_e->pos.x += POS_DELTA * fps->tick;
+		update_model_matrix(gl_e);
+	}
+	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_DOWN))
+	{
+		gl_e->pos.y -= POS_DELTA * fps->tick;
+		update_model_matrix(gl_e);
+	}
+	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_UP))
+	{
+		gl_e->pos.y += POS_DELTA * fps->tick;
+		update_model_matrix(gl_e);
+	}
+	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_1))
+	{
+		gl_e->pos.z -= POS_DELTA * fps->tick;
+		update_model_matrix(gl_e);
+	}
+	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_0))
+	{
+		gl_e->pos.z += POS_DELTA * fps->tick;
+		update_model_matrix(gl_e);
+	}
+	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_7))
+	{
+		gl_e->rot.x += RAD_DELTA * fps->tick;
+		update_model_matrix(gl_e);
+	}
+	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_4))
+	{
+		gl_e->rot.x -= RAD_DELTA * fps->tick;
+		update_model_matrix(gl_e);
+	}
+	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_8))
+	{
+		gl_e->rot.y += RAD_DELTA * fps->tick;
+		update_model_matrix(gl_e);
+	}
 	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_5))
+	{
 		gl_e->rot.y -= RAD_DELTA * fps->tick;
+		update_model_matrix(gl_e);
+	}
 	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_9))
+	{
 		gl_e->rot.z += RAD_DELTA * fps->tick;
+		update_model_matrix(gl_e);
+	}
 	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_6))
+	{
 		gl_e->rot.z -= RAD_DELTA * fps->tick;
+		update_model_matrix(gl_e);
+	}
 	events_parameters(glfw, gl_e, fps);
 }
 
@@ -116,7 +177,7 @@ static void		events_one_press(t_glfw *glfw, t_gl_env *gl_e, t_fps *fps)
 	}
 	if (is_first_press(glfw, GLFW_KEY_SPACE, gl_e))
 		gl_e->rotate = !gl_e->rotate;
-	events_movements(glfw, gl_e, fps);
+	events__obj_movements(glfw, gl_e, fps);
 }
 
 /*
