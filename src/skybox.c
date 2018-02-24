@@ -6,11 +6,17 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/20 17:50:42 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/02/24 16:14:03 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/02/24 23:21:24 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "scop.h"
+#define COS_A	val[0]
+#define SIN_A	val[1]
+#define COS_B	val[2]
+#define SIN_B	val[3]
+#define COS_C	val[4]
+#define SIN_C	val[5]
 
 /*
 **  index textures: 6 -> 11
@@ -30,13 +36,13 @@ static int		wait_for_next_frame(t_fps *fps)
 		return (0);
 }
 */
-static t_cam		init_cam(float x, float y, float z)
+
+static t_cam		init_cam(t_vector3 pos, t_vector3 rot)
 {
 	t_cam	cam;
 
-	cam.pos.x = x;
-	cam.pos.y = y;
-	cam.pos.z = z;
+	cam.pos = pos;
+	cam.rot = rot;
 	cam.right.x = 1;
 	cam.right.y = 0;
 	cam.right.z = 0;
@@ -50,29 +56,41 @@ static t_cam		init_cam(float x, float y, float z)
 	return (cam);
 }
 
-static t_matrix4	view_matrix(void)
+static t_matrix4	view_matrix(t_matrix4 viewmatrix)
 {
 	t_cam		cam;
-	t_matrix4	viewmatrix;
+	t_vector3	res;
+	float		val[8];
 
-	cam = init_cam(0, 0, 5);
+	cam = init_cam((t_vector3){DTOR(0), DTOR(0), DTOR(10)}, \
+					(t_vector3){DTOR(0), DTOR(0), DTOR(0)});
 	viewmatrix = matrix4(0, MATRIX_ROW_MAJOR);
-	viewmatrix.m.tab[0][0] = cam.right.x;
-	viewmatrix.m.tab[1][0] = cam.right.y;
-	viewmatrix.m.tab[2][0] = cam.right.z;
-	viewmatrix.m.tab[0][1] = cam.up.x;
-	viewmatrix.m.tab[1][1] = cam.up.y;
-	viewmatrix.m.tab[2][1] = cam.up.z;
-	viewmatrix.m.tab[0][2] = cam.forward.x;
-	viewmatrix.m.tab[1][2] = cam.forward.y;
-	viewmatrix.m.tab[2][2] = cam.forward.z;
-	viewmatrix.m.tab[0][3] = -cam.pos.x;
-	viewmatrix.m.tab[1][3] = -cam.pos.y;
-	viewmatrix.m.tab[2][3] = -cam.pos.z;
+	val[0] = cosf(cam.rot.x);
+	val[1] = sinf(cam.rot.x);
+	val[2] = cosf(cam.rot.y);
+	val[3] = sinf(cam.rot.y);
+	val[4] = cosf(cam.rot.z);
+	val[5] = sinf(cam.rot.z);
+	val[6] = COS_A * SIN_B;
+	val[7] = SIN_A * SIN_B;
+	viewmatrix.m.tab[0][0] = COS_B * COS_C;
+	viewmatrix.m.tab[1][0] = val[7] * COS_C + COS_A * SIN_C;
+	viewmatrix.m.tab[2][0] = -val[6] * COS_C + SIN_A * SIN_C;
+	viewmatrix.m.tab[0][1] = -COS_B * SIN_C;
+	viewmatrix.m.tab[1][1] = -val[7] * SIN_C + COS_A * COS_C;
+	viewmatrix.m.tab[2][1] = val[6] * SIN_C + SIN_A * COS_C;
+	viewmatrix.m.tab[0][2] = SIN_B;
+	viewmatrix.m.tab[1][2] = -SIN_A * COS_B;
+	viewmatrix.m.tab[2][2] = COS_A * COS_B;
+	res = vector3_rotZYX(cam.pos, cam.rot, ROT_WAY);
+	viewmatrix.m.tab[0][3] = -res.x;
+	viewmatrix.m.tab[1][3] = -res.y;
+	viewmatrix.m.tab[2][3] = -res.z;
 	viewmatrix.m.tab[3][3] = 1;
 	viewmatrix = matrix4_set_order(viewmatrix, !viewmatrix.order);
 	return (viewmatrix);
 }
+
 
 static t_matrix4	pro_matrix(float rad, float far, float near)
 {
@@ -304,8 +322,9 @@ void    skybox(t_gl_env *sky_e)
     ////////////    matrice
 	t_matrix4	promatrix;
 	t_matrix4	viewmatrix;
+
 	promatrix = pro_matrix(DTOR(sky_e->fov), FAR, NEAR);
-	viewmatrix = view_matrix();
+	viewmatrix = view_matrix(matrix4(0, MATRIX_ROW_MAJOR));
     if (DATA && DATA_SKYBOX)
 	{
 		printf("View Matrix:\n");

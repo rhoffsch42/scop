@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/24 14:01:02 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/02/24 16:54:48 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/02/24 23:31:58 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -198,6 +198,10 @@ typedef struct			s_gl_env
 	int					rotate;
 	t_vector3			rot;
 	t_vector3			pos;
+	///////////////////////
+	double				mouse_x;
+	double				mouse_y;
+	///////////////////////
 	int					angle;
 	float				vector;
 	float				scale;

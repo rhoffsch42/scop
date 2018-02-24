@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/24 14:01:02 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/02/24 16:41:52 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/02/24 21:44:34 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ t_vector3		vector3_rotXYZ(const t_vector3 v, t_vector3 rad, float rot_way)
 	mat[2] = SIN_B;
 	mat[3] = val[7] * COS_C + COS_A * SIN_C;
 	mat[4] = -val[7] * SIN_C + COS_A * COS_C;
-	mat[5] = -val[1] * COS_B;
+	mat[5] = -SIN_A * COS_B;
 	mat[6] = -val[6] * COS_C + SIN_A * SIN_C;
 	mat[7] = val[6] * SIN_C + SIN_A * COS_C;
 	mat[8] = COS_A * COS_B;

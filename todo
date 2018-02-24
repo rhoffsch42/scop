@@ -149,3 +149,7 @@ view matrix update
 catch des events souris -> cam	
 1 program x obj
 skybox
+
+libs:
+	matrix4_rotationXYZ	?
+	matrix4_rotationZYX	?

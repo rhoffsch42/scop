@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 17:07:41 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/02/22 18:27:48 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/02/24 23:33:55 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,9 @@ t_gl_env	*init_gl_env(t_objfile **objf, t_xpm **xpm, int *len, char *cwd)
 		gl_e->tex_id[i] = xpm_to_glid(xpm[i]);
 	gl_e->obj_len = len[0];
 	gl_e->xpm_len = len[1];
+	gl_e->pos.y = -5.0f;
 	gl_e->pos.z = -5.0f;
-	gl_e->rotate = 1;
+	gl_e->rotate = 0;
 	gl_e->angle = 10;
 	gl_e->vector = 0.1f;
 	gl_e->scale = 0.20f;
@@ -77,6 +78,14 @@ void		key_callback(GLFWwindow *window, int key, int scancode, \
 	}
 }
 
+void		cursor_pos_callback(GLFWwindow *window, double xpos, double ypos)
+{
+	// printf("Mouse:\t%.2f\t%.2f| ", xpos, ypos);
+	(void)xpos;
+	(void)ypos;
+	(void)window;
+}
+
 t_glfw		*init_glfw(t_glfw *glfw)
 {
 	startf("init_glfw");
@@ -98,6 +107,8 @@ t_glfw		*init_glfw(t_glfw *glfw)
 		ft_errexit(GLFW_WIN_FAIL, RED, GLFW_FAIL);
 	glfwMakeContextCurrent(glfw->win);
 	glfwSetKeyCallback(glfw->win, key_callback);
+	glfwSetInputMode(glfw->win, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	glfwSetCursorPosCallback(glfw->win, cursor_pos_callback);
 	glfwSetInputMode(glfw->win, GLFW_STICKY_KEYS, 1);
 	glewExperimental = GL_TRUE;
 	if (glewInit() != GLEW_OK)

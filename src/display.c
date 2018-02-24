@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 17:04:35 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/02/24 16:43:54 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/02/24 23:33:36 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,8 +88,7 @@ void			display_object(t_glfw *glfw, t_objfile **objf, t_xpm **xpm, \
 			glUseProgram(gl_e->shader_programme);
 			draw_frame(gl_e);
 			}
-
-			if (0)
+			if (1)
 			{
 			glUseProgram(sky_e->shader_programme);
 			glBindTexture(GL_TEXTURE_CUBE_MAP, sky_e->tex_id[0]);
@@ -99,8 +98,14 @@ void			display_object(t_glfw *glfw, t_objfile **objf, t_xpm **xpm, \
             glDepthMask(GL_TRUE);
 			}
 
+			glfwGetCursorPos(glfw->win, &gl_e->mouse_x, &gl_e->mouse_y);
+			ft_putnbr(gl_e->mouse_y);ft_putchar(':');ft_putnbr(gl_e->mouse_x);ft_putchar(10);
+			
 			glfwSwapBuffers(glfw->win);
 			glfwPollEvents();
+
+			glUseProgram(gl_e->shader_programme);
+   			glBindVertexArray(gl_e->vao);
 			events(glfw, gl_e, fps);
 		}
 	}
