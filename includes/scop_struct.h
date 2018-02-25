@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/24 14:01:02 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/02/24 23:31:58 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/02/25 18:16:28 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,6 +158,16 @@ typedef struct			s_fps
 	double				last_time;
 }						t_fps;
 
+typedef struct			s_cam
+{
+	t_vector3			pos;
+	t_vector3			right;
+	t_vector3			up;
+	t_vector3			forward;
+	t_vector3			front;
+	t_vector3			rot;
+}						t_cam;
+
 typedef struct			s_gl_env
 {
 	////// temporaire struct programm
@@ -187,6 +197,15 @@ typedef struct			s_gl_env
 	GLint				gl_v;
 	GLint				gl_p;
 	////// struct program end
+	////// skybox
+	GLuint				sky_programme;
+	GLuint				sky_vshader;
+	GLuint				sky_fshader;
+	GLuint				sky_vao;
+	GLuint				sky_tex_vbo;
+	GLuint				sky_tex_id;
+	int					sky_vbo_slot;
+	////// skybox
 	t_objfile			**objf;
 	t_xpm				**xpm;
 	GLuint				*tex_id;
@@ -199,8 +218,11 @@ typedef struct			s_gl_env
 	t_vector3			rot;
 	t_vector3			pos;
 	///////////////////////
+	t_cam				cam;
 	double				mouse_x;
 	double				mouse_y;
+	double				mouse_origin_x;
+	double				mouse_origin_y;
 	///////////////////////
 	int					angle;
 	float				vector;
@@ -213,16 +235,6 @@ typedef struct			s_gl_env
 	char				*cwd;
 	char				*shaders[2];
 }						t_gl_env;
-
-typedef struct			s_cam
-{
-	t_vector3			pos;
-	t_vector3			right;
-	t_vector3			up;
-	t_vector3			forward;
-	t_vector3			front;
-	t_vector3			rot;
-}						t_cam;
 
 typedef struct			s_logs
 {

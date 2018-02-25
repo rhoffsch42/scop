@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/24 14:01:02 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/02/24 15:04:18 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/02/25 15:43:20 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,30 +57,6 @@ typedef struct	s_matrix4
 	t_matrix	m;
 }				t_matrix4;
 
-/*
-**	typedef vector3
-**	{
-**		float	x
-**		float	y
-**		float	z
-**		// ou bien faire une nouvelle structure
-**		// et remplacer ces 3 valeurs par un t_vector3
-**
-**		bool	data_changed
-**		float	magnitude
-**		float	orher1
-**		float	other2
-**	} tvector3
-**
-**	if (data_changed)
-**		calc_new magnitude/otherx
-**	else
-**		return magnitude/otherx
-**
-**	void			vector2_scale(t_vector2 dst, float f);
-**	void			vector3_scale(t_vector3 dst, float v);
-*/
-
 void			vector2_print(const t_vector2 v);
 void			vector3_print(const t_vector3 v);
 void			matrix4_print(t_matrix4 m);
@@ -98,6 +74,7 @@ t_vector3		vector3_add(t_vector3 v1, const t_vector3 v2);
 t_vector3		vector3_sub(t_vector3 v1, const t_vector3 v2);
 t_vector3		vector3_mult_coef(t_vector3 v, float coef);
 float			vector3_magnitude(const t_vector3 v);
+t_vector3 		vector3_normalize(t_vector3 v);
 float			vector3_dot(const t_vector3 v1, const t_vector3 v2);
 t_vector3		vector3_cross(const t_vector3 v1, const t_vector3 v2);
 t_vector3		vector3_rot(const t_vector3 src, t_vector3 rad, float rot_way);

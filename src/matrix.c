@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 17:08:13 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/02/24 23:15:53 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/02/25 16:38:00 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,16 @@
 #define SIN_B	val[3]
 #define COS_C	val[4]
 #define SIN_C	val[5]
+
+void				update_cam_vector(t_cam *cam)
+{
+	t_vector3	right = {1.0f, 0.0f, 0.0f};
+	t_vector3	up = {0.0f, 1.0f, 0.0f};
+
+	cam->right = vector3_rot(right, cam->rot, -ROT_WAY);
+	cam->up = vector3_rot(up, cam->rot, -ROT_WAY);
+	cam->forward = vector3_cross(cam->up, cam->right);
+}
 
 static t_cam		init_cam(t_vector3 pos, t_vector3 rot)
 {
@@ -30,28 +40,21 @@ static t_cam		init_cam(t_vector3 pos, t_vector3 rot)
 	cam.up.x = 0;
 	cam.up.y = 1;
 	cam.up.z = 0;
-	cam.forward.x = 0;
-	cam.forward.y = 0;
-	cam.forward.z = 1;
-	cam.front = vector3_cross(cam.up, cam.right);
+	update_cam_vector(&cam);
 	return (cam);
 }
 
-static t_matrix4	view_matrix(t_matrix4 viewmatrix)
+t_matrix4	view_matrix(t_gl_env *gl_e, t_matrix4 viewmatrix)
 {
-	t_cam		cam;
 	t_vector3	res;
 	float		val[8];
 
-	cam = init_cam((t_vector3){DTOR(0), DTOR(0), DTOR(10)}, \
-					(t_vector3){DTOR(0), DTOR(0), DTOR(0)});
-	viewmatrix = matrix4(0, MATRIX_ROW_MAJOR);
-	val[0] = cosf(cam.rot.x);
-	val[1] = sinf(cam.rot.x);
-	val[2] = cosf(cam.rot.y);
-	val[3] = sinf(cam.rot.y);
-	val[4] = cosf(cam.rot.z);
-	val[5] = sinf(cam.rot.z);
+	COS_A = cosf(gl_e->cam.rot.x);
+	SIN_A = sinf(gl_e->cam.rot.x);
+	COS_B = cosf(gl_e->cam.rot.y);
+	SIN_B = sinf(gl_e->cam.rot.y);
+	COS_C = cosf(gl_e->cam.rot.z);
+	SIN_C = sinf(gl_e->cam.rot.z);
 	val[6] = COS_A * SIN_B;
 	val[7] = SIN_A * SIN_B;
 	viewmatrix.m.tab[0][0] = COS_B * COS_C;
@@ -63,7 +66,7 @@ static t_matrix4	view_matrix(t_matrix4 viewmatrix)
 	viewmatrix.m.tab[0][2] = SIN_B;
 	viewmatrix.m.tab[1][2] = -SIN_A * COS_B;
 	viewmatrix.m.tab[2][2] = COS_A * COS_B;
-	res = vector3_rotZYX(cam.pos, cam.rot, ROT_WAY);
+	res = vector3_rot(gl_e->cam.pos, gl_e->cam.rot, ROT_WAY);
 	viewmatrix.m.tab[0][3] = -res.x;
 	viewmatrix.m.tab[1][3] = -res.y;
 	viewmatrix.m.tab[2][3] = -res.z;
@@ -100,8 +103,10 @@ t_matrix4	model_matrix(t_gl_env *gl_e, t_matrix4 model)
 	val[5] = sinf(gl_e->rot.z);
 	val[6] = COS_A * SIN_B;
 	val[7] = SIN_A * SIN_B;
+	val[6] = COS_A * SIN_B;
+	val[7] = SIN_A * SIN_B;
 	model.m.tab[0][0] = COS_B * COS_C;
-	model.m.tab[1][0] = -COS_B * SIN_C;
+	model.m.tab[1][0] = val[7] * COS_C + COS_A * SIN_C;
 	model.m.tab[2][0] = -val[6] * COS_C + SIN_A * SIN_C;
 	model.m.tab[0][1] = -COS_B * SIN_C;
 	model.m.tab[1][1] = -val[7] * SIN_C + COS_A * COS_C;
@@ -135,9 +140,11 @@ void				print_mvp_matrix(t_gl_env *gl_e)
 
 void				load_matrix(t_gl_env *gl_e)
 {
+	gl_e->cam = init_cam((t_vector3){0.0f, 0.0f, 5.0f}, \
+						(t_vector3){DTOR(0), DTOR(0), DTOR(0)});
 	gl_e->matrix_zero = matrix4(0, MATRIX_ROW_MAJOR);
 	gl_e->model = model_matrix(gl_e, gl_e->matrix_zero);
-	gl_e->view = view_matrix(gl_e->matrix_zero);
+	gl_e->view = view_matrix(gl_e, gl_e->matrix_zero);
 	gl_e->projection = pro_matrix(DTOR(gl_e->fov), FAR, NEAR);
 	if (DATA && DATA_MATRIX)
 	{

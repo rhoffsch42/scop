@@ -153,3 +153,7 @@ skybox
 libs:
 	matrix4_rotationXYZ	?
 	matrix4_rotationZYX	?
+
+pour avoir un seul clic (is_first_press) => function callback
+pour avoir le state, appeler la fonction correspondante
+	mettre a jour les events (need variable globale ?)

@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 17:04:35 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/02/24 23:33:36 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/02/26 00:05:55 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,22 +60,22 @@ void			display_object(t_glfw *glfw, t_objfile **objf, t_xpm **xpm, \
 								int *len)
 {
 	t_gl_env	*gl_e;
-	t_gl_env	*sky_e;
 	t_fps		*fps;
 
 	startf("display_object");
 	gl_e = init_gl_env(objf, xpm, len, glfw->cwd);
-	sky_e = init_gl_env(objf, xpm, len, glfw->cwd);
-	skybox(sky_e);
+	skybox(gl_e, objf[gl_e->obj_i]->obj);
 	glEnable(GL_DEPTH_TEST);
 	glClearDepth(-1.0f);
 	glDepthFunc(GL_GREATER);
-	// gl_e->obj_i = 3;//42
-	gl_e->obj_i = 0;//teapot
+	// gl_e->obj_i = 3;
+	gl_e->obj_i = 0;
 	create_program(gl_e, objf[gl_e->obj_i]->obj);
 	gl_e->obj_face_amount = objf[gl_e->obj_i]->obj->f_amount;
 	gl_e->face_drawed = (int)scale_d(gl_e->face_drawed, 1, gl_e->obj_face_amount);
 	fps = init_t_fps();
+	glfwGetCursorPos(glfw->win, &gl_e->mouse_origin_x, &gl_e->mouse_origin_y);
+	printf("Origin mouse:\t%.2f:%.2f\n", gl_e->mouse_origin_y, gl_e->mouse_origin_x);
 	while (!glfwWindowShouldClose(glfw->win))
 	{
 		if (wait_for_next_frame(fps))
@@ -85,27 +85,22 @@ void			display_object(t_glfw *glfw, t_objfile **objf, t_xpm **xpm, \
 
 			if (1)
 			{
-			glUseProgram(gl_e->shader_programme);
-			draw_frame(gl_e);
+			glDepthMask(GL_FALSE);
+			glActiveTexture(GL_TEXTURE0);
+			glUseProgram(gl_e->sky_programme);
+			glBindTexture(GL_TEXTURE_CUBE_MAP_ARB, gl_e->sky_tex_id);
+   			glBindVertexArray(gl_e->sky_vao);
+            glDrawArrays(GL_TRIANGLES, 0, gl_e->obj_face_amount);
+            glDepthMask(GL_TRUE);
 			}
 			if (1)
 			{
-			glUseProgram(sky_e->shader_programme);
-			glBindTexture(GL_TEXTURE_CUBE_MAP, sky_e->tex_id[0]);
-   			glBindVertexArray(sky_e->vao);
-			glDepthMask(GL_FALSE);
-            glDrawArrays(GL_TRIANGLES, 0, 36);
-            glDepthMask(GL_TRUE);
+			glUseProgram(gl_e->shader_programme);
+			draw_frame(gl_e);
 			}
-
-			glfwGetCursorPos(glfw->win, &gl_e->mouse_x, &gl_e->mouse_y);
-			ft_putnbr(gl_e->mouse_y);ft_putchar(':');ft_putnbr(gl_e->mouse_x);ft_putchar(10);
-			
+	
 			glfwSwapBuffers(glfw->win);
 			glfwPollEvents();
-
-			glUseProgram(gl_e->shader_programme);
-   			glBindVertexArray(gl_e->vao);
 			events(glfw, gl_e, fps);
 		}
 	}

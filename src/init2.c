@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 17:07:41 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/02/24 23:33:55 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/02/25 16:39:24 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ t_gl_env	*init_gl_env(t_objfile **objf, t_xpm **xpm, int *len, char *cwd)
 		gl_e->tex_id[i] = xpm_to_glid(xpm[i]);
 	gl_e->obj_len = len[0];
 	gl_e->xpm_len = len[1];
-	gl_e->pos.y = -5.0f;
+	gl_e->pos.y = 0.0f;
 	gl_e->pos.z = -5.0f;
 	gl_e->rotate = 0;
 	gl_e->angle = 10;
@@ -86,6 +86,22 @@ void		cursor_pos_callback(GLFWwindow *window, double xpos, double ypos)
 	(void)window;
 }
 
+void		mouse_button_callback(GLFWwindow *window, int button, int action, int mods)
+{
+	/*
+		action : GLFW_PRESS or GLFW_RELEASE
+	*/
+	int state = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
+	if (state == GLFW_PRESS)
+		printf("PRESS left\n");
+	else if (state == GLFW_RELEASE)
+		printf("RELEASE left\n");
+	(void)window;
+	(void)button;
+	(void)mods;
+	(void)action;
+}
+
 t_glfw		*init_glfw(t_glfw *glfw)
 {
 	startf("init_glfw");
@@ -109,7 +125,9 @@ t_glfw		*init_glfw(t_glfw *glfw)
 	glfwSetKeyCallback(glfw->win, key_callback);
 	glfwSetInputMode(glfw->win, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	glfwSetCursorPosCallback(glfw->win, cursor_pos_callback);
+	glfwSetMouseButtonCallback(glfw->win, mouse_button_callback);
 	glfwSetInputMode(glfw->win, GLFW_STICKY_KEYS, 1);
+	glfwSetInputMode(glfw->win, GLFW_STICKY_MOUSE_BUTTONS, 1);
 	glewExperimental = GL_TRUE;
 	if (glewInit() != GLEW_OK)
 		ft_errexit(GLEW_WIN_FAIL, RED, GLEW_FAIL);

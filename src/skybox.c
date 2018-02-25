@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/20 17:50:42 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/02/24 23:21:24 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/02/26 00:05:54 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,55 +22,17 @@
 **  index textures: 6 -> 11
 */
 
-/*
-static int		wait_for_next_frame(t_fps *fps)
+t_matrix4	view_matrix_sky(t_gl_env *gl_e, t_matrix4 viewmatrix)
 {
-	fps->ellapsed_time = glfwGetTime() - fps->last_time;
-	if (fps->ellapsed_time >= fps->tick)
-	{
-		fps->last_time += fps->ellapsed_time;
-		fps->ellapsed_time = 0.0;
-		return (1);
-	}
-	else
-		return (0);
-}
-*/
-
-static t_cam		init_cam(t_vector3 pos, t_vector3 rot)
-{
-	t_cam	cam;
-
-	cam.pos = pos;
-	cam.rot = rot;
-	cam.right.x = 1;
-	cam.right.y = 0;
-	cam.right.z = 0;
-	cam.up.x = 0;
-	cam.up.y = 1;
-	cam.up.z = 0;
-	cam.forward.x = 0;
-	cam.forward.y = 0;
-	cam.forward.z = 1;
-	cam.front = vector3_cross(cam.up, cam.right);
-	return (cam);
-}
-
-static t_matrix4	view_matrix(t_matrix4 viewmatrix)
-{
-	t_cam		cam;
 	t_vector3	res;
 	float		val[8];
 
-	cam = init_cam((t_vector3){DTOR(0), DTOR(0), DTOR(10)}, \
-					(t_vector3){DTOR(0), DTOR(0), DTOR(0)});
-	viewmatrix = matrix4(0, MATRIX_ROW_MAJOR);
-	val[0] = cosf(cam.rot.x);
-	val[1] = sinf(cam.rot.x);
-	val[2] = cosf(cam.rot.y);
-	val[3] = sinf(cam.rot.y);
-	val[4] = cosf(cam.rot.z);
-	val[5] = sinf(cam.rot.z);
+	COS_A = cosf(gl_e->cam.rot.x);
+	SIN_A = sinf(gl_e->cam.rot.x);
+	COS_B = cosf(gl_e->cam.rot.y);
+	SIN_B = sinf(gl_e->cam.rot.y);
+	COS_C = cosf(gl_e->cam.rot.z);
+	SIN_C = sinf(gl_e->cam.rot.z);
 	val[6] = COS_A * SIN_B;
 	val[7] = SIN_A * SIN_B;
 	viewmatrix.m.tab[0][0] = COS_B * COS_C;
@@ -82,7 +44,7 @@ static t_matrix4	view_matrix(t_matrix4 viewmatrix)
 	viewmatrix.m.tab[0][2] = SIN_B;
 	viewmatrix.m.tab[1][2] = -SIN_A * COS_B;
 	viewmatrix.m.tab[2][2] = COS_A * COS_B;
-	res = vector3_rotZYX(cam.pos, cam.rot, ROT_WAY);
+	res = vector3_rot(gl_e->cam.pos, gl_e->cam.rot, ROT_WAY);
 	viewmatrix.m.tab[0][3] = -res.x;
 	viewmatrix.m.tab[1][3] = -res.y;
 	viewmatrix.m.tab[2][3] = -res.z;
@@ -90,7 +52,6 @@ static t_matrix4	view_matrix(t_matrix4 viewmatrix)
 	viewmatrix = matrix4_set_order(viewmatrix, !viewmatrix.order);
 	return (viewmatrix);
 }
-
 
 static t_matrix4	pro_matrix(float rad, float far, float near)
 {
@@ -161,151 +122,114 @@ static GLuint	init_shader(char *filename, int type)
 	return (shader);
 }
 
-void    skybox(t_gl_env *sky_e)
+void    skybox(t_gl_env *gl_e, t_obj *obj)
 {
     int     i;
 
     check_sky_extensions();
-    glActiveTexture(GL_TEXTURE0);
     glEnable(GL_TEXTURE_CUBE_MAP_ARB);
+    glActiveTexture(GL_TEXTURE0);
     GLenum  cubemap[6] = {
-        GL_TEXTURE_CUBE_MAP_NEGATIVE_X_ARB,
         GL_TEXTURE_CUBE_MAP_POSITIVE_X_ARB,
-        GL_TEXTURE_CUBE_MAP_NEGATIVE_Y_ARB,
+        GL_TEXTURE_CUBE_MAP_NEGATIVE_X_ARB,
         GL_TEXTURE_CUBE_MAP_POSITIVE_Y_ARB,
-        GL_TEXTURE_CUBE_MAP_NEGATIVE_Z_ARB,
-        GL_TEXTURE_CUBE_MAP_POSITIVE_Z_ARB
+        GL_TEXTURE_CUBE_MAP_NEGATIVE_Y_ARB,
+        GL_TEXTURE_CUBE_MAP_POSITIVE_Z_ARB,
+        GL_TEXTURE_CUBE_MAP_NEGATIVE_Z_ARB
     };
     t_xpm   *xpm_ptr[6];
-    ft_chkptr(xpm_ptr[0] = get_xpm(sky_e->xpm, sky_e->xpm_len, CUBEMAP_NX_TEX), CUBEMAP_MISS_TEX, GL_ERROR);
-    ft_chkptr(xpm_ptr[1] = get_xpm(sky_e->xpm, sky_e->xpm_len, CUBEMAP_PX_TEX), CUBEMAP_MISS_TEX, GL_ERROR);
-    ft_chkptr(xpm_ptr[2] = get_xpm(sky_e->xpm, sky_e->xpm_len, CUBEMAP_NY_TEX), CUBEMAP_MISS_TEX, GL_ERROR);
-    ft_chkptr(xpm_ptr[3] = get_xpm(sky_e->xpm, sky_e->xpm_len, CUBEMAP_PY_TEX), CUBEMAP_MISS_TEX, GL_ERROR);
-    ft_chkptr(xpm_ptr[4] = get_xpm(sky_e->xpm, sky_e->xpm_len, CUBEMAP_NZ_TEX), CUBEMAP_MISS_TEX, GL_ERROR);
-    ft_chkptr(xpm_ptr[5] = get_xpm(sky_e->xpm, sky_e->xpm_len, CUBEMAP_PZ_TEX), CUBEMAP_MISS_TEX, GL_ERROR);
+    ft_chkptr(xpm_ptr[0] = get_xpm(gl_e->xpm, gl_e->xpm_len, CUBEMAP_NX_TEX), CUBEMAP_MISS_TEX, GL_ERROR);
+    ft_chkptr(xpm_ptr[1] = get_xpm(gl_e->xpm, gl_e->xpm_len, CUBEMAP_PX_TEX), CUBEMAP_MISS_TEX, GL_ERROR);
+    ft_chkptr(xpm_ptr[2] = get_xpm(gl_e->xpm, gl_e->xpm_len, CUBEMAP_NY_TEX), CUBEMAP_MISS_TEX, GL_ERROR);
+    ft_chkptr(xpm_ptr[3] = get_xpm(gl_e->xpm, gl_e->xpm_len, CUBEMAP_PY_TEX), CUBEMAP_MISS_TEX, GL_ERROR);
+    ft_chkptr(xpm_ptr[4] = get_xpm(gl_e->xpm, gl_e->xpm_len, CUBEMAP_NZ_TEX), CUBEMAP_MISS_TEX, GL_ERROR);
+    ft_chkptr(xpm_ptr[5] = get_xpm(gl_e->xpm, gl_e->xpm_len, CUBEMAP_PZ_TEX), CUBEMAP_MISS_TEX, GL_ERROR);
     printf("Searching CUBEMAP textures\tOK\n");
 
-    glGenTextures(1, &sky_e->tex_id[0]);
-    glBindTexture(GL_TEXTURE_CUBE_MAP_ARB, sky_e->tex_id[0]);
+    glGenTextures(1, &gl_e->sky_tex_id);
+    glBindTexture(GL_TEXTURE_CUBE_MAP_ARB, gl_e->sky_tex_id);
     i = 0;
     while (i < 6)
     {
-        printf("cubemap build:\t%s\n", xpm_ptr[i]->name);
+        printf("cubemap build:\t%s - %dx%d\n", xpm_ptr[i]->name, xpm_ptr[i]->width, xpm_ptr[i]->height);
+        glTexParameteri(GL_TEXTURE_CUBE_MAP_ARB, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_CUBE_MAP_ARB, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_CUBE_MAP_ARB, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_CUBE_MAP_ARB, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_CUBE_MAP_ARB, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+        
         glTexImage2D(cubemap[i], 0, GL_RGB, xpm_ptr[i]->width, xpm_ptr[i]->height,
             0, GL_RGB, GL_UNSIGNED_BYTE, xpm_ptr[i]->data);
         i++;
     }
-    glTexParameteri(GL_TEXTURE_CUBE_MAP_ARB, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_CUBE_MAP_ARB, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_CUBE_MAP_ARB, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_CUBE_MAP_ARB, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_CUBE_MAP_ARB, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
     printf("Building OpenGL textures\tOK\n");
 
-    float   l = 3.0f;
-    float   points[] = {
-        -l,  l, -l,
-        -l, -l, -l,
-        l, -l, -l,
-        l, -l, -l,
-        l,  l, -l,
-        -l,  l, -l,
-        
-        -l, -l,  l,
-        -l, -l, -l,
-        -l,  l, -l,
-        -l,  l, -l,
-        -l,  l,  l,
-        -l, -l,  l,
-        
-        l, -l, -l,
-        l, -l,  l,
-        l,  l,  l,
-        l,  l,  l,
-        l,  l, -l,
-        l, -l, -l,
-        
-        -l, -l,  l,
-        -l,  l,  l,
-        l,  l,  l,
-        l,  l,  l,
-        l, -l,  l,
-        -l, -l,  l,
-        
-        -l,  l, -l,
-        l,  l, -l,
-        l,  l,  l,
-        l,  l,  l,
-        -l,  l,  l,
-        -l,  l, -l,
-        
-        -l, -l, -l,
-        -l, -l,  l,
-        l, -l, -l,
-        l, -l, -l,
-        -l, -l,  l,
-        l, -l,  l
-    };
     ////////////    program et shaders
     char    *shaders[2];
 
-    shaders[0] = ft_strjoin(sky_e->cwd, VSHADER_FILE_CUBE);
+    shaders[0] = ft_strjoin(gl_e->cwd, VSHADER_FILE_CUBE);
     // -> /Users/rhoffsch/projects/scop_github/shaders/vertex_shader_cubemap.glsl
-    shaders[1] = ft_strjoin(sky_e->cwd, FSHADER_FILE_CUBE);
+    shaders[1] = ft_strjoin(gl_e->cwd, FSHADER_FILE_CUBE);
     // -> /Users/rhoffsch/projects/scop_github/shaders/fragment_shader_cubemap.glsl
 
-    sky_e->vshader = init_shader(shaders[0], GL_VERTEX_SHADER);
+    gl_e->sky_vshader = init_shader(shaders[0], GL_VERTEX_SHADER);
     /*
-        sky_e->vshader = glCreateShader(GL_VERTEX_SHADER);
-        glShaderSource(sky_e->vshader, 1, &file_content, NULL);
-        glCompileShader(sky_e->vshader);
+        gl_e->sky_vshader = glCreateShader(GL_VERTEX_SHADER);
+        glShaderSource(gl_e->sky_vshader, 1, &file_content, NULL);
+        glCompileShader(gl_e->sky_vshader);
 
         GLint	ret;
         glGetShaderiv(shader, GL_COMPILE_STATUS, &ret);
 	    if (ret == GL_FALSE)
 		    gl_compile_error(shader, "shader compilation error:");
     */
-	sky_e->fshader = init_shader(shaders[1], GL_FRAGMENT_SHADER);
+	gl_e->sky_fshader = init_shader(shaders[1], GL_FRAGMENT_SHADER);
     /*
-        sky_e->fshader = glCreateShader(GL_FRAGMENT_SHADER);
-        glShaderSource(sky_e->fshader, 1, &file_content, NULL);
-        glCompileShader(sky_e->fshader);
+        gl_e->sky_vshader = glCreateShader(GL_FRAGMENT_SHADER);
+        glShaderSource(gl_e->sky_vshader, 1, &file_content, NULL);
+        glCompileShader(gl_e->sky_vshader);
 
         GLint	ret;
         glGetShaderiv(shader, GL_COMPILE_STATUS, &ret);
 	    if (ret == GL_FALSE)
 		    gl_compile_error(shader, "shader compilation error:");
     */
+    free(shaders[0]);
+    free(shaders[1]);
 
-	sky_e->shader_programme = glCreateProgram();
-	glAttachShader(sky_e->shader_programme, sky_e->vshader);
-	glAttachShader(sky_e->shader_programme, sky_e->fshader);
-	glLinkProgram(sky_e->shader_programme);
+	gl_e->sky_programme = glCreateProgram();
+	glAttachShader(gl_e->sky_programme, gl_e->sky_vshader);
+	glAttachShader(gl_e->sky_programme, gl_e->sky_fshader);
+	glLinkProgram(gl_e->sky_programme);
 
     int p = -1;
-	glValidateProgram(sky_e->shader_programme);
-	glGetProgramiv(sky_e->shader_programme, GL_LINK_STATUS, &p);
-	(p != GL_TRUE) ? print_programme_info_log(sky_e->shader_programme) : (void)p;
-	glUseProgram(sky_e->shader_programme);
+	glValidateProgram(gl_e->sky_programme);
+	glGetProgramiv(gl_e->sky_programme, GL_LINK_STATUS, &p);
+	(p != GL_TRUE) ? print_programme_info_log(gl_e->sky_programme) : (void)p;
+	glUseProgram(gl_e->sky_programme);
 
     ////////////    vao
-    glGenVertexArrays(1, &sky_e->vao);
-    glEnableVertexAttribArray(0);//utile ?
-
+    glGenVertexArrays(1, &gl_e->sky_vao);
+    glBindVertexArray(gl_e->vao); 
 
     ////////////    vbo
-	int		slot;
-	if ((slot = glGetAttribLocation(sky_e->shader_programme, "vertex")) == -1)
+    float   points[obj->f_amount * 9];
+    fill_points_array(points, obj->f);
+
+    glGenBuffers(1, &gl_e->sky_tex_vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, gl_e->sky_tex_vbo);
+    glBufferData(GL_ARRAY_BUFFER, obj->f_amount * 9 * sizeof(float), points, GL_STATIC_DRAW);
+
+	if ((gl_e->sky_vbo_slot = glGetAttribLocation(gl_e->sky_programme, "vertex")) == -1)
 	{
 		glGetError();
 		ft_errexit("glGetAttribLocation failed (-1)", RED, GL_ERROR);
 	}
-	printf("slot %d:\t%s\n", slot, "vertex");
-    glGenBuffers(1, &sky_e->vbo);
-    glBindBuffer(GL_ARRAY_BUFFER, sky_e->vbo);
-    glBufferData(GL_ARRAY_BUFFER, 3 * 36 * sizeof(float), &points, GL_STATIC_DRAW);
-    glVertexAttribPointer(slot, 3, GL_FLOAT, GL_FALSE, 0, NULL);
-	glEnableVertexAttribArray(slot);
+	printf("slot %d:\t%s\n", gl_e->sky_vbo_slot, "vertex");
+    glVertexAttribPointer(gl_e->sky_vbo_slot, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glEnableVertexAttribArray(0);//utile ?
+	glBindVertexArray(0);
     /*  0 : slot
         3 : size (nb de values)
         GL_FLOAT : type
@@ -323,8 +247,8 @@ void    skybox(t_gl_env *sky_e)
 	t_matrix4	promatrix;
 	t_matrix4	viewmatrix;
 
-	promatrix = pro_matrix(DTOR(sky_e->fov), FAR, NEAR);
-	viewmatrix = view_matrix(matrix4(0, MATRIX_ROW_MAJOR));
+	promatrix = pro_matrix(DTOR(gl_e->fov), FAR, NEAR);
+	viewmatrix = view_matrix_sky(gl_e, matrix4(0, MATRIX_ROW_MAJOR));
     if (DATA && DATA_SKYBOX)
 	{
 		printf("View Matrix:\n");
@@ -333,37 +257,8 @@ void    skybox(t_gl_env *sky_e)
 		matrix4_print(promatrix);
 	}
 
-    GLint projection = glGetUniformLocation(sky_e->shader_programme, "P");
-    GLint view = glGetUniformLocation(sky_e->shader_programme, "V");
+    GLint projection = glGetUniformLocation(gl_e->sky_programme, "P");
+    GLint view = glGetUniformLocation(gl_e->sky_programme, "V");
     glUniformMatrix4fv(projection, 1, GL_FALSE, promatrix.m.e);
     glUniformMatrix4fv(view, 1, GL_FALSE, viewmatrix.m.e);
-
-    matrix4(IDENTITY, MATRIX_COLUMN_MAJOR);
-    ////////////    render
-    /*
-    t_fps		*fps = init_t_fps();
-    glEnable(GL_DEPTH_TEST);
-    glClearDepth(-1.0f);
-    glDepthFunc(GL_GREATER);
-    glUseProgram(sky_e->shader_programme);
-    glBindTexture(GL_TEXTURE_CUBE_MAP, sky_e->tex_id[0]);
-    glBindVertexArray(sky_e->vao);
-    while (!glfwWindowShouldClose(glfw->win))
-    {
-        if (wait_for_next_frame(fps))
-        {
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-            glDepthMask(GL_FALSE);
-            glDrawArrays(GL_TRIANGLES, 0, 36);
-            //  draw from 0
-            //  to 36: 3coo(xyz) * (6cotes * (2faces * 3sommets) * float
-            glDepthMask(GL_TRUE);
-            glfwSwapBuffers(glfw->win);
-            glfwPollEvents();
-        }
-    }
-
-    exit(0);
-    */
 }

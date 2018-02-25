@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/24 14:01:02 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/02/24 22:56:13 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/02/25 21:03:09 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@
 # define DATA			1
 # define DATA_RESOURCES	0
 # define DATA_MATRIX	0
-# define DATA_SKYBOX	0
+# define DATA_SKYBOX	1
 
 # define RAD			0.017453f
 # define RAD_DELTA		1.0f
@@ -61,6 +61,8 @@
 
 # define FPS			60
 # define MAX_FPS		120
+# define SENSIBILITY	2000.0f
+# define ROT_X			0
 
 # define COLOR_RGB_1		"/etc/X11/rgb.txt"
 # define COLOR_RGB_2		"/usr/share/emacs/26.0.50/etc/rgb.txt"
@@ -79,11 +81,11 @@
 # define PONY_FILE			"./textures/pony.xpm"
 # define DEF_WIN_TITLE		"Default title"
 # define DEF_WIN_X			800
-# define DEF_WIN_Y			600
+# define DEF_WIN_Y			800
 # define MAX_WIN_X			1920
 # define MAX_WIN_Y			1080
 # define MIN_WIN_X			800
-# define MIN_WIN_Y			600
+# define MIN_WIN_Y			800
 # define BYTE				3
 # define FLOAT_MAX_LEN		7
 # define COLOR_MAX			255
@@ -91,7 +93,7 @@
 # define TITLE_TRUNC		"[...]"
 # define FAR				0.01f
 # define NEAR				1000.0f
-# define FOV				90.0f
+# define FOV				60.0f
 # define FOVX				90.0f
 # define FOVY				90.0f
 # define MAX_FOV			200.0f
@@ -297,9 +299,11 @@ void		fill_tex_cylinder_array(float *arr, t_face *face);
 void		fill_points_array(float *arr, t_face *face);
 void		load_matrix(t_gl_env *gl_e);
 t_matrix4	model_matrix(t_gl_env *gl_e, t_matrix4 model);//tmp
+t_matrix4	view_matrix(t_gl_env *gl_e, t_matrix4 viewmatrix);//tmp
+void		update_cam_vector(t_cam *cam);//tmp
 void		print_mvp_matrix(t_gl_env *gl_e);
 void		create_program(t_gl_env *gl_e, t_obj *obj);
-void    	skybox(t_gl_env *sky_e);
+void    	skybox(t_gl_env *sky_e, t_obj *obj);
 
 /*
 ** error OpenGL

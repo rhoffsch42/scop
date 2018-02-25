@@ -6,7 +6,7 @@
 #    By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2014/11/10 20:07:50 by rhoffsch          #+#    #+#              #
-#    Updated: 2016/02/10 02:48:29 by rhoffsch         ###   ########.fr        #
+#    Updated: 2018/02/25 15:55:34 by rhoffsch         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,6 +29,7 @@ SRC_FILE	=	print.c \
 				vector3_sub.c \
 				vector3_mult_coef.c \
 				vector3_magnitude.c \
+				vector3_normalize.c \
 				vector3_dot.c \
 				vector3_cross.c \
 				vector3_rot.c \
