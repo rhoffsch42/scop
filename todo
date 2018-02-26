@@ -171,28 +171,9 @@ obj3D blueprints:
 
 .h:
 //////////// programs
-# define PROG_SKYBOX	0
-# define PROG_OBJ3D		1
-//////////// vao
-# define CUBE		0
-# define TORCH		1
-//////////// texture vbo
-# define DIRT		0
-# define GRASS		1
+# define SKYBOX		0
+# define OBJ3D		1
 
-
-.c:
-	glUseProgram(programs[PROG_OBJ3D]);
-	glBindVertexArray(programs[PROG_OBJ3D]->vao[CUBE]);
-	glBindTexture(programs[PROG_OBJ3D]->texture_type, texture_id[DIRT]);
-
-	glUseProgram(programs[PROG_OBJ3D]);
-	glBindVertexArray(programs[PROG_OBJ3D]->vao[CUBE]);
-	glBindTexture(programs[PROG_OBJ3D]->texture_type, texture_id[DIRT]);
-
-
-POUR MINECRAFT
-un program construit un object 3d
 	un vao par obj3d, contenant:
 			les vbo pour:
 				vertex mesh
