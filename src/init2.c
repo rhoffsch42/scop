@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 17:07:41 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/02/25 16:39:24 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/02/26 14:18:55 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ t_gl_env	*init_gl_env(t_objfile **objf, t_xpm **xpm, int *len, char *cwd)
 		gl_e->tex_id[i] = xpm_to_glid(xpm[i]);
 	gl_e->obj_len = len[0];
 	gl_e->xpm_len = len[1];
-	gl_e->pos.y = 0.0f;
+	gl_e->pos.y = 4.0f;
 	gl_e->pos.z = -5.0f;
 	gl_e->rotate = 0;
 	gl_e->angle = 10;

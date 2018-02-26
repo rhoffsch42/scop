@@ -6,7 +6,7 @@
 #    By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2015/05/15 17:38:19 by rhoffsch          #+#    #+#              #
-#    Updated: 2018/02/20 17:57:49 by rhoffsch         ###   ########.fr        #
+#    Updated: 2018/02/26 16:44:46 by rhoffsch         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -49,6 +49,7 @@ SRC_FILE		=	main.c \
 					for_list.c \
 					list_to_tab.c \
 					display.c \
+					display2.c \
 					matrix.c \
 					fill_gl_arrays.c \
 					gl_error.c \
@@ -63,7 +64,8 @@ SRC_FILE		=	main.c \
 					misc.c
 
 HDR_FILE		=	scop.h \
-					scop_struct.h
+					scop_struct.h \
+					scop_opengl.h
 
 SRC_DIR			=	src
 OBJ_DIR			=	obj

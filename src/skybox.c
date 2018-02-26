@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/20 17:50:42 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/02/26 00:05:54 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/02/26 14:24:41 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -215,6 +215,10 @@ void    skybox(t_gl_env *gl_e, t_obj *obj)
     ////////////    vbo
     float   points[obj->f_amount * 9];
     fill_points_array(points, obj->f);
+    int j = 0; while (j < obj->f_amount * 9) {
+        points[j] *= 3.0f;
+        j++;
+    }
 
     glGenBuffers(1, &gl_e->sky_tex_vbo);
     glBindBuffer(GL_ARRAY_BUFFER, gl_e->sky_tex_vbo);

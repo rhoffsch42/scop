@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 17:06:41 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/02/25 16:46:23 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/02/26 16:21:13 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -218,7 +218,7 @@ void			events(t_glfw *glfw, t_gl_env *gl_e, t_fps *fps)
 		gl_e->face_drawed = gl_e->obj_face_amount;;
 	if (is_first_press(glfw, GLFW_KEY_T, gl_e))
 	{
-		if ((gl_e->texture_mod = !gl_e->texture_mod))
+		if ((gl_e->texture_mod = !gl_e->texture_mod) == 1)
 		{
 			glBindBuffer(GL_ARRAY_BUFFER, gl_e->tex_vbo);
 			glVertexAttribPointer(gl_e->tex_slot, 2, GL_FLOAT, GL_FALSE, 0, NULL);

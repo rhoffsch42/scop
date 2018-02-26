@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 17:04:35 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/02/26 00:05:55 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/02/26 14:23:38 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,13 +90,20 @@ void			display_object(t_glfw *glfw, t_objfile **objf, t_xpm **xpm, \
 			glUseProgram(gl_e->sky_programme);
 			glBindTexture(GL_TEXTURE_CUBE_MAP_ARB, gl_e->sky_tex_id);
    			glBindVertexArray(gl_e->sky_vao);
-            glDrawArrays(GL_TRIANGLES, 0, gl_e->obj_face_amount);
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+            glDrawArrays(GL_TRIANGLES, 0, gl_e->obj_face_amount * 3);
             glDepthMask(GL_TRUE);
 			}
 			if (1)
 			{
 			glUseProgram(gl_e->shader_programme);
 			draw_frame(gl_e);
+			
+			gl_e->pos.x -= 3;
+			gl_e->model = model_matrix(gl_e, gl_e->matrix_zero);
+			glUniformMatrix4fv(gl_e->gl_m, 1, GL_FALSE, gl_e->model.m.e);
+			draw_frame(gl_e);
+			gl_e->pos.x += 3;
 			}
 	
 			glfwSwapBuffers(glfw->win);

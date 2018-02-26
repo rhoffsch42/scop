@@ -6,18 +6,22 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/24 14:01:02 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/02/25 21:03:09 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/02/26 17:03:40 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SCOP_H
 # define SCOP_H
 
-# include <libft.h>
-# include <libmath3d.h>
+/*
+**	do not change include order
+*/
 # include <GL/glew.h>
 # include <GLFW/glfw3.h>
+# include <libft.h>
+# include <libmath3d.h>
 # include <scop_struct.h>
+# include <scop_opengl.h>
 
 # include <unistd.h>
 # include <stdio.h>
@@ -158,6 +162,9 @@
 # define DISPLAY_COLOR		1
 # define DISPLAY_MATERIAL	2
 
+# define SKYBOX				0
+# define OBJ3D				1
+
 /*
 **	libft
 */
@@ -289,7 +296,7 @@ void		error_mtl(char *s1, char *s2);
 void		mtl_checks(t_mtlfile *mtlfile);
 
 /*
-** glfw
+** glfw & OpenGL
 */
 void		display_object(t_glfw *glfw, t_objfile **objf, t_xpm **xpm, \
 							int *len);
@@ -304,6 +311,9 @@ void		update_cam_vector(t_cam *cam);//tmp
 void		print_mvp_matrix(t_gl_env *gl_e);
 void		create_program(t_gl_env *gl_e, t_obj *obj);
 void    	skybox(t_gl_env *sky_e, t_obj *obj);
+///// v2
+void		display_object2(t_glfw *glfw, t_objfile **objf, t_xpm **xpm, int *len);
+
 
 /*
 ** error OpenGL

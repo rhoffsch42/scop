@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 17:07:58 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/02/25 13:20:24 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/02/26 16:57:48 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int		main(int ac, char **av)
 	texture_tab = (t_xpm**)list_to_tab((t_void*)(e->xpmfile));
 	e->glfw = init_glfw(NULL);
 	e->glfw->cwd = e->cwd;
-	display_object(e->glfw, object_tab, texture_tab, \
+	display_object2(e->glfw, object_tab, texture_tab, \
 		(int[2]){ft_listlen(e->objfile), ft_listlen(e->xpmfile)});
 	printf("________________END________________\n");
 	return (0);

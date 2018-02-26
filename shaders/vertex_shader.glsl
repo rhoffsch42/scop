@@ -6,7 +6,6 @@ in vec2 vertexUV;
 out vec2 UV;
 out vec3 colour;
 
-uniform int dismod;
 uniform mat4 M;
 uniform mat4 V;
 uniform mat4 P;
