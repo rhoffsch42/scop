@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/24 14:01:02 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/02/26 17:03:40 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/02/27 20:49:10 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,6 +157,14 @@
 # define MTL_OPACITY		"d"
 # define MTL_ILLUM			"illum"
 
+#define COS_A	val[0]
+#define SIN_A	val[1]
+#define COS_B	val[2]
+#define SIN_B	val[3]
+#define COS_C	val[4]
+#define SIN_C	val[5]
+
+
 # define MODS				3
 # define DISPLAY_TEXTURE	0
 # define DISPLAY_COLOR		1
@@ -306,13 +314,14 @@ void		fill_tex_cylinder_array(float *arr, t_face *face);
 void		fill_points_array(float *arr, t_face *face);
 void		load_matrix(t_gl_env *gl_e);
 t_matrix4	model_matrix(t_gl_env *gl_e, t_matrix4 model);//tmp
-t_matrix4	view_matrix(t_gl_env *gl_e, t_matrix4 viewmatrix);//tmp
+t_matrix4	view_matrix(t_cam *cam, t_matrix4 viewmatrix);//tmp
 void		update_cam_vector(t_cam *cam);//tmp
 void		print_mvp_matrix(t_gl_env *gl_e);
 void		create_program(t_gl_env *gl_e, t_obj *obj);
 void    	skybox(t_gl_env *sky_e, t_obj *obj);
 ///// v2
 void		display_object2(t_glfw *glfw, t_objfile **objf, t_xpm **xpm, int *len);
+void		events2(t_glfw *glfw, t_gl *gle, t_prog *prog);
 
 
 /*

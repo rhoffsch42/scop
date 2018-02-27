@@ -6,17 +6,11 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/20 17:50:42 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/02/26 14:24:41 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/02/27 19:41:34 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "scop.h"
-#define COS_A	val[0]
-#define SIN_A	val[1]
-#define COS_B	val[2]
-#define SIN_B	val[3]
-#define COS_C	val[4]
-#define SIN_C	val[5]
 
 /*
 **  index textures: 6 -> 11
@@ -127,15 +121,15 @@ void    skybox(t_gl_env *gl_e, t_obj *obj)
     int     i;
 
     check_sky_extensions();
-    glEnable(GL_TEXTURE_CUBE_MAP_ARB);
+    glEnable(GL_TEXTURE_CUBE_MAP);
     glActiveTexture(GL_TEXTURE0);
     GLenum  cubemap[6] = {
-        GL_TEXTURE_CUBE_MAP_POSITIVE_X_ARB,
-        GL_TEXTURE_CUBE_MAP_NEGATIVE_X_ARB,
-        GL_TEXTURE_CUBE_MAP_POSITIVE_Y_ARB,
-        GL_TEXTURE_CUBE_MAP_NEGATIVE_Y_ARB,
-        GL_TEXTURE_CUBE_MAP_POSITIVE_Z_ARB,
-        GL_TEXTURE_CUBE_MAP_NEGATIVE_Z_ARB
+        GL_TEXTURE_CUBE_MAP_POSITIVE_X,
+        GL_TEXTURE_CUBE_MAP_NEGATIVE_X,
+        GL_TEXTURE_CUBE_MAP_POSITIVE_Y,
+        GL_TEXTURE_CUBE_MAP_NEGATIVE_Y,
+        GL_TEXTURE_CUBE_MAP_POSITIVE_Z,
+        GL_TEXTURE_CUBE_MAP_NEGATIVE_Z
     };
     t_xpm   *xpm_ptr[6];
     ft_chkptr(xpm_ptr[0] = get_xpm(gl_e->xpm, gl_e->xpm_len, CUBEMAP_NX_TEX), CUBEMAP_MISS_TEX, GL_ERROR);
@@ -147,16 +141,16 @@ void    skybox(t_gl_env *gl_e, t_obj *obj)
     printf("Searching CUBEMAP textures\tOK\n");
 
     glGenTextures(1, &gl_e->sky_tex_id);
-    glBindTexture(GL_TEXTURE_CUBE_MAP_ARB, gl_e->sky_tex_id);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, gl_e->sky_tex_id);
     i = 0;
     while (i < 6)
     {
         printf("cubemap build:\t%s - %dx%d\n", xpm_ptr[i]->name, xpm_ptr[i]->width, xpm_ptr[i]->height);
-        glTexParameteri(GL_TEXTURE_CUBE_MAP_ARB, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_CUBE_MAP_ARB, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_CUBE_MAP_ARB, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_CUBE_MAP_ARB, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_CUBE_MAP_ARB, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
         
         glTexImage2D(cubemap[i], 0, GL_RGB, xpm_ptr[i]->width, xpm_ptr[i]->height,
             0, GL_RGB, GL_UNSIGNED_BYTE, xpm_ptr[i]->data);

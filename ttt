@@ -1,0 +1,285 @@
+./scop
+resources/42.obj
+resources/cube.obj
+resources/cylinder.obj
+resources/teapot.obj
+resources/teapot2.obj
+textures/canyon_bk.xpm
+textures/canyon_dn.xpm
+textures/canyon_ft.xpm
+textures/canyon_lf.xpm
+textures/canyon_rt.xpm
+textures/canyon_up.xpm
+________________BEGIN________________
+_ init_env				.
+_ ft_free_list				.
+_ load_file				.
+_ add_xpmfile				.
+_ chk_xpmfile				.
+_ get_xpmfile				.
+_ load_xpm				.
+_ init_xpm				.
+_ basename				.
+_ build_xpm				.
+_ build_tokens				.
+_ ft_free_list				.
+_ ft_free_list				.
+_ ft_free_list				.
+====	resources/42.obj
+_ add_objfile				.
+_ basename				.
+_ build_objects				.
+_ init_obj				.
+_ build_data (obj)				.
+_ add_vertix				.
+_ ft_free_list				.
+====	resources/cube.obj
+_ add_objfile				.
+_ basename				.
+_ build_objects				.
+_ init_obj				.
+_ build_data (obj)				.
+_ add_vertix				.
+_ ft_free_list				.
+====	resources/cylinder.obj
+_ add_objfile				.
+_ basename				.
+_ build_objects				.
+_ init_obj				.
+_ build_data (obj)				.
+_ add_vertix				.
+_ ft_free_list				.
+====	resources/teapot.obj
+_ add_objfile				.
+_ basename				.
+_ build_objects				.
+_ init_obj				.
+_ build_data (obj)				.
+_ add_vertix				.
+_ ft_free_list				.
+====	resources/teapot2.obj
+_ add_objfile				.
+_ basename				.
+_ build_objects				.
+_ init_obj				.
+_ build_data (obj)				.
+_ add_vertix				.
+_ ft_free_list				.
+====	textures/canyon_bk.xpm
+_ add_xpmfile				.
+_ chk_xpmfile				.
+_ get_xpmfile				.
+_ load_xpm				.
+_ init_xpm				.
+_ basename				.
+_ build_xpm				.
+_ build_tokens				.
+_ ft_free_list				.
+_ ft_free_list				.
+_ ft_free_list				.
+====	textures/canyon_dn.xpm
+_ add_xpmfile				.
+_ chk_xpmfile				.
+_ get_xpmfile				.
+_ load_xpm				.
+_ init_xpm				.
+_ basename				.
+_ build_xpm				.
+_ build_tokens				.
+_ ft_free_list				.
+_ ft_free_list				.
+_ ft_free_list				.
+====	textures/canyon_ft.xpm
+_ add_xpmfile				.
+_ chk_xpmfile				.
+_ get_xpmfile				.
+_ load_xpm				.
+_ init_xpm				.
+_ basename				.
+_ build_xpm				.
+_ build_tokens				.
+_ ft_free_list				.
+_ ft_free_list				.
+_ ft_free_list				.
+====	textures/canyon_lf.xpm
+_ add_xpmfile				.
+_ chk_xpmfile				.
+_ get_xpmfile				.
+_ load_xpm				.
+_ init_xpm				.
+_ basename				.
+_ build_xpm				.
+_ build_tokens				.
+_ ft_free_list				.
+_ ft_free_list				.
+_ ft_free_list				.
+====	textures/canyon_rt.xpm
+_ add_xpmfile				.
+_ chk_xpmfile				.
+_ get_xpmfile				.
+_ load_xpm				.
+_ init_xpm				.
+_ basename				.
+_ build_xpm				.
+_ build_tokens				.
+_ ft_free_list				.
+_ ft_free_list				.
+_ ft_free_list				.
+====	textures/canyon_up.xpm
+_ add_xpmfile				.
+_ chk_xpmfile				.
+_ get_xpmfile				.
+_ load_xpm				.
+_ init_xpm				.
+_ basename				.
+_ build_xpm				.
+_ build_tokens				.
+_ ft_free_list				.
+_ ft_free_list				.
+_ ft_free_list				.
+_ link_file				.
+_ _ _ check_directory for :
+_ teapot2.mtl				.
+linked
+_ _ _ check_directory for :
+_ 42.mtl				.
+linked
+_ _ _ check_directory for :
+_ 42.mtl				.
+linked
+_ obj_checks				.
+_ check_obj				.
+_ check_obj				.
+_ check_obj				.
+_ check_obj				.
+_ check_obj				.
+_ rewrite_objects				.
+_ center_obj				.
+_ translate_obj				.
+_ rewrite_objects				.
+_ center_obj				.
+_ translate_obj				.
+_ rewrite_objects				.
+_ center_obj				.
+_ translate_obj				.
+_ rewrite_objects				.
+_ center_obj				.
+_ translate_obj				.
+_ rewrite_objects				.
+_ center_obj				.
+_ translate_obj				.
+___ dump_datafile
+*******************************************
+type:   	objfile
+id:     	4
+path:   	resources/teapot2.obj
+name:   	teapot2.obj
+	DATAS :
+ID:      	4
+Name:    	teapot
+Mtl library:	teapot2.mtl
+Material:	None (id: -1)
+Smooth: 	off
+Vertix amount:	3644
+Faces amount:	6320
+- - - - - - - - - - - - - - - - - - - -
+type:   	objfile
+id:     	3
+path:   	resources/teapot.obj
+name:   	teapot.obj
+	DATAS :
+ID:      	3
+Name:    	Object #3
+Mtl library:	'N/D'
+Material:	'N/D'
+Smooth: 	off
+Vertix amount:	3644
+Faces amount:	6320
+- - - - - - - - - - - - - - - - - - - -
+type:   	objfile
+id:     	2
+path:   	resources/cylinder.obj
+name:   	cylinder.obj
+	DATAS :
+ID:      	2
+Name:    	Object #2
+Mtl library:	'N/D'
+Material:	'N/D'
+Smooth: 	off
+Vertix amount:	202
+Faces amount:	404
+- - - - - - - - - - - - - - - - - - - -
+type:   	objfile
+id:     	1
+path:   	resources/cube.obj
+name:   	cube.obj
+	DATAS :
+ID:      	1
+Name:    	vraicube
+Mtl library:	42.mtl
+Material:	Material (id: -1)
+Smooth: 	off
+Vertix amount:	8
+Faces amount:	12
+- - - - - - - - - - .....
+.......
+- - - - - - - - - -
+type:   	objfile
+id:     	0
+path:   	resources/42.obj
+name:   	42.obj
+	DATAS :
+ID:      	0
+Name:    	Cube
+Mtl library:	42.mtl
+Material:	Material (id: -1)
+Smooth: 	off
+Vertix amount:	42
+Faces amount:	76
+- - - - - - - - - - - - - - - - - - - -
+*******************************************
+*******************************************
+textures/canyon_up.xpm
+textures/canyon_rt.xpm
+textures/canyon_lf.xpm
+textures/canyon_ft.xpm
+textures/canyon_dn.xpm
+textures/canyon_bk.xpm
+./textures/pony.xpm
+*******************************************
+_ init_glfw				.
+GL version: 4.1 NVIDIA-10.17.5 355.10.05.45f01
+_ init_gl_env				.
+_ ft_free_list				.
+_ ft_free_list				.
+slot 5:	M
+slot 0:	V
+slot 11:	P
+slot 9:	dismod
+slot 4:	plain_color
+slot 2:	vertex_position
+slot 1:	vertex_colour
+slot 0:	vertexUV
+slot 0:	vertexUV
+slot 2:	vertex_position
+slot 1:	vertex_colour
+slot 0:	vertexUV
+slot 0:	vertexUV
+slot 2:	vertex_position
+slot 1:	vertex_colour
+slot 0:	vertexUV
+slot 0:	vertexUV
+slot 2:	vertex_position
+slot 1:	vertex_colour
+slot 0:	vertexUV
+slot 0:	vertexUV
+slot 2:	vertex_position
+slot 1:	vertex_colour
+slot 0:	vertexUV
+slot 0:	vertexUV
+Origin mouse:	934.11:380.08
+press: 125
+release: 125
+press: 126
+release: 126
+press: 53

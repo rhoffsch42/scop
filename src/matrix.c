@@ -6,17 +6,11 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 17:08:13 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/02/25 16:38:00 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/02/27 18:00:46 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <scop.h>
-#define COS_A	val[0]
-#define SIN_A	val[1]
-#define COS_B	val[2]
-#define SIN_B	val[3]
-#define COS_C	val[4]
-#define SIN_C	val[5]
 
 void				update_cam_vector(t_cam *cam)
 {
@@ -44,17 +38,17 @@ static t_cam		init_cam(t_vector3 pos, t_vector3 rot)
 	return (cam);
 }
 
-t_matrix4	view_matrix(t_gl_env *gl_e, t_matrix4 viewmatrix)
+t_matrix4	view_matrix(t_cam *cam, t_matrix4 viewmatrix)
 {
 	t_vector3	res;
 	float		val[8];
 
-	COS_A = cosf(gl_e->cam.rot.x);
-	SIN_A = sinf(gl_e->cam.rot.x);
-	COS_B = cosf(gl_e->cam.rot.y);
-	SIN_B = sinf(gl_e->cam.rot.y);
-	COS_C = cosf(gl_e->cam.rot.z);
-	SIN_C = sinf(gl_e->cam.rot.z);
+	COS_A = cosf(cam->rot.x);
+	SIN_A = sinf(cam->rot.x);
+	COS_B = cosf(cam->rot.y);
+	SIN_B = sinf(cam->rot.y);
+	COS_C = cosf(cam->rot.z);
+	SIN_C = sinf(cam->rot.z);
 	val[6] = COS_A * SIN_B;
 	val[7] = SIN_A * SIN_B;
 	viewmatrix.m.tab[0][0] = COS_B * COS_C;
@@ -66,7 +60,7 @@ t_matrix4	view_matrix(t_gl_env *gl_e, t_matrix4 viewmatrix)
 	viewmatrix.m.tab[0][2] = SIN_B;
 	viewmatrix.m.tab[1][2] = -SIN_A * COS_B;
 	viewmatrix.m.tab[2][2] = COS_A * COS_B;
-	res = vector3_rot(gl_e->cam.pos, gl_e->cam.rot, ROT_WAY);
+	res = vector3_rot(cam->pos, cam->rot, ROT_WAY);
 	viewmatrix.m.tab[0][3] = -res.x;
 	viewmatrix.m.tab[1][3] = -res.y;
 	viewmatrix.m.tab[2][3] = -res.z;
@@ -144,7 +138,7 @@ void				load_matrix(t_gl_env *gl_e)
 						(t_vector3){DTOR(0), DTOR(0), DTOR(0)});
 	gl_e->matrix_zero = matrix4(0, MATRIX_ROW_MAJOR);
 	gl_e->model = model_matrix(gl_e, gl_e->matrix_zero);
-	gl_e->view = view_matrix(gl_e, gl_e->matrix_zero);
+	gl_e->view = view_matrix(&gl_e->cam, gl_e->matrix_zero);
 	gl_e->projection = pro_matrix(DTOR(gl_e->fov), FAR, NEAR);
 	if (DATA && DATA_MATRIX)
 	{

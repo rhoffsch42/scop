@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 17:04:35 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/02/26 14:23:38 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/02/27 19:40:39 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ void			display_object(t_glfw *glfw, t_objfile **objf, t_xpm **xpm, \
 			glDepthMask(GL_FALSE);
 			glActiveTexture(GL_TEXTURE0);
 			glUseProgram(gl_e->sky_programme);
-			glBindTexture(GL_TEXTURE_CUBE_MAP_ARB, gl_e->sky_tex_id);
+			glBindTexture(GL_TEXTURE_CUBE_MAP, gl_e->sky_tex_id);
    			glBindVertexArray(gl_e->sky_vao);
 			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
             glDrawArrays(GL_TRIANGLES, 0, gl_e->obj_face_amount * 3);

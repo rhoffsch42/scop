@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/26 16:25:11 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/02/26 19:30:26 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/02/27 21:30:20 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 typedef struct			s_vbo
 {
-	GLuint				vertex;
+	GLuint				vbo;
 	GLint				slot;
 }						t_vbo;
 
@@ -34,12 +34,16 @@ typedef struct			s_blueprint_obj3d
 	t_vbo				vertex_texture;
 	t_vbo				vertex_texture_cylinder;
 	t_matrix4			model_matrix;
+	GLuint				tex;
 	uint8_t				rotate;
 	t_vector3			pos;
 	t_vector3			rot;
 	int					current_faces;
 	int					max_faces;
 	t_vector3			plain_color;
+	uint8_t				display_mod;
+	uint8_t				draw_mod;
+	uint8_t				cyl_mapping;
 }						t_blueprint_obj3d;
 
 typedef union			u_blueprint
@@ -78,5 +82,20 @@ typedef struct			s_prog
 	t_blueprint			*blueprints;//a malloc, pour X blueprint(s)
 	int					blueprints_amount;
 }						t_prog;
+
+typedef struct			s_gl
+{
+	t_cam				cam;
+	t_fps				fps;
+	t_matrix4			matrix_zero;
+	t_matrix4			view;
+	t_matrix4			projection;
+	GLuint				*textures_id;
+	GLuint				tex_max;
+	int					obj_i;
+	int					obj_max;
+	float				fov;
+	uint8_t				boolens[348];
+}						t_gl;
 
 #endif

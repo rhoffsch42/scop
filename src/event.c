@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 17:06:41 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/02/26 16:21:13 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/02/27 19:49:53 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ static void		events_cam(t_glfw *glfw, t_gl_env *gl_e, t_fps *fps)
 	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_R))
 		gl_e->cam.pos = vector3_add(gl_e->cam.pos, vector3_mult_coef(gl_e->cam.up, POS_DELTA * fps->tick));
 
-	gl_e->view = view_matrix(gl_e, gl_e->matrix_zero);
+	gl_e->view = view_matrix(&gl_e->cam, gl_e->matrix_zero);
 	glUniformMatrix4fv(gl_e->gl_v, 1, GL_FALSE, gl_e->view.m.e);
 
 	state = glfwGetMouseButton(glfw->win, GLFW_MOUSE_BUTTON_LEFT);
