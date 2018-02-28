@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/26 16:25:11 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/02/27 21:30:20 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/02/28 12:57:21 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,10 @@ typedef struct			s_gl
 	int					obj_max;
 	float				fov;
 	uint8_t				boolens[348];
+	double				mouse_x;
+	double				mouse_y;
+	double				mouse_origin_x;
+	double				mouse_origin_y;
 }						t_gl;
 
 #endif

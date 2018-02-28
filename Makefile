@@ -6,7 +6,7 @@
 #    By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2015/05/15 17:38:19 by rhoffsch          #+#    #+#              #
-#    Updated: 2018/02/27 18:38:25 by rhoffsch         ###   ########.fr        #
+#    Updated: 2018/02/28 13:59:33 by rhoffsch         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -49,14 +49,13 @@ SRC_FILE		=	main.c \
 					for_list.c \
 					list_to_tab.c \
 					display.c \
-					display2.c \
+					display_old.c \
 					matrix.c \
 					fill_gl_arrays.c \
 					gl_error.c \
 					gl_build.c \
 					skybox.c \
 					event.c \
-					event2.c \
 					xpm_load.c \
 					xpm_data.c \
 					xpm_to_glid.c \

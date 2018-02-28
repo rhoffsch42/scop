@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/24 14:01:02 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/02/27 20:49:10 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/02/28 14:01:42 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,8 +84,11 @@
 # define CUBEMAP_PZ_TEX		"canyon_bk.xpm"
 # define PONY_FILE			"./textures/pony.xpm"
 # define DEF_WIN_TITLE		"Default title"
-# define DEF_WIN_X			800
-# define DEF_WIN_Y			800
+/*
+**	mac res: 2560x1440
+*/
+# define DEF_WIN_X			1400
+# define DEF_WIN_Y			1400
 # define MAX_WIN_X			1920
 # define MAX_WIN_Y			1080
 # define MIN_WIN_X			800
@@ -100,7 +103,7 @@
 # define FOV				60.0f
 # define FOVX				90.0f
 # define FOVY				90.0f
-# define MAX_FOV			200.0f
+# define MAX_FOV			120.0f
 
 # define SCOP_DIR			"-d"
 # define OBJ_BAD_FORMAT		100
@@ -321,7 +324,8 @@ void		create_program(t_gl_env *gl_e, t_obj *obj);
 void    	skybox(t_gl_env *sky_e, t_obj *obj);
 ///// v2
 void		display_object2(t_glfw *glfw, t_objfile **objf, t_xpm **xpm, int *len);
-void		events2(t_glfw *glfw, t_gl *gle, t_prog *prog);
+void		events(t_glfw *glfw, t_gl *gle, t_prog *prog);
+t_matrix4	model_matrix2(t_vector3 pos, t_vector3 rot, t_matrix4 model);
 
 
 /*
@@ -333,6 +337,5 @@ void		gl_compile_error(GLuint shader, char *intro);
 /*
 ** events
 */
-void		events(t_glfw *glfw, t_gl_env *gl_e, t_fps *fps);
 
 #endif

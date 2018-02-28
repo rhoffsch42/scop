@@ -5,234 +5,240 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/01/05 17:06:41 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/02/27 19:49:53 by rhoffsch         ###   ########.fr       */
+/*   Created: 2018/02/27 18:38:52 by rhoffsch          #+#    #+#             */
+/*   Updated: 2018/02/28 13:57:57 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <scop.h>
+#include "scop.h"
 
-static void		print_cam_pp(t_gl_env *gl_e)
+static void		print_cam_pp(t_gl *gle)
 {
 	printf("Left mouse is being PRESSed\n");
-	printf("Mouse:\t%d:%d\n", (int)gl_e->mouse_y, (int)gl_e->mouse_x);
-	printf("fov : %.2f\n", gl_e->fov);
+	printf("Mouse:\t%d:%d\n", (int)gle->mouse_y, (int)gle->mouse_x);
+	printf("fov : %.2f\n", gle->fov);
 	printf("pos    \t");
-	vector3_print(gl_e->cam.pos);
+	vector3_print(gle->cam.pos);
 	printf("rot    \t");
-	vector3_print(gl_e->cam.rot);
+	vector3_print(gle->cam.rot);
 	printf("right  \t");
-	vector3_print(gl_e->cam.right);
+	vector3_print(gle->cam.right);
 	printf("up     \t");
-	vector3_print(gl_e->cam.up);
+	vector3_print(gle->cam.up);
 	printf("forward\t");
-	vector3_print(gl_e->cam.forward);
+	vector3_print(gle->cam.forward);
 	printf("--------------------------------\n");
 }
 
-static int		is_first_press(t_glfw *glfw, int key, t_gl_env *gl_e)
+static int		is_first_press(t_glfw *glfw, int key, t_gl *gle)
 {
 	int		val;
 
 	if ((val = glfwGetKey(glfw->win, key)) == GLFW_PRESS \
-		&& gl_e->boolens[key] == 0)
+		&& gle->boolens[key] == 0)
 	{
-		gl_e->boolens[key] = 1;
+		gle->boolens[key] = 1;
 		return (1);
 	}
 	else if (val == GLFW_RELEASE)
 	{
-		gl_e->boolens[key] = 0;
+		gle->boolens[key] = 0;
 		return (0);
 	}
 	return (0);
 }
 
-static void		update_model_matrix(t_gl_env *gl_e)
+void				print_mvp_matrix2(t_gl *gle, t_blueprint_obj3d *obj)
 {
-	gl_e->model = model_matrix(gl_e, gl_e->matrix_zero);
-	glUniformMatrix4fv(gl_e->gl_m, 1, GL_FALSE, gl_e->model.m.e);
-	print_mvp_matrix(gl_e);
+	if (DATA && DATA_MATRIX)
+	{
+		printf("Current object Model Matrix:\n");
+		matrix4_print(obj->model_matrix);
+		printf("View Matrix:\n");
+		matrix4_print(gle->view);
+		printf("Projection Matrix:\n");
+		matrix4_print(gle->projection);
+		printf("Current object Properties:\n");
+		vector3_print(obj->pos);
+		vector3_print(obj->rot);
+		printf("================\n");
+	}
 }
 
-static void		update_projection_matrix(t_gl_env *gl_e)
+static void		update_projection_matrix(t_gl *gle, t_prog *prog)
 {
 	float	ratio;
 
-	ratio = 1.0f / tanf(DTOR(gl_e->fov) / 2.0f);
-	gl_e->projection.m.tab[0][0] = ratio / (DEF_WIN_X / DEF_WIN_Y);
-	gl_e->projection.m.tab[1][1] = ratio;
-	glUniformMatrix4fv(gl_e->gl_p, 1, GL_FALSE, gl_e->projection.m.e);
-	print_mvp_matrix(gl_e);
+	ratio = 1.0f / tanf(DTOR(gle->fov) / 2.0f);
+	gle->projection.m.tab[0][0] = ratio / (DEF_WIN_X / DEF_WIN_Y);
+	gle->projection.m.tab[1][1] = ratio;
+	glUniformMatrix4fv(prog->slots.obj3d.mat4_p, 1, GL_FALSE, gle->projection.m.e);
+	print_mvp_matrix2(gle, &prog->blueprints[gle->obj_i].obj3d);
 }
 
-static void		events_cam(t_glfw *glfw, t_gl_env *gl_e, t_fps *fps)
+static void		update_model_matrix_obj3d(t_gl *gle, t_blueprint *blueprints)
 {
-	int		state;
-	float		diffx;
-	float		diffy;
+	int					i;
+	t_blueprint_obj3d	*obj;
 
-	glfwGetCursorPos(glfw->win, &gl_e->mouse_x, &gl_e->mouse_y);
-	diffy = gl_e->mouse_origin_y - gl_e->mouse_y; 
-	diffx = gl_e->mouse_origin_x - gl_e->mouse_x; 
-	gl_e->cam.rot.y = -DTOR(diffx * 360.0f / SENSIBILITY);// diffx pour l'axe Y !
-	if (ROT_X)
-		gl_e->cam.rot.x = diffy * 360.0f / SENSIBILITY;// diffy pour l'axe X !
-	gl_e->cam.rot.x = -DTOR(scale_d(gl_e->cam.rot.x, -90.0, 90.0));
-	update_cam_vector(&gl_e->cam);
-	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_W))
-		gl_e->cam.pos = vector3_add(gl_e->cam.pos, vector3_mult_coef(gl_e->cam.forward, POS_DELTA * fps->tick));
-	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_S))
-		gl_e->cam.pos = vector3_sub(gl_e->cam.pos, vector3_mult_coef(gl_e->cam.forward, POS_DELTA * fps->tick));
-	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_A))
-		gl_e->cam.pos = vector3_sub(gl_e->cam.pos, vector3_mult_coef(gl_e->cam.right, POS_DELTA * fps->tick));
-	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_D))
-		gl_e->cam.pos = vector3_add(gl_e->cam.pos, vector3_mult_coef(gl_e->cam.right, POS_DELTA * fps->tick));
-	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_F))
-		gl_e->cam.pos = vector3_sub(gl_e->cam.pos, vector3_mult_coef(gl_e->cam.up, POS_DELTA * fps->tick));
-	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_R))
-		gl_e->cam.pos = vector3_add(gl_e->cam.pos, vector3_mult_coef(gl_e->cam.up, POS_DELTA * fps->tick));
-
-	gl_e->view = view_matrix(&gl_e->cam, gl_e->matrix_zero);
-	glUniformMatrix4fv(gl_e->gl_v, 1, GL_FALSE, gl_e->view.m.e);
-
-	state = glfwGetMouseButton(glfw->win, GLFW_MOUSE_BUTTON_LEFT);
-	if (state == GLFW_PRESS)
-		print_cam_pp(gl_e);
+	i = 0;
+	while (i < gle->obj_max)
+	{
+		obj = &blueprints[i].obj3d;
+		if (obj->rotate)
+			obj->rot.y += RAD_DELTA * gle->fps.tick;
+		obj->model_matrix = model_matrix2(obj->pos, obj->rot, gle->matrix_zero);
+		i++;
+	}
 }
 
-static void		events_parameters(t_glfw *glfw, t_gl_env *gl_e, t_fps *fps)
+static void		events_one_press(t_glfw *glfw, t_gl *gle, t_prog *prog)
+{
+	t_blueprint_obj3d	*obj;
+
+	obj = &prog->blueprints[gle->obj_i].obj3d;
+	if (is_first_press(glfw, GLFW_KEY_EQUAL, gle))
+		obj->current_faces = scale_d(obj->current_faces + 1, 1, obj->max_faces);
+	if (is_first_press(glfw, GLFW_KEY_MINUS, gle))
+		obj->current_faces = scale_d(obj->current_faces - 1, 1, obj->max_faces);
+	if (is_first_press(glfw, GLFW_KEY_LEFT_BRACKET, gle))
+		obj->current_faces = 1;
+	if (is_first_press(glfw, GLFW_KEY_RIGHT_BRACKET, gle))
+		obj->current_faces = obj->max_faces;
+	if (is_first_press(glfw, GLFW_KEY_T, gle))
+		obj->cyl_mapping = !obj->cyl_mapping;
+	if (is_first_press(glfw, GLFW_KEY_PAGE_DOWN, gle))
+		gle->obj_i = (gle->obj_i < gle->obj_max - 1) ? gle->obj_i + 1 : 0;
+	if (is_first_press(glfw, GLFW_KEY_PAGE_UP, gle))
+		gle->obj_i = (gle->obj_i > 0) ? gle->obj_i - 1 : gle->obj_max - 1;
+	if (is_first_press(glfw, GLFW_KEY_HOME, gle))
+		obj->tex = (obj->tex + 1 <= gle->tex_max) ? obj->tex + 1 : 1;
+	if (is_first_press(glfw, GLFW_KEY_END, gle))
+		obj->tex = (obj->tex - 1 != 0) ? obj->tex - 1 : gle->tex_max;
+	if (is_first_press(glfw, GLFW_KEY_ENTER, gle))
+		obj->display_mod = (obj->display_mod < MODS - 1) ? obj->display_mod + 1 : 0;
+	if (is_first_press(glfw, GLFW_KEY_SPACE, gle))
+		obj->rotate = !obj->rotate;
+	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_1))
+		obj->draw_mod = GL_POINTS;
+	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_2))
+		obj->draw_mod = MOD_LINE;
+	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_3))
+		obj->draw_mod = GL_TRIANGLES;
+}
+
+static void		events_obj_movements(t_glfw *glfw, t_fps *fps, t_blueprint_obj3d *obj)
+{
+	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_LEFT))
+		obj->pos.x -= POS_DELTA * fps->tick;
+	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_RIGHT))
+		obj->pos.x += POS_DELTA * fps->tick;
+	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_DOWN))
+		obj->pos.y -= POS_DELTA * fps->tick;
+	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_UP))
+		obj->pos.y += POS_DELTA * fps->tick;
+	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_1))
+		obj->pos.z -= POS_DELTA * fps->tick;
+	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_0))
+		obj->pos.z += POS_DELTA * fps->tick;
+	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_7))
+		obj->rot.x += RAD_DELTA * fps->tick;
+	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_4))
+		obj->rot.x -= RAD_DELTA * fps->tick;
+	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_8))
+		obj->rot.y += RAD_DELTA * fps->tick;
+	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_5))
+		obj->rot.y -= RAD_DELTA * fps->tick;
+	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_9))
+		obj->rot.z += RAD_DELTA * fps->tick;
+	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_6))
+		obj->rot.z -= RAD_DELTA * fps->tick;
+}
+
+static void		events_parameters(t_glfw *glfw, t_gl *gle)
 {
 	char *fps_char;
 
 	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_P))
 	{
-		fps->fps = scale_d(fps->fps + 20 * fps->tick, 1, MAX_FPS);
-		fps->tick = 1.0 / fps->fps;
-		fps_char = ft_itoa(fps->fps);
+		gle->fps.fps = scale_d(gle->fps.fps + 20 * gle->fps.tick, 1, MAX_FPS);
+		gle->fps.tick = 1.0 / gle->fps.fps;
+		fps_char = ft_itoa(gle->fps.fps);
 		glfwSetWindowTitle(glfw->win, fps_char);
 		free(fps_char);
 	}
 	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_L))
 	{
-		fps->fps = scale_d(fps->fps - 20 * fps->tick, 1, MAX_FPS);
-		fps->tick = 1.0 / fps->fps;
-		fps_char = ft_itoa(fps->fps);
-		glfwSetWindowTitle(glfw->win, ft_itoa(fps->fps));
+		gle->fps.fps = scale_d(gle->fps.fps - 20 * gle->fps.tick, 1, MAX_FPS);
+		gle->fps.tick = 1.0 / gle->fps.fps;
+		fps_char = ft_itoa(gle->fps.fps);
+		glfwSetWindowTitle(glfw->win, ft_itoa(gle->fps.fps));
 		free(fps_char);
 	}
 	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_SUBTRACT))
-		gl_e->fov = (float)scale_d(gl_e->fov + 40 * fps->tick, 10, 120);
+		gle->fov = (float)scale_d(gle->fov + 40 * gle->fps.tick, 10, MAX_FOV);
 	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_ADD))
-		gl_e->fov = (float)scale_d(gl_e->fov - 40 * fps->tick, 10, 120);
-	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_1))
-		gl_e->draw_mod = GL_POINTS;
-	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_2))
-		gl_e->draw_mod = MOD_LINE;
-	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_3))
-		gl_e->draw_mod = GL_TRIANGLES;
+		gle->fov = (float)scale_d(gle->fov - 40 * gle->fps.tick, 10, MAX_FOV);
 }
 
-static void		events_obj_movements(t_glfw *glfw, t_gl_env *gl_e, t_fps *fps)
+static void		events_cam(t_glfw *glfw, t_gl *gle, t_prog *prog)
 {
-	if (gl_e->rotate)
-		gl_e->rot.y += RAD_DELTA * fps->tick;
-	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_LEFT))
-		gl_e->pos.x -= POS_DELTA * fps->tick;
-	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_RIGHT))
-		gl_e->pos.x += POS_DELTA * fps->tick;
-	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_DOWN))
-		gl_e->pos.y -= POS_DELTA * fps->tick;
-	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_UP))
-		gl_e->pos.y += POS_DELTA * fps->tick;
-	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_1))
-		gl_e->pos.z -= POS_DELTA * fps->tick;
-	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_0))
-		gl_e->pos.z += POS_DELTA * fps->tick;
-	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_7))
-		gl_e->rot.x += RAD_DELTA * fps->tick;
-	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_4))
-		gl_e->rot.x -= RAD_DELTA * fps->tick;
-	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_8))
-		gl_e->rot.y += RAD_DELTA * fps->tick;
-	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_5))
-		gl_e->rot.y -= RAD_DELTA * fps->tick;
-	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_9))
-		gl_e->rot.z += RAD_DELTA * fps->tick;
-	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_6))
-		gl_e->rot.z -= RAD_DELTA * fps->tick;
+	int			state;
+	float		diffx;
+	float		diffy;
+
+	glfwGetCursorPos(glfw->win, &gle->mouse_x, &gle->mouse_y);
+	diffy = gle->mouse_origin_y - gle->mouse_y;
+	diffx = gle->mouse_origin_x - gle->mouse_x;
+	gle->cam.rot.y = -DTOR(diffx * 360.0f / SENSIBILITY);// diffx pour l'axe Y !
+	if (ROT_X)
+		gle->cam.rot.x = diffy * 360.0f / SENSIBILITY;// diffy pour l'axe X !
+	gle->cam.rot.x = -DTOR(scale_d(gle->cam.rot.x, -90.0, 90.0));
+	update_cam_vector(&gle->cam);
+	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_W))
+		gle->cam.pos = vector3_add(gle->cam.pos, vector3_mult_coef(gle->cam.forward, POS_DELTA * gle->fps.tick));
+	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_S))
+		gle->cam.pos = vector3_sub(gle->cam.pos, vector3_mult_coef(gle->cam.forward, POS_DELTA * gle->fps.tick));
+	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_A))
+		gle->cam.pos = vector3_sub(gle->cam.pos, vector3_mult_coef(gle->cam.right, POS_DELTA * gle->fps.tick));
+	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_D))
+		gle->cam.pos = vector3_add(gle->cam.pos, vector3_mult_coef(gle->cam.right, POS_DELTA * gle->fps.tick));
+	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_F))
+		gle->cam.pos = vector3_sub(gle->cam.pos, vector3_mult_coef(gle->cam.up, POS_DELTA * gle->fps.tick));
+	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_R))
+		gle->cam.pos = vector3_add(gle->cam.pos, vector3_mult_coef(gle->cam.up, POS_DELTA * gle->fps.tick));
+
+	gle->view = view_matrix(&gle->cam, gle->matrix_zero);
+	glUniformMatrix4fv(prog->slots.obj3d.mat4_v , 1, GL_FALSE, gle->view.m.e);
+
+	state = glfwGetMouseButton(glfw->win, GLFW_MOUSE_BUTTON_LEFT);
+	if (state == GLFW_PRESS)
+		print_cam_pp(gle);
 }
 
-static void		events_one_press(t_glfw *glfw, t_gl_env *gl_e)
+void			events(t_glfw *glfw, t_gl *gle, t_prog *prog)
 {
-	if (is_first_press(glfw, GLFW_KEY_PAGE_DOWN, gl_e))
-	{
-		gl_e->obj_i = (gl_e->obj_i < gl_e->obj_len - 1) ? gl_e->obj_i + 1 : 0;
-		gl_e->face_drawed = gl_e->obj_face_amount;
-	}
-	if (is_first_press(glfw, GLFW_KEY_PAGE_UP, gl_e))
-	{
-		gl_e->obj_i = (gl_e->obj_i > 0) ? gl_e->obj_i - 1 : gl_e->obj_len - 1;
-		gl_e->face_drawed = gl_e->obj_face_amount;;
-	}
-	if (is_first_press(glfw, GLFW_KEY_HOME, gl_e))
-		gl_e->tex_i = (gl_e->tex_i < gl_e->xpm_len - 1) ? gl_e->tex_i + 1 : 0;
-	if (is_first_press(glfw, GLFW_KEY_END, gl_e))
-		gl_e->tex_i = (gl_e->tex_i != 0) ? gl_e->tex_i - 1 : gl_e->xpm_len - 1;
-	if (is_first_press(glfw, GLFW_KEY_ENTER, gl_e))
-	{
-		gl_e->dismod = (gl_e->dismod < MODS - 1) ? gl_e->dismod + 1 : 0;
-		glUniform1i(gl_e->gl_display_mod, gl_e->dismod);
-	}
-	if (is_first_press(glfw, GLFW_KEY_SPACE, gl_e))
-		gl_e->rotate = !gl_e->rotate;
-}
+	int					val;
+	t_blueprint_obj3d	*obj;
 
-/*
-**	glFrontFace(GL_CW); // GL_CCW for counter clock-wise
-*/
-
-void			events(t_glfw *glfw, t_gl_env *gl_e, t_fps *fps)
-{
-	int		val;
-
+	obj = &prog->blueprints[gle->obj_i].obj3d;
 	if ((val = glfwGetKey(glfw->win, GLFW_KEY_C)) == GLFW_PRESS \
-		&& !gl_e->boolens[GLFW_KEY_C])
+		&& !gle->boolens[GLFW_KEY_C])
 	{
-		gl_e->boolens[GLFW_KEY_C] = 1;
+		gle->boolens[GLFW_KEY_C] = 1;
 		glEnable(GL_CULL_FACE);
 		glCullFace(GL_BACK);
 	}
 	else if (val == GLFW_RELEASE)
 	{
-		gl_e->boolens[GLFW_KEY_C] = 0;
+		gle->boolens[GLFW_KEY_C] = 0;
 		glDisable(GL_CULL_FACE);
 	}
-	if (is_first_press(glfw, GLFW_KEY_EQUAL, gl_e))
-		gl_e->face_drawed = (int)scale_d(gl_e->face_drawed + 1, 1, gl_e->obj_face_amount);
-	if (is_first_press(glfw, GLFW_KEY_MINUS, gl_e))
-		gl_e->face_drawed = (int)scale_d(gl_e->face_drawed - 1, 1, gl_e->obj_face_amount);
-	if (is_first_press(glfw, GLFW_KEY_LEFT_BRACKET, gl_e))
-		gl_e->face_drawed = 1;
-	if (is_first_press(glfw, GLFW_KEY_RIGHT_BRACKET, gl_e))
-		gl_e->face_drawed = gl_e->obj_face_amount;;
-	if (is_first_press(glfw, GLFW_KEY_T, gl_e))
-	{
-		if ((gl_e->texture_mod = !gl_e->texture_mod) == 1)
-		{
-			glBindBuffer(GL_ARRAY_BUFFER, gl_e->tex_vbo);
-			glVertexAttribPointer(gl_e->tex_slot, 2, GL_FLOAT, GL_FALSE, 0, NULL);
-		}
-		else
-		{
-			glBindBuffer(GL_ARRAY_BUFFER, gl_e->tex_cylinder_vbo);
-			glVertexAttribPointer(gl_e->tex_cylinder_slot, 2, GL_FLOAT, GL_FALSE, 0, NULL);
-		}
-	}
-	events_one_press(glfw, gl_e);
-	events_obj_movements(glfw, gl_e, fps);
-	events_parameters(glfw, gl_e, fps);
-	events_cam(glfw, gl_e, fps);
-	update_projection_matrix(gl_e);
-	update_model_matrix(gl_e);
+
+	events_one_press(glfw, gle, prog);
+	events_obj_movements(glfw, &gle->fps, obj);
+	events_parameters(glfw, gle);
+	events_cam(glfw, gle, prog);
+	update_projection_matrix(gle, prog);
+	update_model_matrix_obj3d(gle, prog->blueprints);
 }
