@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/26 16:25:11 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/03/01 11:15:41 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/03/01 14:30:42 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ typedef struct			s_vbo
 typedef struct			s_blueprint_skybox
 {
 	GLuint				vao;
-	t_vbo				v_obj;
+	t_vbo				v_skybox;
 	GLuint				tex;
 }						t_blueprint_skybox;
 
@@ -30,7 +30,7 @@ typedef struct			s_blueprint_obj3d
 {
 	GLuint				vao;
 	t_vbo				v_obj;
-	t_vbo				v_blackwhite;//black and white 42
+	t_vbo				v_blackwhite;
 	t_vbo				v_texture;
 	t_vbo				v_tex_cylinder;
 	t_matrix4			model_matrix;
@@ -56,6 +56,8 @@ typedef struct			s_skybox_slots
 {
 	GLint				mat4_v;
 	GLint				mat4_p;
+	GLint				vertex_position;
+	GLint				cubemap;
 }						t_skybox_slots;
 
 typedef struct			s_obj3d_slots
@@ -82,7 +84,7 @@ typedef struct			s_prog
 	GLuint				vshader;
 	GLuint				fshader;
 	t_slots				slots;
-	t_blueprint			*blueprints;//a malloc, pour X blueprint(s)
+	t_blueprint			*blueprints;
 	int					blueprints_amount;
 }						t_prog;
 

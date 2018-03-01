@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 17:09:16 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/03/01 12:59:56 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/03/01 13:14:27 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ t_str			*build_tokens(t_rgb **rgb_ptr, int tok_amount, t_str *ptr, \
 	int		id;
 	char	*s;
 
-	startf("build_tokens");
 	id = 0;
 	while (tok_amount > 0)
 	{
@@ -76,7 +75,6 @@ static void		build_xpm(t_xpm *x, t_str *ptr, t_rgb *chart)
 	t_rgb	*rgb_tokens[4];
 	t_str	*line;
 
-	startf("build_xpm");
 	if (strncmp("static", ptr->str, ft_strlen("static")) != 0)
 		error_xpm(ptr->str, XPM_ERROR);
 	if (sscanf(chk_separator(ptr->next->str), "%d %d %d %d", \
@@ -100,7 +98,6 @@ t_xpm			*load_xpm(char *path, t_rgb *chart)
 	char	*all;
 	t_xpm	*xpm;
 
-	startf("load_xpm");
 	if (!is_typefile(path, ".xpm"))
 		ft_errexit(ft_strjoin(path, " is not a valid xpm file"), RED, BAD_ARGS);
 	str = ft_getfile(path);

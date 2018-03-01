@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 17:08:34 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/03/01 12:53:37 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/03/01 13:12:42 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 static void		chk_matname(t_mat *mat, char *name)
 {
-	startf("chk_matname");
 	while (mat)
 	{
 		if (strcmp(mat->name, name) == 0)
@@ -29,7 +28,6 @@ t_str			*add_mtlname(t_mat **mat, t_str *ptr)
 	char	token[100];
 	char	name[500];
 
-	startf("add_mtlname");
 	ft_bzero(token, 100);
 	ft_bzero(name, 500);
 	sscanf(ptr->str, "%s %s", token, name);
@@ -51,7 +49,6 @@ t_str			*add_color(t_str *ptr, float *color)
 {
 	char	token[100];
 
-	startf("add_color");
 	sscanf(ptr->str, "%s %f %f %f", token, \
 		&(color[0]), &(color[1]), &(color[2]));
 	return (ptr->next);

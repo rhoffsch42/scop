@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 17:08:04 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/03/01 12:52:12 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/03/01 13:13:05 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,6 @@ void		add_objfile(t_objfile **addr, char *file)
 
 	if (!chk_objfile(*addr, file))
 		return ;
-	startf("add_objfile");
 	new_objfile = (t_objfile*)safe_malloc(sizeof(t_objfile));
 	new_objfile->id = id;
 	new_objfile->path = ft_strdup(file);
@@ -63,7 +62,6 @@ void		add_mtlfile(t_mtlfile **addr, char *file)
 	static int	id = 0;
 	t_mtlfile	*new_mtlfile;
 
-	startf("add_mtlfile");
 	printf("mtlfile: %s\n", file);
 	if (!chk_mtlfile(*addr, file))
 		return ;

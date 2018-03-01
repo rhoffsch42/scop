@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 17:08:52 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/03/01 12:54:04 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/03/01 13:12:10 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ t_str			*add_objname(t_obj *obj, t_str *ptr)
 
 static void		translate_obj(t_vertix *vertix, float x, float y, float z)
 {
-	startf("translate_obj");
 	while (vertix)
 	{
 		vertix->x += x;
@@ -46,7 +45,6 @@ static t_void	*center_obj(t_void *objptr)
 	float		vmin[3];
 	float		vmax[3];
 
-	startf("center_obj");
 	vertix = ((t_obj*)objptr)->v;
 	vmin[0] = vertix->x;
 	vmin[1] = vertix->y;
@@ -74,7 +72,6 @@ t_void			*rewrite_objects(t_void *objfile)
 	t_objfile	*objf;
 	t_obj		*obj;
 
-	startf("rewrite_objects");
 	objf = (t_objfile*)objfile;
 	obj = (t_obj*)objf->obj;
 	return (for_list((t_void*)obj, center_obj));

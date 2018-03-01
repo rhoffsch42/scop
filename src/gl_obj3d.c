@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/28 15:43:32 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/03/01 12:46:10 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/03/01 18:06:39 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ static void		create_blueprints_obj3d(t_prog *prog, t_objfile **objf, int n)
 		obj = &prog->blueprints[n].obj3d;
 		glGenVertexArrays(1, &obj->vao);
 		glBindVertexArray(obj->vao);
-		glEnableVertexAttribArray(0);//utile ?
+		glEnableVertexAttribArray(0);//usefull ?
 		obj->v_obj.slot = prog->slots.obj3d.vertex_position;
 		obj->v_blackwhite.slot = prog->slots.obj3d.vertex_colour;
 		obj->v_texture.slot = prog->slots.obj3d.vertexUV;

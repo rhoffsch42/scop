@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/28 15:54:15 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/02/28 18:14:39 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/03/01 13:27:12 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ GLint	get_slot(GLuint program, const GLchar *varname, \
 	GLint	slot;
 
 	slot = func(program, varname);
-	printf("slot %d:\t%s\n", slot, varname);
+	printf("slot %d :\t%s\n", slot, varname);
 	if (slot == -1)
 	{
 		glGetError();

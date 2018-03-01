@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 17:07:49 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/03/01 12:52:31 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/03/01 13:25:52 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,8 @@ t_void		**list_to_tab(t_void *list)
 	{
 		tab[i] = list;
 		list = list->next;
-		ft_putchar('.');
 		i++;
 	}
 	tab[i] = NULL;
-	ft_putchar(10);
 	return (tab);
 }

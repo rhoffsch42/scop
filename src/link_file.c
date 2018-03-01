@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 17:07:46 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/03/01 12:51:24 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/03/01 13:23:14 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,11 @@ static void		check_directory(t_env *e, char *filename)
 	t_str	*dir;
 	int		len[2];
 
-	printf("_ _ _ check_directory for :\n");
-	startf(filename);
 	dir = e->dir;
 	bigpath = NULL;
 	len[1] = ft_strlen(filename);
 	while (dir)
 	{
-		printf("dir: %s\n", dir->str);
 		len[0] = len[1] + ft_strlen(dir->str) + 2;
 		bigpath = ft_strnew(len[0]);
 		ft_strcat(bigpath, dir->str);
@@ -53,7 +50,6 @@ static void		link_material(t_obj *obj, t_mtlfile *mtlf)
 			{
 				if (strcmp(mat->name, obj->mat_name) == 0)
 				{
-					printf("linking mat:\t%s - %s\n", obj->name, mat->name);
 					obj->mtlfile = mtlf;
 					obj->mat = mat;
 					break ;
@@ -72,7 +68,6 @@ void			link_file(t_env *e)
 	t_objfile	*objf;
 	t_obj		*obj;
 
-	startf("link_file");
 	objf = e->objfile;
 	while (objf)
 	{
@@ -84,7 +79,6 @@ void			link_file(t_env *e)
 			{
 				check_directory(e, obj->mtllib);
 				link_material(obj, e->mtlfile);
-				printf("linked\n");
 			}
 			obj = obj->next;
 		}

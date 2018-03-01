@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 17:08:44 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/03/01 12:53:48 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/03/01 13:12:28 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ t_void		*check_obj(t_void *objptr)
 	t_obj	*obj;
 	char	error[300];
 
-	startf("check_obj");
 	obj = (t_obj*)objptr;
 	ft_bzero(error, 300);
 	ft_strcat(error, "obj\t");
@@ -53,7 +52,6 @@ t_void		*check_objfile(t_void *link)
 
 void		obj_checks(t_objfile *objfile)
 {
-	startf("obj_checks");
 	COLOR(YELLOW, STDERR_FILENO);
 	for_list((t_void*)objfile, &check_objfile);
 	COLOR(NOCOLOR, STDERR_FILENO);

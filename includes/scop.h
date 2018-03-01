@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/24 14:01:02 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/03/01 13:06:41 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/03/01 18:07:26 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,14 +75,14 @@
 # define FSHADER_FILE		"/shaders/fragment_shader.glsl"
 # define VSHADER_FILE_CUBE	"/shaders/vertex_shader_cubemap.glsl"
 # define FSHADER_FILE_CUBE	"/shaders/fragment_shader_cubemap.glsl"
-# define ARB_CUBEMAP		"GL_ARB_texture_cube_map_array"
-# define CUBEMAP_NX_TEX		"canyon_lf.xpm"
-# define CUBEMAP_PX_TEX		"canyon_rt.xpm"
+# define CUBEMAP_NZ_TEX		"canyon_lf.xpm"
+# define CUBEMAP_PZ_TEX		"canyon_rt.xpm"
 # define CUBEMAP_NY_TEX		"canyon_dn.xpm"
 # define CUBEMAP_PY_TEX		"canyon_up.xpm"
-# define CUBEMAP_NZ_TEX		"canyon_ft.xpm"
-# define CUBEMAP_PZ_TEX		"canyon_bk.xpm"
-# define PONY_FILE			"./textures/pony.xpm"
+# define CUBEMAP_PX_TEX		"canyon_ft.xpm"
+# define CUBEMAP_NX_TEX		"canyon_bk.xpm"
+# define PONY_FILE			"textures/pony.xpm"
+# define SKYBOX_FILE		"/resources/skybox/skybox.obj"
 # define DEF_WIN_TITLE		"Default title"
 /*
 **	mac res: 2560x1440
@@ -99,7 +99,7 @@
 # define TITLE_MAX_LEN		50
 # define TITLE_TRUNC		"[...]"
 # define FAR				0.01f
-# define NEAR				1000.0f
+# define NEAR				3000.0f
 # define FOV				60.0f
 # define FOVX				90.0f
 # define FOVY				90.0f
@@ -138,6 +138,7 @@
 # define XPM_COLOR_TOKEN	"Error : bad xpm format (unknow color token)"
 # define XPM_TOKEN_ERR		"Bad token for remove_comments_vl : "
 # define CUBEMAP_MISS_TEX	"Missing texture for the CUBEMAP"
+# define CUBEMAP_MISS_OBJ	"Missing object for the CUBEMAP"
 
 # define COMMENT_CHAR		"#"
 # define DOUBLE_QUOTE		'"'
@@ -309,36 +310,32 @@ void		mtl_checks(t_mtlfile *mtlfile);
 /*
 ** glfw & OpenGL
 */
-
-void		fill_color_array(float *arr, t_face *face);
-void		fill_tex_array(float *arr, t_face *face);
-void		fill_tex_cylinder_array(float *arr, t_face *face);
-void		fill_points_array(float *arr, t_face *face);
-void		update_cam_vector(t_cam *cam);
-void		skybox(t_gl_env *sky_e, t_obj *obj);
-//v2
+void		init_t_gl(t_gl *gle, t_xpm **xpm, int *len);
 void		display_object(t_glfw *glfw, t_objfile **objf, t_xpm **xpm, int *len);
 t_matrix4	model_matrix(t_vector3 pos, t_vector3 rot, t_matrix4 model);
 t_matrix4	view_matrix(t_cam *cam, t_matrix4 viewmatrix);
 t_matrix4	pro_matrix(float rad, float far, float near);
 t_cam		init_cam(t_vector3 pos, t_vector3 rot);
+void		update_cam_vector(t_cam *cam);
 t_prog		create_program(char *cwd, char *vshader_file, char *fshader_file, \
 									void (get_slot_uniform)(t_prog*));
 void		create_buffer(t_vbo *vertex_buffer, int size, GLenum type);
 void		fill_buffer(GLuint vbo, t_obj *obj, \
 							void (fill_func)(float*, t_face*), int summit);
-void		init_t_gl(t_gl *gle, t_xpm **xpm, int *len);
+void		fill_color_array(float *arr, t_face *face);
+void		fill_tex_array(float *arr, t_face *face);
+void		fill_tex_cylinder_array(float *arr, t_face *face);
+void		fill_points_array(float *arr, t_face *face);
 GLint		get_slot(GLuint program, const GLchar *varname, \
 							GLint (func)(GLuint, const GLchar*));
+t_prog		create_program_obj3d(t_objfile **objf, int n, char *cwd);
+t_prog		create_program_skybox(char *cwd, t_xpm **xpm, int xpm_len);
+t_xpm		*get_xpm(t_xpm **textures, int len, const char *name);
 
 void		print_mvp_matrix(t_gl *gle, t_blueprint_obj3d *obj);
 void		print_pixel(float x, float y);
 void		print_cam_properties(t_gl *gle);
 
-/*
-**	OpenGL obj3d
-*/
-t_prog		create_program_obj3d(t_objfile **objf, int n, char *cwd);
 
 /*
 **	OpenGL error 

@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 17:07:09 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/03/01 12:50:32 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/03/01 13:13:47 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ void	ft_free_list(void *list, t_void *(custom_free)(t_void*))
 	t_void	*ptr;
 	t_void	*f;
 
-	startf("ft_free_list");
 	ptr = (t_void*)list;
 	while (ptr)
 	{

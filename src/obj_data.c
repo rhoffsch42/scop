@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 17:08:49 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/03/01 12:53:59 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/03/01 13:12:20 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,6 @@ t_str		*add_vertix(t_obj *obj, t_str *ptr)
 	t_vertix	*v;
 	int			id;
 
-	startf("add_vertix");
 	v = (t_vertix*)safe_malloc(sizeof(t_vertix));
 	id = 1;
 	obj->v = v;

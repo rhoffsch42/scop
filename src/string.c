@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 17:09:07 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/03/01 12:54:19 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/03/01 13:14:34 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ char	*basename(char *path)
 {
 	char	*ptr;
 
-	startf("basename");
 	ptr = ft_strrchr(path, '/');
 	if (ptr)
 		return (ptr + 1);

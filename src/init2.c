@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 17:07:41 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/03/01 12:51:30 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/03/01 13:14:39 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ t_gl_env	*init_gl_env(t_objfile **objf, t_xpm **xpm, int *len, char *cwd)
 	t_gl_env	*gl_e;
 	int			i;
 
-	startf("init_gl_env");
 	gl_e = (t_gl_env*)ft_strnew(sizeof(t_gl_env));
 	gl_e->objf = objf;
 	gl_e->xpm = xpm;
@@ -104,7 +103,6 @@ void		mouse_button_callback(GLFWwindow *window, int button, int action, int mods
 
 t_glfw		*init_glfw(t_glfw *glfw)
 {
-	startf("init_glfw");
 	glfw = (t_glfw*)safe_malloc(sizeof(t_glfw));
 	ft_bzero((void*)glfw, sizeof(t_glfw));
 	glfw->size[0] = DEF_WIN_X;

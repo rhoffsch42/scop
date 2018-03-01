@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 17:07:53 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/03/01 12:51:09 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/03/01 13:24:44 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ static void		add_directory(char **av, int i, t_str **dir)
 	t_str	*new_dir;
 	t_str	*ptr;
 
-	startf("add_directory");
 	if (av[i + 1] == NULL)
 		ft_errexit(ft_strjoin(SCOP_DIR_ERR, USAGE), RED, BAD_ARGS);
 	if (check_perm(av[i + 1]) && is_directory(av[i + 1]))
@@ -61,7 +60,6 @@ void			load_file(t_env *e, int ac, char **av)
 {
 	int		i;
 
-	startf("load_file");
 	if (ac == 1)
 		error_arg(av[0], ft_strjoin(SCOP_BAD_ARG, USAGE));
 	add_xpmfile(&(e->xpmfile), PONY_FILE, e->chart);

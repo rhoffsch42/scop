@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 17:08:39 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/03/01 12:53:44 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/03/01 13:12:34 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ static void			build_data(t_obj *obj, t_str *ptr)
 {
 	char	keyword[100];
 
-	startf("build_data (obj)");
 	while (ptr)
 	{
 		sscanf(ptr->str, "%s", keyword);
@@ -82,7 +81,6 @@ t_obj				*build_objects(char *path)
 	t_str	*lst;
 	t_obj	*new_obj;
 
-	startf("build_objects");
 	lst = ft_getfile(path);
 	remove_comments(lst, COMMENT_CHAR);
 	remove_white_spaces(lst);

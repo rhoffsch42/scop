@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 17:08:08 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/03/01 12:52:07 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/03/01 17:39:15 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,14 +50,10 @@ int		chk_mtlfile(t_mtlfile *mtlfile, char *path)
 
 t_xpm	*get_xpmfile(t_xpm *ptr, char *path)
 {
-	startf("get_xpmfile");
 	while (ptr)
 	{
 		if (strcmp(path, ptr->path) == 0)
-		{
-			ft_putendl("Found!");
 			return (ptr);
-		}
 		ptr = ptr->next;
 	}
 	return (NULL);
@@ -67,7 +63,6 @@ int		chk_xpmfile(t_xpm *xpmfile, char *path)
 {
 	t_xpm	*ptr;
 
-	startf("chk_xpmfile");
 	ptr = get_xpmfile(xpmfile, path);
 	if (ptr)
 	{
@@ -87,7 +82,6 @@ void	add_xpmfile(t_xpm **addr, char *file, t_rgb *chart)
 	static int	id = 0;
 	t_xpm		*new_xpmfile;
 
-	startf("add_xpmfile");
 	if (!chk_xpmfile(*addr, file))
 		return ;
 	new_xpmfile = load_xpm(file, chart);

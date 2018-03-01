@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 17:08:23 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/03/01 12:51:53 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/03/01 13:12:49 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ static void		build_data(t_mat **mat, t_str *ptr)
 {
 	char	keyword[100];
 
-	startf("build_data (mat)");
 	while (ptr)
 	{
 		sscanf(ptr->str, "%s", keyword);
@@ -63,7 +62,6 @@ t_mat			*build_material(char *path)
 	t_str	*lst;
 	t_mat	*new_mat;
 
-	startf("build_material");
 	lst = ft_getfile(path);
 	remove_comments(lst, COMMENT_CHAR);
 	remove_white_spaces(lst);

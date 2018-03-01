@@ -6,13 +6,13 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/26 16:45:04 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/03/01 12:46:24 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/03/01 16:50:25 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "scop.h"
 
-static void		load_shader_attributes(t_prog *p, t_gl *gle)
+static void		load_shader_attributes_obj(t_prog *p, t_gl *gle)
 {
 	glUniformMatrix4fv(p->slots.obj3d.mat4_v , 1, GL_FALSE, gle->view.m.e);
 	glUniformMatrix4fv(p->slots.obj3d.mat4_p, 1, GL_FALSE, gle->projection.m.e);
@@ -51,12 +51,31 @@ static void		draw_obj3d(t_prog *prog, t_blueprint_obj3d *obj3d_bp)
 	glBindVertexArray(0);
 }
 
-static void	launch_program_obj3d(t_prog *prog, t_gl *gle, int n)
+void	launch_program_obj3d(t_prog *prog, t_gl *gle, int n)
 {
 	glUseProgram(prog->program);
-	load_shader_attributes(prog, gle);
+	load_shader_attributes_obj(prog, gle);
 	while (--n >= 0)
 		draw_obj3d(prog, &prog->blueprints[n].obj3d);
+}
+static void	launch_program_skybox(t_prog *prog, t_gl *gle)
+{
+	t_blueprint_skybox	*skybox;
+
+	skybox = &prog->blueprints[0].skybox;
+	glUseProgram(prog->program);
+	glUniformMatrix4fv(prog->slots.skybox.mat4_v , 1, GL_FALSE, gle->view.m.e);
+	glUniformMatrix4fv(prog->slots.skybox.mat4_p, 1, GL_FALSE, gle->projection.m.e);
+	glUniform1i(prog->slots.skybox.cubemap, 0);
+
+	//draw
+	glBindTexture(GL_TEXTURE_CUBE_MAP, skybox->tex);
+	glBindVertexArray(skybox->vao);
+	glBindBuffer(GL_ARRAY_BUFFER, skybox->v_skybox.vbo);
+	glVertexAttribPointer(skybox->v_skybox.slot, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	glDrawArrays(GL_TRIANGLES, 0, 12 * 3);
+	glBindVertexArray(0);
 }
 
 static int		wait_for_next_frame(t_fps *fps)
@@ -82,6 +101,7 @@ void			display_object(t_glfw *glfw, t_objfile **objf, t_xpm **xpm, int *len)
 	glEnable(GL_DEPTH_TEST);
 	glClearDepth(-1.0f);
 	glDepthFunc(GL_GREATER);
+	progs[SKYBOX] = create_program_skybox(glfw->cwd, xpm, len[1]);
 	progs[OBJ3D] = create_program_obj3d(objf, len[0], glfw->cwd);
 	glfwGetCursorPos(glfw->win, &gle.mouse_origin_x, &gle.mouse_origin_y);
 	printf("Origin mouse:\t%.2f:%.2f\n", gle.mouse_origin_y, gle.mouse_origin_x);
@@ -96,6 +116,7 @@ void			display_object(t_glfw *glfw, t_objfile **objf, t_xpm **xpm, int *len)
 			glClearColor(0.0f, 0.2f, 0.4f, 1.0f);
 
 			launch_program_obj3d(&progs[OBJ3D], &gle, len[0]);
+			launch_program_skybox(&progs[SKYBOX], &gle);
 			
 			glfwSwapBuffers(glfw->win);
 			glfwPollEvents();
