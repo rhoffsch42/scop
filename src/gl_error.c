@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 17:07:25 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/01/05 17:07:30 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/02/28 16:01:42 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 **	35682	GL_SAMPLER_2D_SHADOW
 */
 
-const char		*gl_type_to_string2(GLenum type)
+static const char	*gl_type_to_string2(GLenum type)
 {
 	if (type == GL_SAMPLER_3D)
 		return ("sampler3D");
@@ -39,7 +39,7 @@ const char		*gl_type_to_string2(GLenum type)
 	return ("other");
 }
 
-const char		*gl_type_to_string(GLenum type)
+static const char	*gl_type_to_string(GLenum type)
 {
 	if (type == GL_BOOL)
 		return ("bool");
@@ -64,7 +64,7 @@ const char		*gl_type_to_string(GLenum type)
 	return (gl_type_to_string2(type));
 }
 
-static t_logs	init_logs(void)
+static t_logs		init_logs(void)
 {
 	t_logs	logs;
 
@@ -76,7 +76,7 @@ static t_logs	init_logs(void)
 	return (logs);
 }
 
-static void		program_logs(GLuint programme, GLenum pname, \
+static void			program_logs(GLuint programme, GLenum pname, \
 							GLint (func)(GLuint, const GLchar *), char *msg)
 {
 	t_logs	l;
@@ -106,7 +106,7 @@ static void		program_logs(GLuint programme, GLenum pname, \
 	}
 }
 
-void			print_programme_info_log(GLuint programme)
+void				print_programme_info_log(GLuint programme)
 {
 	int		params;
 	int		max_len;

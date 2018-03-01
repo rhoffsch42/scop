@@ -6,29 +6,11 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/27 18:38:52 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/02/28 13:57:57 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/02/28 23:16:05 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "scop.h"
-
-static void		print_cam_pp(t_gl *gle)
-{
-	printf("Left mouse is being PRESSed\n");
-	printf("Mouse:\t%d:%d\n", (int)gle->mouse_y, (int)gle->mouse_x);
-	printf("fov : %.2f\n", gle->fov);
-	printf("pos    \t");
-	vector3_print(gle->cam.pos);
-	printf("rot    \t");
-	vector3_print(gle->cam.rot);
-	printf("right  \t");
-	vector3_print(gle->cam.right);
-	printf("up     \t");
-	vector3_print(gle->cam.up);
-	printf("forward\t");
-	vector3_print(gle->cam.forward);
-	printf("--------------------------------\n");
-}
 
 static int		is_first_press(t_glfw *glfw, int key, t_gl *gle)
 {
@@ -46,50 +28,6 @@ static int		is_first_press(t_glfw *glfw, int key, t_gl *gle)
 		return (0);
 	}
 	return (0);
-}
-
-void				print_mvp_matrix2(t_gl *gle, t_blueprint_obj3d *obj)
-{
-	if (DATA && DATA_MATRIX)
-	{
-		printf("Current object Model Matrix:\n");
-		matrix4_print(obj->model_matrix);
-		printf("View Matrix:\n");
-		matrix4_print(gle->view);
-		printf("Projection Matrix:\n");
-		matrix4_print(gle->projection);
-		printf("Current object Properties:\n");
-		vector3_print(obj->pos);
-		vector3_print(obj->rot);
-		printf("================\n");
-	}
-}
-
-static void		update_projection_matrix(t_gl *gle, t_prog *prog)
-{
-	float	ratio;
-
-	ratio = 1.0f / tanf(DTOR(gle->fov) / 2.0f);
-	gle->projection.m.tab[0][0] = ratio / (DEF_WIN_X / DEF_WIN_Y);
-	gle->projection.m.tab[1][1] = ratio;
-	glUniformMatrix4fv(prog->slots.obj3d.mat4_p, 1, GL_FALSE, gle->projection.m.e);
-	print_mvp_matrix2(gle, &prog->blueprints[gle->obj_i].obj3d);
-}
-
-static void		update_model_matrix_obj3d(t_gl *gle, t_blueprint *blueprints)
-{
-	int					i;
-	t_blueprint_obj3d	*obj;
-
-	i = 0;
-	while (i < gle->obj_max)
-	{
-		obj = &blueprints[i].obj3d;
-		if (obj->rotate)
-			obj->rot.y += RAD_DELTA * gle->fps.tick;
-		obj->model_matrix = model_matrix2(obj->pos, obj->rot, gle->matrix_zero);
-		i++;
-	}
 }
 
 static void		events_one_press(t_glfw *glfw, t_gl *gle, t_prog *prog)
@@ -181,7 +119,7 @@ static void		events_parameters(t_glfw *glfw, t_gl *gle)
 		gle->fov = (float)scale_d(gle->fov - 40 * gle->fps.tick, 10, MAX_FOV);
 }
 
-static void		events_cam(t_glfw *glfw, t_gl *gle, t_prog *prog)
+static void		events_cam(t_glfw *glfw, t_gl *gle)
 {
 	int			state;
 	float		diffx;
@@ -208,12 +146,9 @@ static void		events_cam(t_glfw *glfw, t_gl *gle, t_prog *prog)
 	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_R))
 		gle->cam.pos = vector3_add(gle->cam.pos, vector3_mult_coef(gle->cam.up, POS_DELTA * gle->fps.tick));
 
-	gle->view = view_matrix(&gle->cam, gle->matrix_zero);
-	glUniformMatrix4fv(prog->slots.obj3d.mat4_v , 1, GL_FALSE, gle->view.m.e);
-
 	state = glfwGetMouseButton(glfw->win, GLFW_MOUSE_BUTTON_LEFT);
 	if (state == GLFW_PRESS)
-		print_cam_pp(gle);
+		print_cam_properties(gle);
 }
 
 void			events(t_glfw *glfw, t_gl *gle, t_prog *prog)
@@ -238,7 +173,6 @@ void			events(t_glfw *glfw, t_gl *gle, t_prog *prog)
 	events_one_press(glfw, gle, prog);
 	events_obj_movements(glfw, &gle->fps, obj);
 	events_parameters(glfw, gle);
-	events_cam(glfw, gle, prog);
-	update_projection_matrix(gle, prog);
-	update_model_matrix_obj3d(gle, prog->blueprints);
+	events_cam(glfw, gle);
+	update_matrices(gle, prog->blueprints);
 }

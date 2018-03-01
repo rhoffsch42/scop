@@ -185,3 +185,5 @@ obj3D blueprints:
 				GLint		id_texture
 				t_vector3	pos
 				bool		rotate
+------------------------------------------------------------------------------------------------------------
+iburel cam correct

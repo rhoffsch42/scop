@@ -6,11 +6,28 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 17:07:14 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/02/26 14:28:06 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/02/28 18:16:23 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <scop.h>
+#include "scop.h"
+
+// static void		fill_buffer(GLuint vbo, t_obj *obj, void (fill_func)(float*, t_face*), int size)//gl_build.c
+// {
+// 	float	points[obj->f_amount * size];
+	
+// 	fill_func(points, obj->f);
+// 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+// 	glBufferData(GL_ARRAY_BUFFER, obj->f_amount * size * sizeof(float), points, GL_STATIC_DRAW);
+// }// si tout fonctionne, check avec cette fonction, remplacer le pave en dessous (load_data_obj3d)
+
+void			create_buffer(t_vbo *vertex_buffer, int size, GLenum type)
+{
+	glGenBuffers(1, &vertex_buffer->vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer->vbo);
+	glVertexAttribPointer(vertex_buffer->slot, size, type, GL_FALSE, 0, NULL);
+	glEnableVertexAttribArray(vertex_buffer->slot);
+}
 
 static GLuint	init_shader(char *filename, int type)
 {
@@ -32,93 +49,28 @@ static GLuint	init_shader(char *filename, int type)
 	return (shader);
 }
 
-static GLint		get_slot(GLuint program, const GLchar *varname)
+t_prog			create_program(char *cwd, char *vshader_file, \
+				char *fshader_file, void (get_slot_uniform)(t_prog*))
 {
-	GLint	slot;
-
-	if ((slot = glGetAttribLocation(program, varname)) == -1)
-	{
-		glGetError();
-		ft_errexit("glGetAttribLocation failed (-1)", RED, GL_ERROR);
-	}
-	printf("slot %d:\t%s\n", slot, varname);
-	return (slot);
-}
-
-static GLint		create_buffer(GLint slot, GLuint *vbo, int size, GLenum type)
-{
-	glGenBuffers(1, vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
-	glVertexAttribPointer(slot, size, type, GL_FALSE, 0, NULL);
-	glEnableVertexAttribArray(slot);
-	return (slot);
-}
-
-static void		load_data(t_gl_env *gl_e, t_obj *obj)
-{
-	float	points[obj->f_amount * 9];
-	float	colors[obj->f_amount * 9];
-	float	tex[obj->f_amount * 6];
-	float	tex_cylinder[obj->f_amount * 6];
-
-	fill_points_array(points, obj->f);
-	fill_color_array(colors, obj->f);
-	fill_tex_array(tex, obj->f);
-	fill_tex_cylinder_array(tex_cylinder, obj->f);
-
-	glBindBuffer(GL_ARRAY_BUFFER, gl_e->vbo);
-	glBufferData(GL_ARRAY_BUFFER, obj->f_amount * 9 * sizeof(float), points, GL_STATIC_DRAW);
-	glBindBuffer(GL_ARRAY_BUFFER, gl_e->colors_vbo);
-	glBufferData(GL_ARRAY_BUFFER, obj->f_amount * 9 * sizeof(float), colors, GL_STATIC_DRAW);
-	glBindBuffer(GL_ARRAY_BUFFER, gl_e->tex_vbo);
-	glBufferData(GL_ARRAY_BUFFER, obj->f_amount * 6 * sizeof(float), tex, GL_STATIC_DRAW);
-	glBindBuffer(GL_ARRAY_BUFFER, gl_e->tex_cylinder_vbo);
-	glBufferData(GL_ARRAY_BUFFER, obj->f_amount * 6 * sizeof(float), tex_cylinder, GL_STATIC_DRAW);
-}
-
-void			create_program(t_gl_env *gl_e, t_obj *obj)
-{
+	t_prog		program;
 	int			p;
 
-	gl_e->vshader = init_shader(gl_e->shaders[0], GL_VERTEX_SHADER);
-	gl_e->fshader = init_shader(gl_e->shaders[1], GL_FRAGMENT_SHADER);
-
-	gl_e->shader_programme = glCreateProgram();
-	glAttachShader(gl_e->shader_programme, gl_e->vshader);
-	glAttachShader(gl_e->shader_programme, gl_e->fshader);
-	glLinkProgram(gl_e->shader_programme);
-
+	vshader_file = ft_strjoin(cwd, vshader_file);
+	fshader_file = ft_strjoin(cwd, fshader_file);
+	program.vshader = init_shader(vshader_file, GL_VERTEX_SHADER);
+	program.fshader = init_shader(fshader_file, GL_FRAGMENT_SHADER);
+	free(vshader_file);
+	free(fshader_file);
+	program.program = glCreateProgram();
+	glAttachShader(program.program, program.vshader);
+	glAttachShader(program.program, program.fshader);
+	glLinkProgram(program.program);
+	get_slot_uniform(&program);
 	p = -1;
-	glValidateProgram(gl_e->shader_programme);
-	glGetProgramiv(gl_e->shader_programme, GL_LINK_STATUS, &p);
-	(p != GL_TRUE) ? print_programme_info_log(gl_e->shader_programme) : (void)p;
-	glUseProgram(gl_e->shader_programme);
-
-	gl_e->gl_display_mod = glGetUniformLocation(gl_e->shader_programme, "dismod");
-	gl_e->gl_m = glGetUniformLocation(gl_e->shader_programme, "M");
-	gl_e->gl_v = glGetUniformLocation(gl_e->shader_programme, "V");
-	gl_e->gl_p = glGetUniformLocation(gl_e->shader_programme, "P");
-	gl_e->gl_plain_color = glGetUniformLocation(gl_e->shader_programme, "plain_color");
-	if (obj->mat)
-		glUniform3f(gl_e->gl_plain_color, obj->mat->kd[0], obj->mat->kd[1], obj->mat->kd[2]);
-	else
-		glUniform3f(gl_e->gl_plain_color, 1.0f, 0.0f, 0.3f);
-
-
-	glGenVertexArrays(1, &gl_e->vao);
-	glBindVertexArray((&gl_e->vao)[0]);//vao[x] pour object x ? => 1 program pour x objects similaires (ie skybox != teapot) 
-	glEnableVertexAttribArray(0);//utile ?
-
-	gl_e->vbo_slot = get_slot(gl_e->shader_programme, "vertex_position");
-	gl_e->colors_slot = get_slot(gl_e->shader_programme, "vertex_colour");
-	gl_e->tex_slot = get_slot(gl_e->shader_programme, "vertexUV");
-	gl_e->tex_cylinder_slot = get_slot(gl_e->shader_programme, "vertexUV");
-	create_buffer((gl_e->vbo_slot), &gl_e->vbo, 3, GL_FLOAT);
-	create_buffer((gl_e->colors_slot), &gl_e->colors_vbo, 3, GL_FLOAT);
-	glEnable(GL_TEXTURE_2D);
-	create_buffer((gl_e->tex_slot), &gl_e->tex_vbo, 2, GL_FLOAT);
-	create_buffer((gl_e->tex_cylinder_slot), &gl_e->tex_cylinder_vbo, 2, GL_FLOAT);
-
-	load_data(gl_e, obj);
-	load_matrix(gl_e);
+	glValidateProgram(program.program);
+	glGetProgramiv(program.program, GL_LINK_STATUS, &p);
+	if (p != GL_TRUE)
+		print_programme_info_log(program.program);
+	glUseProgram(program.program);
+	return (program);
 }

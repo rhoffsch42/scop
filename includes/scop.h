@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/24 14:01:02 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/02/28 14:01:42 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/02/28 23:15:51 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -309,27 +309,38 @@ void		mtl_checks(t_mtlfile *mtlfile);
 /*
 ** glfw & OpenGL
 */
-void		display_object(t_glfw *glfw, t_objfile **objf, t_xpm **xpm, \
-							int *len);
+
 void		fill_color_array(float *arr, t_face *face);
 void		fill_tex_array(float *arr, t_face *face);
 void		fill_tex_cylinder_array(float *arr, t_face *face);
 void		fill_points_array(float *arr, t_face *face);
-void		load_matrix(t_gl_env *gl_e);
-t_matrix4	model_matrix(t_gl_env *gl_e, t_matrix4 model);//tmp
-t_matrix4	view_matrix(t_cam *cam, t_matrix4 viewmatrix);//tmp
-void		update_cam_vector(t_cam *cam);//tmp
-void		print_mvp_matrix(t_gl_env *gl_e);
-void		create_program(t_gl_env *gl_e, t_obj *obj);
-void    	skybox(t_gl_env *sky_e, t_obj *obj);
-///// v2
-void		display_object2(t_glfw *glfw, t_objfile **objf, t_xpm **xpm, int *len);
-void		events(t_glfw *glfw, t_gl *gle, t_prog *prog);
-t_matrix4	model_matrix2(t_vector3 pos, t_vector3 rot, t_matrix4 model);
+void		update_cam_vector(t_cam *cam);
+void		skybox(t_gl_env *sky_e, t_obj *obj);
+//v2
+void		display_object(t_glfw *glfw, t_objfile **objf, t_xpm **xpm, int *len);
+t_matrix4	model_matrix(t_vector3 pos, t_vector3 rot, t_matrix4 model);
+t_matrix4	view_matrix(t_cam *cam, t_matrix4 viewmatrix);
+t_matrix4	pro_matrix(float rad, float far, float near);
+t_cam		init_cam(t_vector3 pos, t_vector3 rot);
+t_prog		create_program(char *cwd, char *vshader_file, char *fshader_file, \
+									void (get_slot_uniform)(t_prog*));
+void		create_buffer(t_vbo *vertex_buffer, int size, GLenum type);
+void		init_t_gl(t_gl *gle, t_xpm **xpm, int *len);
+GLint		get_slot(GLuint program, const GLchar *varname, \
+							GLint (func)(GLuint, const GLchar*));
 
+void		print_mvp_matrix(t_gl *gle, t_blueprint_obj3d *obj);
+void		print_pixel(float x, float y);
+void		print_cam_properties(t_gl *gle);
 
 /*
-** error OpenGL
+**	OpenGL obj3d
+*/
+void		get_slots_obj3d(t_prog *prog);
+void		create_blueprints_obj3d(t_prog *prog, t_objfile **objf, int n);
+
+/*
+**	OpenGL error 
 */
 void		print_programme_info_log(GLuint programme);
 void		gl_compile_error(GLuint shader, char *intro);
@@ -337,5 +348,7 @@ void		gl_compile_error(GLuint shader, char *intro);
 /*
 ** events
 */
+void		events(t_glfw *glfw, t_gl *gle, t_prog *prog);
+void		update_matrices(t_gl *gle, t_blueprint *blueprints);
 
 #endif

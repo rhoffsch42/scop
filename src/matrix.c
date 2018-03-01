@@ -6,11 +6,28 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 17:08:13 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/02/27 18:00:46 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/02/28 22:29:25 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <scop.h>
+
+void				print_mvp_matrix(t_gl *gle, t_blueprint_obj3d *obj)
+{
+	if (DATA && DATA_MATRIX)
+	{
+		printf("Current object Model Matrix:\n");
+		matrix4_print(obj->model_matrix);
+		printf("View Matrix:\n");
+		matrix4_print(gle->view);
+		printf("Projection Matrix:\n");
+		matrix4_print(gle->projection);
+		printf("Current object Properties:\n");
+		vector3_print(obj->pos);
+		vector3_print(obj->rot);
+		printf("================\n");
+	}
+}
 
 void				update_cam_vector(t_cam *cam)
 {
@@ -20,22 +37,6 @@ void				update_cam_vector(t_cam *cam)
 	cam->right = vector3_rot(right, cam->rot, -ROT_WAY);
 	cam->up = vector3_rot(up, cam->rot, -ROT_WAY);
 	cam->forward = vector3_cross(cam->up, cam->right);
-}
-
-static t_cam		init_cam(t_vector3 pos, t_vector3 rot)
-{
-	t_cam	cam;
-
-	cam.pos = pos;
-	cam.rot = rot;
-	cam.right.x = 1;
-	cam.right.y = 0;
-	cam.right.z = 0;
-	cam.up.x = 0;
-	cam.up.y = 1;
-	cam.up.z = 0;
-	update_cam_vector(&cam);
-	return (cam);
 }
 
 t_matrix4	view_matrix(t_cam *cam, t_matrix4 viewmatrix)
@@ -69,7 +70,7 @@ t_matrix4	view_matrix(t_cam *cam, t_matrix4 viewmatrix)
 	return (viewmatrix);
 }
 
-static t_matrix4	pro_matrix(float rad, float far, float near)
+t_matrix4	pro_matrix(float rad, float far, float near)
 {
 	t_matrix4	promatrix;
 	float		ratio;
@@ -85,16 +86,16 @@ static t_matrix4	pro_matrix(float rad, float far, float near)
 	return (promatrix);
 }
 
-t_matrix4	model_matrix(t_gl_env *gl_e, t_matrix4 model)
+t_matrix4	model_matrix(t_vector3 pos, t_vector3 rot, t_matrix4 model)
 {
 	float		val[8];
 
-	val[0] = cosf(gl_e->rot.x);
-	val[1] = sinf(gl_e->rot.x);
-	val[2] = cosf(gl_e->rot.y);
-	val[3] = sinf(gl_e->rot.y);
-	val[4] = cosf(gl_e->rot.z);
-	val[5] = sinf(gl_e->rot.z);
+	val[0] = cosf(rot.x);
+	val[1] = sinf(rot.x);
+	val[2] = cosf(rot.y);
+	val[3] = sinf(rot.y);
+	val[4] = cosf(rot.z);
+	val[5] = sinf(rot.z);
 	val[6] = COS_A * SIN_B;
 	val[7] = SIN_A * SIN_B;
 	val[6] = COS_A * SIN_B;
@@ -108,48 +109,10 @@ t_matrix4	model_matrix(t_gl_env *gl_e, t_matrix4 model)
 	model.m.tab[0][2] = SIN_B;
 	model.m.tab[1][2] = -SIN_A * COS_B;
 	model.m.tab[2][2] = COS_A * COS_B;
-	model.m.tab[0][3] = gl_e->pos.x;
-	model.m.tab[1][3] = gl_e->pos.y;
-	model.m.tab[2][3] = gl_e->pos.z;
+	model.m.tab[0][3] = pos.x;
+	model.m.tab[1][3] = pos.y;
+	model.m.tab[2][3] = pos.z;
 	model.m.tab[3][3] = 1;
 	model = matrix4_set_order(model, !model.order);
 	return (model);
-}
-
-void				print_mvp_matrix(t_gl_env *gl_e)
-{
-	if (DATA && DATA_MATRIX)
-	{
-		printf("Model Matrix:\n");
-		matrix4_print(gl_e->model);
-		printf("View Matrix:\n");
-		matrix4_print(gl_e->view);
-		printf("Projection Matrix:\n");
-		matrix4_print(gl_e->projection);
-		vector3_print(gl_e->pos);
-		vector3_print(gl_e->rot);
-		printf("================\n");
-	}
-}
-
-void				load_matrix(t_gl_env *gl_e)
-{
-	gl_e->cam = init_cam((t_vector3){0.0f, 0.0f, 5.0f}, \
-						(t_vector3){DTOR(0), DTOR(0), DTOR(0)});
-	gl_e->matrix_zero = matrix4(0, MATRIX_ROW_MAJOR);
-	gl_e->model = model_matrix(gl_e, gl_e->matrix_zero);
-	gl_e->view = view_matrix(&gl_e->cam, gl_e->matrix_zero);
-	gl_e->projection = pro_matrix(DTOR(gl_e->fov), FAR, NEAR);
-	if (DATA && DATA_MATRIX)
-	{
-		printf("Model Matrix:\n");
-		matrix4_print(gl_e->model);
-		printf("View Matrix:\n");
-		matrix4_print(gl_e->view);
-		printf("Projection Matrix:\n");
-		matrix4_print(gl_e->projection);
-	}
-	glUniformMatrix4fv(gl_e->gl_m, 1, GL_FALSE, gl_e->model.m.e);
-	glUniformMatrix4fv(gl_e->gl_v, 1, GL_FALSE, gl_e->view.m.e);
-	glUniformMatrix4fv(gl_e->gl_p, 1, GL_FALSE, gl_e->projection.m.e);
 }

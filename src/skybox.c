@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/20 17:50:42 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/02/27 19:41:34 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/02/28 14:31:08 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ t_matrix4	view_matrix_sky(t_gl_env *gl_e, t_matrix4 viewmatrix)
 	return (viewmatrix);
 }
 
-static t_matrix4	pro_matrix(float rad, float far, float near)
+static t_matrix4	pro_matrix_sky(float rad, float far, float near)
 {
 	t_matrix4	promatrix;
 	float		ratio;
@@ -245,7 +245,7 @@ void    skybox(t_gl_env *gl_e, t_obj *obj)
 	t_matrix4	promatrix;
 	t_matrix4	viewmatrix;
 
-	promatrix = pro_matrix(DTOR(gl_e->fov), FAR, NEAR);
+	promatrix = pro_matrix_sky(DTOR(gl_e->fov), FAR, NEAR);
 	viewmatrix = view_matrix_sky(gl_e, matrix4(0, MATRIX_ROW_MAJOR));
     if (DATA && DATA_SKYBOX)
 	{

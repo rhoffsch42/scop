@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 17:04:35 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/02/28 14:01:03 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/02/28 14:13:50 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ static void		draw_frame(t_gl_env *gl_e)
 
 }
 
-void			display_object(t_glfw *glfw, t_objfile **objf, t_xpm **xpm, \
+void			display_object_old(t_glfw *glfw, t_objfile **objf, t_xpm **xpm, \
 								int *len)
 {
 	t_gl_env	*gl_e;
