@@ -6,11 +6,11 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 17:04:35 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/02/24 16:12:47 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/03/01 12:50:15 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <scop.h>
+#include "scop.h"
 
 void	dump_data_mtl(t_mat *mat)
 {

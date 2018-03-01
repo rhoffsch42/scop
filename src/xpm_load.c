@@ -6,11 +6,11 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 17:09:16 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/01/05 17:09:18 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/03/01 12:59:56 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <scop.h>
+#include "scop.h"
 
 void			error_xpm(char *s1, char *s2)
 {

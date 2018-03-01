@@ -6,11 +6,11 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 17:08:29 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/01/05 17:08:32 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/03/01 12:53:25 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <scop.h>
+#include "scop.h"
 
 int			regularize(float *v, float min, float max)
 {

@@ -6,43 +6,36 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/28 15:43:32 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/02/28 22:41:14 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/03/01 12:46:10 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "scop.h"
 
-void			get_slots_obj3d(t_prog *prog)
+static void		get_slots_obj3d(t_prog *prog)
 {
-	int			(*fun)(unsigned int, const char *);
+	int				(*fun)(unsigned int, const char *);
+	t_obj3d_slots	*slots;
 
+	slots = &prog->slots.obj3d;
 	fun = glGetUniformLocation;
-	prog->slots.obj3d.mat4_m = get_slot(prog->program, "M", fun);
-	prog->slots.obj3d.mat4_v = get_slot(prog->program, "V", fun);
-	prog->slots.obj3d.mat4_p = get_slot(prog->program, "P", fun);
-	prog->slots.obj3d.dismod = get_slot(prog->program, "dismod", fun);
-	prog->slots.obj3d.plain_color = get_slot(prog->program, "plain_color", fun);
+	slots->mat4_m = get_slot(prog->program, "M", fun);
+	slots->mat4_v = get_slot(prog->program, "V", fun);
+	slots->mat4_p = get_slot(prog->program, "P", fun);
+	slots->dismod = get_slot(prog->program, "dismod", fun);
+	slots->plain_color = get_slot(prog->program, "plain_color", fun);
+	fun = glGetAttribLocation;
+	slots->vertex_position = get_slot(prog->program, "vertex_position", fun);
+	slots->vertex_colour = get_slot(prog->program, "vertex_colour", fun);
+	slots->vertexUV = get_slot(prog->program, "vertexUV", fun);
 }
 
 static void		load_data_obj3d(t_blueprint_obj3d *blueprint, t_obj *obj)
 {
-	float	points[obj->f_amount * 9];
-	float	colors[obj->f_amount * 9];
-	float	tex[obj->f_amount * 6];
-	float	tex_cylinder[obj->f_amount * 6];
-
-	fill_points_array(points, obj->f);
-	fill_color_array(colors, obj->f);
-	fill_tex_array(tex, obj->f);
-	fill_tex_cylinder_array(tex_cylinder, obj->f);
-	glBindBuffer(GL_ARRAY_BUFFER, blueprint->vertex_obj.vbo);
-	glBufferData(GL_ARRAY_BUFFER, obj->f_amount * 9 * sizeof(float), points, GL_STATIC_DRAW);
-	glBindBuffer(GL_ARRAY_BUFFER, blueprint->blackwhite.vbo);
-	glBufferData(GL_ARRAY_BUFFER, obj->f_amount * 9 * sizeof(float), colors, GL_STATIC_DRAW);
-	glBindBuffer(GL_ARRAY_BUFFER, blueprint->vertex_texture.vbo);
-	glBufferData(GL_ARRAY_BUFFER, obj->f_amount * 6 * sizeof(float), tex, GL_STATIC_DRAW);
-	glBindBuffer(GL_ARRAY_BUFFER, blueprint->vertex_texture_cylinder.vbo);
-	glBufferData(GL_ARRAY_BUFFER, obj->f_amount * 6 * sizeof(float), tex_cylinder, GL_STATIC_DRAW);
+	fill_buffer(blueprint->v_obj.vbo, obj, fill_points_array, 3);
+	fill_buffer(blueprint->v_blackwhite.vbo, obj, fill_color_array, 3);
+	fill_buffer(blueprint->v_texture.vbo, obj, fill_tex_array, 2);
+	fill_buffer(blueprint->v_tex_cylinder.vbo, obj, fill_tex_cylinder_array, 2);
 	blueprint->rotate = 1;
 	blueprint->pos = vector3(0.0f, 0.0f, 0.0f);
 	blueprint->rot = vector3(0.0f, 0.0f, 0.0f);
@@ -58,7 +51,7 @@ static void		load_data_obj3d(t_blueprint_obj3d *blueprint, t_obj *obj)
 	blueprint->tex = 1;
 }
 
-void			create_blueprints_obj3d(t_prog *prog, t_objfile **objf, int n)
+static void		create_blueprints_obj3d(t_prog *prog, t_objfile **objf, int n)
 {
 	t_blueprint_obj3d	*obj;
 
@@ -70,21 +63,23 @@ void			create_blueprints_obj3d(t_prog *prog, t_objfile **objf, int n)
 		glGenVertexArrays(1, &obj->vao);
 		glBindVertexArray(obj->vao);
 		glEnableVertexAttribArray(0);//utile ?
-		// tous ces slots en bas peuvent s'obtenir une seule fois apres avoir creer le program
-		// les mettre avec les autres slots t_prog::slots::obj3d, et les copier dans les t_vbo::slot ?
-		obj->vertex_obj.slot = \
-			get_slot(prog->program, "vertex_position", glGetAttribLocation);
-		obj->blackwhite.slot = \
-			get_slot(prog->program, "vertex_colour", glGetAttribLocation);
-		obj->vertex_texture.slot = \
-			get_slot(prog->program, "vertexUV", glGetAttribLocation);
-		obj->vertex_texture_cylinder.slot = \
-			get_slot(prog->program, "vertexUV", glGetAttribLocation);
-		////////////////////////////////
-		create_buffer(&obj->vertex_obj, 3, GL_FLOAT);
-		create_buffer(&obj->blackwhite, 3, GL_FLOAT);
-		create_buffer(&obj->vertex_texture, 2, GL_FLOAT);
-		create_buffer(&obj->vertex_texture_cylinder, 2, GL_FLOAT);
+		obj->v_obj.slot = prog->slots.obj3d.vertex_position;
+		obj->v_blackwhite.slot = prog->slots.obj3d.vertex_colour;
+		obj->v_texture.slot = prog->slots.obj3d.vertexUV;
+		obj->v_tex_cylinder.slot = prog->slots.obj3d.vertexUV;
+		create_buffer(&obj->v_obj, 3, GL_FLOAT);
+		create_buffer(&obj->v_blackwhite, 3, GL_FLOAT);
+		create_buffer(&obj->v_texture, 2, GL_FLOAT);
+		create_buffer(&obj->v_tex_cylinder, 2, GL_FLOAT);
 		load_data_obj3d(obj, objf[n]->obj);
 	}
+}
+
+t_prog			create_program_obj3d(t_objfile **objf, int n, char *cwd)
+{
+	t_prog		prog;
+
+	prog = create_program(cwd, VSHADER_FILE, FSHADER_FILE, get_slots_obj3d);
+	create_blueprints_obj3d(&prog, objf, n);
+	return (prog);
 }

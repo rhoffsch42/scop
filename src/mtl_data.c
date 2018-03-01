@@ -6,11 +6,11 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 17:08:34 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/01/05 17:08:37 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/03/01 12:53:37 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <scop.h>
+#include "scop.h"
 
 static void		chk_matname(t_mat *mat, char *name)
 {

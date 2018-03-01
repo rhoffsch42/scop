@@ -6,11 +6,11 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 17:08:13 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/02/28 22:29:25 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/03/01 12:52:02 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <scop.h>
+#include "scop.h"
 
 void				print_mvp_matrix(t_gl *gle, t_blueprint_obj3d *obj)
 {

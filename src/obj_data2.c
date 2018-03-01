@@ -6,11 +6,11 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 17:08:52 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/01/05 17:08:55 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/03/01 12:54:04 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <scop.h>
+#include "scop.h"
 
 t_str			*add_objname(t_obj *obj, t_str *ptr)
 {

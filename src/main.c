@@ -6,11 +6,11 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 17:07:58 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/02/28 14:27:08 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/03/01 12:52:17 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <scop.h>
+#include "scop.h"
 
 char	*get_line(t_str *lst, int n)
 {

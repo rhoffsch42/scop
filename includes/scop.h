@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/24 14:01:02 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/02/28 23:15:51 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/03/01 13:06:41 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,10 @@
 */
 # include <GL/glew.h>
 # include <GLFW/glfw3.h>
-# include <libft.h>
-# include <libmath3d.h>
-# include <scop_struct.h>
-# include <scop_opengl.h>
+# include "libft.h"
+# include "libmath3d.h"
+# include "scop_struct.h"
+# include "scop_opengl.h"
 
 # include <unistd.h>
 # include <stdio.h>
@@ -325,6 +325,8 @@ t_cam		init_cam(t_vector3 pos, t_vector3 rot);
 t_prog		create_program(char *cwd, char *vshader_file, char *fshader_file, \
 									void (get_slot_uniform)(t_prog*));
 void		create_buffer(t_vbo *vertex_buffer, int size, GLenum type);
+void		fill_buffer(GLuint vbo, t_obj *obj, \
+							void (fill_func)(float*, t_face*), int summit);
 void		init_t_gl(t_gl *gle, t_xpm **xpm, int *len);
 GLint		get_slot(GLuint program, const GLchar *varname, \
 							GLint (func)(GLuint, const GLchar*));
@@ -336,8 +338,7 @@ void		print_cam_properties(t_gl *gle);
 /*
 **	OpenGL obj3d
 */
-void		get_slots_obj3d(t_prog *prog);
-void		create_blueprints_obj3d(t_prog *prog, t_objfile **objf, int n);
+t_prog		create_program_obj3d(t_objfile **objf, int n, char *cwd);
 
 /*
 **	OpenGL error 

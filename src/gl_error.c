@@ -6,11 +6,11 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 17:07:25 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/02/28 16:01:42 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/03/01 12:49:06 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <scop.h>
+#include "scop.h"
 
 /*
 **	5124	GL_INT

@@ -6,11 +6,11 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 17:05:10 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/01/05 17:06:00 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/03/01 13:00:37 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <scop.h>
+#include "scop.h"
 
 t_rgb			*get_color(t_rgb *rgb, char *name)
 {

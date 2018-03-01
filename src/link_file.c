@@ -6,11 +6,11 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 17:07:46 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/01/05 17:07:48 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/03/01 12:51:24 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <scop.h>
+#include "scop.h"
 
 static void		check_directory(t_env *e, char *filename)
 {

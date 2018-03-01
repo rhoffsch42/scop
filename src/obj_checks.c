@@ -6,11 +6,11 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 17:08:44 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/01/05 17:08:47 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/03/01 12:53:48 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <scop.h>
+#include "scop.h"
 
 t_void		*check_obj(t_void *objptr)
 {

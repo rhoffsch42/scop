@@ -6,11 +6,11 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 17:06:58 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/01/05 17:07:01 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/03/01 12:50:48 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <scop.h>
+#include "scop.h"
 
 t_void	*free_t_env(t_void *list)
 {

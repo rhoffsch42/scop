@@ -6,11 +6,11 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 17:09:24 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/02/27 17:43:32 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/03/01 12:59:59 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <scop.h>
+#include "scop.h"
 
 GLuint		xpm_to_glid(t_xpm *xpm)
 {

@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/26 16:45:04 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/02/28 23:03:37 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/03/01 12:46:24 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,9 @@ static void		draw_obj3d(t_prog *prog, t_blueprint_obj3d *obj3d_bp)
 	glBindTexture(GL_TEXTURE_2D, obj3d_bp->tex);
 	glBindVertexArray(obj3d_bp->vao);
 	if (obj3d_bp->cyl_mapping)
-		vertex = &obj3d_bp->vertex_texture_cylinder;
+		vertex = &obj3d_bp->v_tex_cylinder;
 	else
-		vertex = &obj3d_bp->vertex_texture;
+		vertex = &obj3d_bp->v_texture;
 	glBindBuffer(GL_ARRAY_BUFFER, vertex->vbo);
 	glVertexAttribPointer(vertex->slot, 2, GL_FLOAT, GL_FALSE, 0, NULL);
 	mod[0] = (obj3d_bp->draw_mod == MOD_LINE) ? GL_LINE : GL_FILL;				//ameliorer ce truc
@@ -49,6 +49,14 @@ static void		draw_obj3d(t_prog *prog, t_blueprint_obj3d *obj3d_bp)
 	glPolygonMode(GL_FRONT_AND_BACK, mod[0]);
 	glDrawArrays(mod[1], 0, obj3d_bp->current_faces * 3);
 	glBindVertexArray(0);
+}
+
+static void	launch_program_obj3d(t_prog *prog, t_gl *gle, int n)
+{
+	glUseProgram(prog->program);
+	load_shader_attributes(prog, gle);
+	while (--n >= 0)
+		draw_obj3d(prog, &prog->blueprints[n].obj3d);
 }
 
 static int		wait_for_next_frame(t_fps *fps)
@@ -68,23 +76,18 @@ void			display_object(t_glfw *glfw, t_objfile **objf, t_xpm **xpm, int *len)
 {
 	t_gl		gle;
 	t_prog		progs[2];
-	int			i;
 
 	init_t_gl(&gle, xpm, len);
 	glEnable(GL_TEXTURE_2D);
 	glEnable(GL_DEPTH_TEST);
 	glClearDepth(-1.0f);
 	glDepthFunc(GL_GREATER);
-	progs[OBJ3D].blueprints = NULL;
-	progs[OBJ3D] = create_program(glfw->cwd, VSHADER_FILE, FSHADER_FILE, \
-									get_slots_obj3d);
-	create_blueprints_obj3d(&progs[OBJ3D], objf, len[0]);
+	progs[OBJ3D] = create_program_obj3d(objf, len[0], glfw->cwd);
 	glfwGetCursorPos(glfw->win, &gle.mouse_origin_x, &gle.mouse_origin_y);
 	printf("Origin mouse:\t%.2f:%.2f\n", gle.mouse_origin_y, gle.mouse_origin_x);
+	
 	// creer une liste des object crees via les blueprints ?
 	// ie: liste de nouvelles instances t_blueprint_obj3d via copy, puis les afficher
-
-
 	while (!glfwWindowShouldClose(glfw->win))
 	{
 		if (wait_for_next_frame(&gle.fps))
@@ -92,20 +95,13 @@ void			display_object(t_glfw *glfw, t_objfile **objf, t_xpm **xpm, int *len)
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			glClearColor(0.0f, 0.2f, 0.4f, 1.0f);
 
-			glUseProgram(progs[OBJ3D].program);
-			i = 0;
-			load_shader_attributes(&progs[OBJ3D], &gle);
-			while (i < len[0])
-			{
-				draw_obj3d(&progs[OBJ3D], &progs[OBJ3D].blueprints[i].obj3d);
-				i++;
-			}
+			launch_program_obj3d(&progs[OBJ3D], &gle, len[0]);
+			
 			glfwSwapBuffers(glfw->win);
 			glfwPollEvents();
 			events(glfw, &gle, &progs[OBJ3D]);
 		}
 	}
-	exit(0);
 }
 
 /*

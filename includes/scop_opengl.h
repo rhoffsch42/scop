@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/26 16:25:11 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/02/28 21:55:12 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/03/01 11:15:41 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,17 +22,17 @@ typedef struct			s_vbo
 typedef struct			s_blueprint_skybox
 {
 	GLuint				vao;
-	t_vbo				vertex;
-	GLuint				texture_id;
+	t_vbo				v_obj;
+	GLuint				tex;
 }						t_blueprint_skybox;
 
 typedef struct			s_blueprint_obj3d
 {
 	GLuint				vao;
-	t_vbo				vertex_obj;
-	t_vbo				blackwhite;//black and white 42
-	t_vbo				vertex_texture;
-	t_vbo				vertex_texture_cylinder;
+	t_vbo				v_obj;
+	t_vbo				v_blackwhite;//black and white 42
+	t_vbo				v_texture;
+	t_vbo				v_tex_cylinder;
 	t_matrix4			model_matrix;
 	GLuint				tex;
 	uint8_t				rotate;
@@ -65,6 +65,9 @@ typedef struct			s_obj3d_slots
 	GLint				mat4_p;
 	GLint				dismod;
 	GLint				plain_color;
+	GLint				vertex_position;
+	GLint				vertex_colour;
+	GLint				vertexUV;
 }						t_obj3d_slots;
 
 typedef union			u_slots

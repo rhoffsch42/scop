@@ -6,20 +6,23 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 17:07:14 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/02/28 18:16:23 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/03/01 10:46:48 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "scop.h"
 
-// static void		fill_buffer(GLuint vbo, t_obj *obj, void (fill_func)(float*, t_face*), int size)//gl_build.c
-// {
-// 	float	points[obj->f_amount * size];
+void		fill_buffer(GLuint vbo, t_obj *obj, \
+						void (fill_func)(float*, t_face*), int summit)
+{
+	float	points[obj->f_amount * summit * 3];
 	
-// 	fill_func(points, obj->f);
-// 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-// 	glBufferData(GL_ARRAY_BUFFER, obj->f_amount * size * sizeof(float), points, GL_STATIC_DRAW);
-// }// si tout fonctionne, check avec cette fonction, remplacer le pave en dessous (load_data_obj3d)
+	fill_func(points, obj->f);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glBufferData(GL_ARRAY_BUFFER, obj->f_amount * summit * 3 * sizeof(float), \
+			points, GL_STATIC_DRAW);
+}
+// si tout fonctionne, check avec cette fonction, remplacer le pave en dessous (load_data_obj3d)
 
 void			create_buffer(t_vbo *vertex_buffer, int size, GLenum type)
 {

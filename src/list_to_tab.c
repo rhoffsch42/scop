@@ -6,11 +6,11 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 17:07:49 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/01/05 17:07:52 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/03/01 12:52:31 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <scop.h>
+#include "scop.h"
 
 t_void		**list_to_tab(t_void *list)
 {

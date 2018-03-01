@@ -6,11 +6,11 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 17:08:39 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/01/05 17:08:42 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/03/01 12:53:44 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <scop.h>
+#include "scop.h"
 
 void				error_obj(char *s1, char *s2)
 {

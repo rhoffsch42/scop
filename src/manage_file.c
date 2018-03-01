@@ -6,11 +6,11 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 17:08:04 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/01/05 17:08:06 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/03/01 12:52:12 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <scop.h>
+#include "scop.h"
 
 t_mtlfile	*get_mtlfile(t_mtlfile *ptr, char *path)
 {

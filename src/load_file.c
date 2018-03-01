@@ -6,11 +6,11 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 17:07:53 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/01/05 17:07:57 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/03/01 12:51:09 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <scop.h>
+#include "scop.h"
 
 static void		error_arg(char *s1, char *s2)
 {

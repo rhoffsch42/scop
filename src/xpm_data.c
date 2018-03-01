@@ -6,11 +6,11 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 17:09:12 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/01/05 17:09:14 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/03/01 12:59:28 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <scop.h>
+#include "scop.h"
 
 void	print_data(t_xpm *xpm)
 {

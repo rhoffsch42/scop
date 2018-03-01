@@ -6,11 +6,11 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 17:05:40 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/01/05 17:05:51 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/03/01 12:49:28 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <scop.h>
+#include "scop.h"
 
 static int	linelen(char *s)
 {
