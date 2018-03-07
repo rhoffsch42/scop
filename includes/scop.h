@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/24 14:01:02 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/03/07 06:52:03 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/03/07 14:06:58 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,12 +75,12 @@
 # define FSHADER_FILE		"/shaders/fragment_shader.glsl"
 # define VSHADER_FILE_CUBE	"/shaders/vertex_shader_cubemap.glsl"
 # define FSHADER_FILE_CUBE	"/shaders/fragment_shader_cubemap.glsl"
-# define CUBEMAP_NZ_TEX		"canyon_lf.xpm"
-# define CUBEMAP_PZ_TEX		"canyon_rt.xpm"
-# define CUBEMAP_NY_TEX		"canyon_dn.xpm"
-# define CUBEMAP_PY_TEX		"canyon_up.xpm"
-# define CUBEMAP_PX_TEX		"canyon_ft.xpm"
-# define CUBEMAP_NX_TEX		"canyon_bk.xpm"
+# define CUBEMAP_NZ_TEX		"back.xpm"
+# define CUBEMAP_PZ_TEX		"front.xpm"
+# define CUBEMAP_NY_TEX		"bottom.xpm"
+# define CUBEMAP_PY_TEX		"top.xpm"
+# define CUBEMAP_PX_TEX		"right.xpm"
+# define CUBEMAP_NX_TEX		"left.xpm"
 # define PONY_FILE			"textures/pony.xpm"
 # define SKYBOX_FILE		"/resources/skybox/skybox.obj"
 # define DEF_WIN_TITLE		"Default title"
