@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/24 14:01:02 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/03/07 02:46:57 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/03/07 06:52:03 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,7 +192,6 @@ char		*get_current_directory(void);
 **	misc
 */
 double		scale_d(double val, double min, double max);
-void		startf(char *func_name);
 void		vertix_to_vector3(t_vertix *vertix, t_vector3 *vector);
 void		dump_datafile(t_objfile *objfile, t_mtlfile *mtlfile, t_str *dir, \
 							t_xpm *xpm);
@@ -252,7 +251,6 @@ t_obj		*init_obj(void);
 t_mat		*init_mat(void);
 t_xpm		*init_xpm(void);
 t_glfw		*init_glfw(t_glfw *glfw);
-t_gl_env	*init_gl_env(t_objfile **objf, t_xpm **xpm, int *len, char *cwd);
 t_fps		*init_t_fps(void);
 
 /*

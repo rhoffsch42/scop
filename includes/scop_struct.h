@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/24 14:01:02 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/02/26 16:26:22 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/03/07 06:50:19 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,74 +167,6 @@ typedef struct			s_cam
 	t_vector3			front;
 	t_vector3			rot;
 }						t_cam;
-
-typedef struct			s_gl_env
-{
-	////// temporaire struct programm
-	GLuint				vbo;
-	GLuint				colors_vbo;
-	GLuint				tex_vbo;
-	GLuint				tex_cylinder_vbo;
-	int					vbo_slot;
-	int					colors_slot;
-	int					tex_slot;
-	int					tex_cylinder_slot;
-	GLuint				vao;
-	GLuint				vshader;
-	GLuint				fshader;
-	GLuint				shader_programme;
-	int					obj_face_amount;
-	t_vector3			plain_color;
-	////// struct program end ?
-	GLint				gl_display_mod;
-	int					dismod;
-	GLint				gl_plain_color;
-	t_matrix4			matrix_zero;
-	t_matrix4			projection;
-	t_matrix4			view;
-	t_matrix4			model;
-	GLint				gl_m;
-	GLint				gl_v;
-	GLint				gl_p;
-	////// struct program end
-	////// skybox
-	GLuint				sky_programme;
-	GLuint				sky_vshader;
-	GLuint				sky_fshader;
-	GLuint				sky_vao;
-	GLuint				sky_tex_vbo;
-	GLuint				sky_tex_id;
-	int					sky_vbo_slot;
-	////// skybox
-	t_objfile			**objf;
-	t_xpm				**xpm;
-	GLuint				*tex_id;
-	int					obj_len;//si la chaine est terminee par NULL, cela est inutile
-	int					xpm_len;//si la chaine est terminee par NULL, cela est inutile
-	int					obj_i;
-	int					tex_i;
-	int					tex;
-	int					rotate;
-	t_vector3			rot;
-	t_vector3			pos;
-	///////////////////////
-	t_cam				cam;
-	double				mouse_x;
-	double				mouse_y;
-	double				mouse_origin_x;
-	double				mouse_origin_y;
-	///////////////////////
-	int					angle;
-	float				vector;
-	float				scale;
-	float				fov;
-	int					draw_mod;
-	int					texture_mod;
-	int					face_drawed;
-	char				boolens[348];
-	char				*cwd;
-	char				*shaders[2];
-}						t_gl_env;
 
 typedef struct			s_logs
 {
