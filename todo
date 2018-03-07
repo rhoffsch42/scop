@@ -147,8 +147,8 @@ model matrix update				OK
 projection matrix update		OK
 view matrix update				OK
 catch des events souris -> cam	OK
-1 program x obj
-skybox
+1 program x obj					OK
+skybox							OK
 
 libs:
 	matrix4_rotationXYZ	?

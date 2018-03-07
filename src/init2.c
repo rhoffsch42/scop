@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 17:07:41 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/03/01 13:14:39 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/03/07 04:50:13 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,10 +63,12 @@ void		error_callback(int error, const char *description)
 }
 
 void		key_callback(GLFWwindow *window, int key, int scancode, \
-						int action, int mods)
+						int action, int mods)//inutile ?
 {
 	(void)mods;
 	(void)scancode;
+	if (action == GLFW_REPEAT)
+		printf("repeat: %d\n", scancode);
 	if (action == GLFW_PRESS)
 		printf("press: %d\n", scancode);
 	else if (action == GLFW_RELEASE)

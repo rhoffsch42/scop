@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 17:08:13 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/03/01 12:52:02 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/03/07 04:10:27 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@ void				update_cam_vector(t_cam *cam)
 	t_vector3	right = {1.0f, 0.0f, 0.0f};
 	t_vector3	up = {0.0f, 1.0f, 0.0f};
 
-	cam->right = vector3_rot(right, cam->rot, -ROT_WAY);
-	cam->up = vector3_rot(up, cam->rot, -ROT_WAY);
+	cam->right = vector3_rotZYX(right, cam->rot, -ROT_WAY);
+	cam->up = vector3_rotZYX(up, cam->rot, -ROT_WAY);
 	cam->forward = vector3_cross(cam->up, cam->right);
 }
 

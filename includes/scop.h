@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/24 14:01:02 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/03/01 18:07:26 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/03/07 02:46:57 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@
 # define FPS			60
 # define MAX_FPS		120
 # define SENSIBILITY	2000.0f
-# define ROT_X			0
+# define ROT_X			1
 
 # define COLOR_RGB_1		"/etc/X11/rgb.txt"
 # define COLOR_RGB_2		"/usr/share/emacs/26.0.50/etc/rgb.txt"
