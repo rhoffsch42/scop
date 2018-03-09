@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/01 13:36:19 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/03/08 14:43:41 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/03/09 21:00:15 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,9 +95,11 @@ void			create_program_skybox(t_prog *program, char *cwd, t_xpm **xpm, \
 	xpm_cube[3] = get_xpm(xpm, xpm_len, CUBEMAP_NY_TEX);
 	xpm_cube[4] = get_xpm(xpm, xpm_len, CUBEMAP_PZ_TEX);
 	xpm_cube[5] = get_xpm(xpm, xpm_len, CUBEMAP_NZ_TEX);
+	program->blueprints = NULL;
 	i = 0;
 	while (i < 6)
-		ft_chkptr(xpm_cube[i++], CUBEMAP_MISS_TEX, GL_ERROR);
+		if (xpm_cube[i++] == NULL)
+			return ;
 	shaders[0] = ft_strjoin(cwd, VSHADER_FILE_CUBE);
 	shaders[1] = ft_strjoin(cwd, FSHADER_FILE_CUBE);
 	create_program(program, shaders[0], shaders[1], get_slots_skybox);

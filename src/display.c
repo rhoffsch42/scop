@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/26 16:45:04 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/03/08 13:51:29 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/03/09 21:09:36 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,14 +93,14 @@ void			display_object(t_glfw *glfw, t_objfile **objf, t_xpm **xpm, \
 	create_program_skybox(&progs[SKYBOX], glfw->cwd, xpm, len[1]);
 	create_program_obj3d(&progs[OBJ3D], objf, len[0], glfw->cwd);
 	glfwGetCursorPos(glfw->win, &gle.mouse_origin_x, &gle.mouse_origin_y);
-	printf("Origin mouse\t%.2f:%.2f\n", gle.mouse_origin_y, gle.mouse_origin_x);
 	while (!glfwWindowShouldClose(glfw->win))
 	{
 		if (wait_for_next_frame(&gle.fps))
 		{
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			glClearColor(0.0f, 0.2f, 0.4f, 1.0f);
-			launch_program_skybox(&progs[SKYBOX], &gle);
+			if (progs[SKYBOX].blueprints)
+				launch_program_skybox(&progs[SKYBOX], &gle);
 			launch_program_obj3d(&progs[OBJ3D], &gle, len[0]);
 			glfwSwapBuffers(glfw->win);
 			glfwPollEvents();

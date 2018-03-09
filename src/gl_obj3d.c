@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/28 15:43:32 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/03/08 14:43:57 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/03/09 21:12:04 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@ static void		load_data_obj3d(t_blueprint_obj3d *blueprint, t_obj *obj)
 	if (obj->mat)
 		blueprint->plain_color = (t_vector3){obj->mat->kd[0], obj->mat->kd[1], \
 											obj->mat->kd[2]};
+	else
+		blueprint->plain_color = (t_vector3){0, 0, 0};
 	blueprint->display_mod = DISPLAY_TEXTURE;
 	blueprint->draw_mod = GL_TRIANGLES;
 	blueprint->cyl_mapping = 0;
