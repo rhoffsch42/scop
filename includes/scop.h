@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/24 14:01:02 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/03/07 14:06:58 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/03/09 18:32:16 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@
 # define PONY_FILE			"textures/pony.xpm"
 # define SKYBOX_FILE		"/resources/skybox/skybox.obj"
 # define DEF_WIN_TITLE		"Default title"
+
 /*
 **	mac res: 2560x1440
 */
@@ -161,13 +162,12 @@
 # define MTL_OPACITY		"d"
 # define MTL_ILLUM			"illum"
 
-#define COS_A	val[0]
-#define SIN_A	val[1]
-#define COS_B	val[2]
-#define SIN_B	val[3]
-#define COS_C	val[4]
-#define SIN_C	val[5]
-
+# define COS_A	val[0]
+# define SIN_A	val[1]
+# define COS_B	val[2]
+# define SIN_B	val[3]
+# define COS_C	val[4]
+# define SIN_C	val[5]
 
 # define MODS				3
 # define DISPLAY_TEXTURE	0
@@ -195,6 +195,7 @@ double		scale_d(double val, double min, double max);
 void		vertix_to_vector3(t_vertix *vertix, t_vector3 *vector);
 void		dump_datafile(t_objfile *objfile, t_mtlfile *mtlfile, t_str *dir, \
 							t_xpm *xpm);
+void		dump_data_obj(t_obj *obj);
 
 /*
 **	free structure
@@ -251,7 +252,7 @@ t_obj		*init_obj(void);
 t_mat		*init_mat(void);
 t_xpm		*init_xpm(void);
 t_glfw		*init_glfw(t_glfw *glfw);
-t_fps		*init_t_fps(void);
+void		init_t_fps(t_fps *fps);
 
 /*
 ** parsing args
@@ -308,15 +309,17 @@ void		mtl_checks(t_mtlfile *mtlfile);
 /*
 ** glfw & OpenGL
 */
+int			wait_for_next_frame(t_fps *fps);
 void		init_t_gl(t_gl *gle, t_xpm **xpm, int *len);
-void		display_object(t_glfw *glfw, t_objfile **objf, t_xpm **xpm, int *len);
+void		display_object(t_glfw *glfw, t_objfile **objf, t_xpm **xpm, \
+							int *len);
 t_matrix4	model_matrix(t_vector3 pos, t_vector3 rot, t_matrix4 model);
 t_matrix4	view_matrix(t_cam *cam, t_matrix4 viewmatrix);
 t_matrix4	pro_matrix(float rad, float far, float near);
 t_cam		init_cam(t_vector3 pos, t_vector3 rot);
 void		update_cam_vector(t_cam *cam);
-t_prog		create_program(char *cwd, char *vshader_file, char *fshader_file, \
-									void (get_slot_uniform)(t_prog*));
+void		create_program(t_prog *program, char *vshader_file, \
+				char *fshader_file, void (get_slot_uniform)(t_prog*));
 void		create_buffer(t_vbo *vertex_buffer, int size, GLenum type);
 void		fill_buffer(GLuint vbo, t_obj *obj, \
 							void (fill_func)(float*, t_face*), int summit);
@@ -326,17 +329,18 @@ void		fill_tex_cylinder_array(float *arr, t_face *face);
 void		fill_points_array(float *arr, t_face *face);
 GLint		get_slot(GLuint program, const GLchar *varname, \
 							GLint (func)(GLuint, const GLchar*));
-t_prog		create_program_obj3d(t_objfile **objf, int n, char *cwd);
-t_prog		create_program_skybox(char *cwd, t_xpm **xpm, int xpm_len);
+void		create_program_obj3d(t_prog *program, t_objfile **objf, \
+								int n, char *cwd);
+void		create_program_skybox(t_prog *program, char *cwd, t_xpm **xpm, \
+								int xpm_len);
 t_xpm		*get_xpm(t_xpm **textures, int len, const char *name);
 
 void		print_mvp_matrix(t_gl *gle, t_blueprint_obj3d *obj);
 void		print_pixel(float x, float y);
 void		print_cam_properties(t_gl *gle);
 
-
 /*
-**	OpenGL error 
+**	OpenGL error
 */
 void		print_programme_info_log(GLuint programme);
 void		gl_compile_error(GLuint shader, char *intro);
@@ -344,6 +348,7 @@ void		gl_compile_error(GLuint shader, char *intro);
 /*
 ** events
 */
+int			is_first_press(t_glfw *glfw, int key, t_gl *gle);
 void		events(t_glfw *glfw, t_gl *gle, t_prog *prog);
 void		update_matrices(t_gl *gle, t_blueprint *blueprints);
 

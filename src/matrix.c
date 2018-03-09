@@ -6,13 +6,13 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 17:08:13 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/03/07 04:10:27 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/03/07 09:46:15 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "scop.h"
 
-void				print_mvp_matrix(t_gl *gle, t_blueprint_obj3d *obj)
+void		print_mvp_matrix(t_gl *gle, t_blueprint_obj3d *obj)
 {
 	if (DATA && DATA_MATRIX)
 	{
@@ -29,13 +29,10 @@ void				print_mvp_matrix(t_gl *gle, t_blueprint_obj3d *obj)
 	}
 }
 
-void				update_cam_vector(t_cam *cam)
+void		update_cam_vector(t_cam *cam)
 {
-	t_vector3	right = {1.0f, 0.0f, 0.0f};
-	t_vector3	up = {0.0f, 1.0f, 0.0f};
-
-	cam->right = vector3_rotZYX(right, cam->rot, -ROT_WAY);
-	cam->up = vector3_rotZYX(up, cam->rot, -ROT_WAY);
+	cam->right = vector3_rotzyx((t_vector3){1, 0, 0}, cam->rot, -ROT_WAY);
+	cam->up = vector3_rotzyx((t_vector3){0, 1, 0}, cam->rot, -ROT_WAY);
 	cam->forward = vector3_cross(cam->up, cam->right);
 }
 
@@ -65,9 +62,7 @@ t_matrix4	view_matrix(t_cam *cam, t_matrix4 viewmatrix)
 	viewmatrix.m.tab[0][3] = -res.x;
 	viewmatrix.m.tab[1][3] = -res.y;
 	viewmatrix.m.tab[2][3] = -res.z;
-	viewmatrix.m.tab[3][3] = 1;
-	viewmatrix = matrix4_set_order(viewmatrix, !viewmatrix.order);
-	return (viewmatrix);
+	return (matrix4_set_order(viewmatrix, !viewmatrix.order));
 }
 
 t_matrix4	pro_matrix(float rad, float far, float near)
@@ -96,8 +91,6 @@ t_matrix4	model_matrix(t_vector3 pos, t_vector3 rot, t_matrix4 model)
 	val[3] = sinf(rot.y);
 	val[4] = cosf(rot.z);
 	val[5] = sinf(rot.z);
-	val[6] = COS_A * SIN_B;
-	val[7] = SIN_A * SIN_B;
 	val[6] = COS_A * SIN_B;
 	val[7] = SIN_A * SIN_B;
 	model.m.tab[0][0] = COS_B * COS_C;

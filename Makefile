@@ -6,13 +6,13 @@
 #    By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2015/05/15 17:38:19 by rhoffsch          #+#    #+#              #
-#    Updated: 2018/03/01 15:49:49 by rhoffsch         ###   ########.fr        #
+#    Updated: 2018/03/07 10:24:31 by rhoffsch         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME			=	scop
 CC				=	gcc
-CFLAGS			=	-Wall -Wextra -Werror
+CFLAGS			=	-Wall -Wextra -Werror -g
 
 INCLUDE			=	-I includes \
 					-I libft/includes -I libmath3d/includes \
@@ -58,6 +58,7 @@ SRC_FILE		=	main.c \
 					gl_update.c \
 					gl_fill_arrays.c \
 					event.c \
+					event2.c \
 					xpm_load.c \
 					xpm_data.c \
 					xpm_to_glid.c \

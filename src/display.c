@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/26 16:45:04 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/03/07 06:08:22 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/03/08 13:51:29 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,9 @@ static void		launch_program_obj3d(t_prog *prog, t_gl *gle, int n)
 			vertex = &obj3d_bp->v_texture;
 		glBindBuffer(GL_ARRAY_BUFFER, vertex->vbo);
 		glVertexAttribPointer(vertex->slot, 2, GL_FLOAT, GL_FALSE, 0, NULL);
-		mod[0] = (obj3d_bp->draw_mod == MOD_LINE) ? GL_LINE : GL_FILL;				//ameliorer ce truc
-		mod[1] = obj3d_bp->draw_mod == MOD_LINE ? GL_TRIANGLES : obj3d_bp->draw_mod;//ameliorer ce truc
+		mod[0] = (obj3d_bp->draw_mod == MOD_LINE) ? GL_LINE : GL_FILL;
+		mod[1] = (obj3d_bp->draw_mod == MOD_LINE) ? \
+					GL_TRIANGLES : obj3d_bp->draw_mod;
 		glPolygonMode(GL_FRONT_AND_BACK, mod[0]);
 		glDrawArrays(mod[1], 0, obj3d_bp->current_faces * 3);
 		glBindVertexArray(0);
@@ -65,31 +66,21 @@ static void		launch_program_skybox(t_prog *prog, t_gl *gle)
 	skybox = &prog->blueprints[0].skybox;
 	glUseProgram(prog->program);
 	glUniformMatrix4fv(prog->slots.skybox.mat4_v, 1, GL_FALSE, gle->view.m.e);
-	glUniformMatrix4fv(prog->slots.skybox.mat4_p, 1, GL_FALSE, gle->projection.m.e);
+	glUniformMatrix4fv(prog->slots.skybox.mat4_p, 1, GL_FALSE, \
+						gle->projection.m.e);
 	glUniform1i(prog->slots.skybox.cubemap, 0);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, skybox->tex);
 	glBindVertexArray(skybox->vao);
 	glBindBuffer(GL_ARRAY_BUFFER, skybox->v_skybox.vbo);
-	glVertexAttribPointer(skybox->v_skybox.slot, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+	glVertexAttribPointer(skybox->v_skybox.slot, 3, GL_FLOAT, GL_FALSE, 0, \
+							NULL);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	glDrawArrays(GL_TRIANGLES, 0, 12 * 3);
 	glBindVertexArray(0);
 }
 
-static int		wait_for_next_frame(t_fps *fps)
-{
-	fps->ellapsed_time = glfwGetTime() - fps->last_time;
-	if (fps->ellapsed_time >= fps->tick)
-	{
-		fps->last_time += fps->ellapsed_time;
-		fps->ellapsed_time = 0.0;
-		return (1);
-	}
-	else
-		return (0);
-}
-
-void			display_object(t_glfw *glfw, t_objfile **objf, t_xpm **xpm, int *len)
+void			display_object(t_glfw *glfw, t_objfile **objf, t_xpm **xpm, \
+								int *len)
 {
 	t_gl		gle;
 	t_prog		progs[2];
@@ -99,12 +90,10 @@ void			display_object(t_glfw *glfw, t_objfile **objf, t_xpm **xpm, int *len)
 	glEnable(GL_DEPTH_TEST);
 	glClearDepth(-1.0f);
 	glDepthFunc(GL_GREATER);
-	progs[SKYBOX] = create_program_skybox(glfw->cwd, xpm, len[1]);
-	progs[OBJ3D] = create_program_obj3d(objf, len[0], glfw->cwd);
+	create_program_skybox(&progs[SKYBOX], glfw->cwd, xpm, len[1]);
+	create_program_obj3d(&progs[OBJ3D], objf, len[0], glfw->cwd);
 	glfwGetCursorPos(glfw->win, &gle.mouse_origin_x, &gle.mouse_origin_y);
-	printf("Origin mouse:\t%.2f:%.2f\n", gle.mouse_origin_y, gle.mouse_origin_x);
-	// creer une liste des object crees via les blueprints ?
-	// ie: liste de nouvelles instances t_blueprint_obj3d via copy, puis les afficher
+	printf("Origin mouse\t%.2f:%.2f\n", gle.mouse_origin_y, gle.mouse_origin_x);
 	while (!glfwWindowShouldClose(glfw->win))
 	{
 		if (wait_for_next_frame(&gle.fps))
@@ -119,8 +108,3 @@ void			display_object(t_glfw *glfw, t_objfile **objf, t_xpm **xpm, int *len)
 		}
 	}
 }
-
-/*
-	object mouse picking
-	dessiner une image en plus avec une color par object, regarder la color au pixel x:y
-*/

@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/24 14:01:02 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/02/24 21:44:34 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/03/07 09:44:36 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ t_vector3		vector3_rot(const t_vector3 v, t_vector3 rad, float rot_way)
 	return (dst);
 }
 
-t_vector3		vector3_rotXYZ(const t_vector3 v, t_vector3 rad, float rot_way)
+t_vector3		vector3_rotxyz(const t_vector3 v, t_vector3 rad, float rot_way)
 {
 	float		val[8];
 	float		mat[9];
@@ -84,13 +84,12 @@ t_vector3		vector3_rotXYZ(const t_vector3 v, t_vector3 rad, float rot_way)
 	dst.z = v.x * mat[6] + v.y * mat[7] + v.z * mat[8];
 	return (dst);
 }
+
 /*
 **	vector3_rotXYZ = vector3_rot
-**	val[6] = COS_A * SIN_B;
-**	val[7] = SIN_A * SIN_B;
 */
 
-t_vector3		vector3_rotZYX(const t_vector3 v, t_vector3 rad, float rot_way)
+t_vector3		vector3_rotzyx(const t_vector3 v, t_vector3 rad, float rot_way)
 {
 	float		val[8];
 	float		mat[9];

@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/28 23:06:50 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/03/01 10:34:41 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/03/07 08:50:17 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,5 +65,5 @@ void		update_matrices(t_gl *gle, t_blueprint *blueprints)
 	ratio = 1.0f / tanf(DTOR(gle->fov) / 2.0f);
 	gle->projection.m.tab[0][0] = ratio / (DEF_WIN_X / DEF_WIN_Y);
 	gle->projection.m.tab[1][1] = ratio;
-	gle->view = view_matrix(&gle->cam, gle->matrix_zero);
+	gle->view = view_matrix(&gle->cam, gle->identity);
 }

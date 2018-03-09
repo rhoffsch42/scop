@@ -6,29 +6,11 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/27 18:38:52 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/03/07 06:48:19 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/03/07 09:30:23 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "scop.h"
-
-static int		is_first_press(t_glfw *glfw, int key, t_gl *gle)
-{
-	int		val;
-
-	if ((val = glfwGetKey(glfw->win, key)) == GLFW_PRESS \
-		&& gle->boolens[key] == 0)
-	{
-		gle->boolens[key] = 1;
-		return (1);
-	}
-	else if (val == GLFW_RELEASE)
-	{
-		gle->boolens[key] = 0;
-		return (0);
-	}
-	return (0);
-}
 
 static void		events_one_press(t_glfw *glfw, t_gl *gle, t_prog *prog)
 {
@@ -57,12 +39,6 @@ static void		events_one_press(t_glfw *glfw, t_gl *gle, t_prog *prog)
 		obj->display_mod = (obj->display_mod + 1) % MODS;
 	if (is_first_press(glfw, GLFW_KEY_SPACE, gle))
 		obj->rotate = !obj->rotate;
-	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_1))
-		obj->draw_mod = GL_POINTS;
-	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_2))
-		obj->draw_mod = MOD_LINE;
-	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_3))
-		obj->draw_mod = GL_TRIANGLES;
 }
 
 static void		events_obj_movements(t_glfw *glfw, t_fps *fps, \
@@ -94,45 +70,47 @@ static void		events_obj_movements(t_glfw *glfw, t_fps *fps, \
 		obj->rot.z -= RAD_DELTA * fps->tick;
 }
 
-static void		events_parameters(t_glfw *glfw, t_gl *gle)
+static void		events_parameters(t_glfw *glfw, t_gl *gle, \
+								t_blueprint_obj3d *obj)
 {
-	char	*fps_char;
+	char		*fps_char;
 
 	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_P))
-	{
 		gle->fps.fps = scale_d(gle->fps.fps + 20 * gle->fps.tick, 1, MAX_FPS);
+	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_L))
+		gle->fps.fps = scale_d(gle->fps.fps - 20 * gle->fps.tick, 1, MAX_FPS);
+	if (gle->fps.old_fps != gle->fps.fps)
+	{
+		gle->fps.old_fps = gle->fps.fps;
 		gle->fps.tick = 1.0 / gle->fps.fps;
 		fps_char = ft_itoa(gle->fps.fps);
 		glfwSetWindowTitle(glfw->win, fps_char);
-		free(fps_char);
-	}
-	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_L))
-	{
-		gle->fps.fps = scale_d(gle->fps.fps - 20 * gle->fps.tick, 1, MAX_FPS);
-		gle->fps.tick = 1.0 / gle->fps.fps;
-		fps_char = ft_itoa(gle->fps.fps);
-		glfwSetWindowTitle(glfw->win, ft_itoa(gle->fps.fps));
 		free(fps_char);
 	}
 	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_SUBTRACT))
 		gle->fov = (float)scale_d(gle->fov + 40 * gle->fps.tick, 10, MAX_FOV);
 	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_KP_ADD))
 		gle->fov = (float)scale_d(gle->fov - 40 * gle->fps.tick, 10, MAX_FOV);
+	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_1))
+		obj->draw_mod = GL_POINTS;
+	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_2))
+		obj->draw_mod = MOD_LINE;
+	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_3))
+		obj->draw_mod = GL_TRIANGLES;
 }
 
 static void		events_cam(t_glfw *glfw, t_gl *gle)
 {
-	float		diffx;
-	float		diffy;
+	float		diff[2];
 	t_vector3	mvt[3];
 
 	glfwGetCursorPos(glfw->win, &gle->mouse_x, &gle->mouse_y);
-	diffy = gle->mouse_origin_y - gle->mouse_y;
-	diffx = gle->mouse_origin_x - gle->mouse_x;
-	gle->cam.rot.y = -DTOR(diffx * 360.0f / SENSIBILITY);// diffx pour l'axe Y !
-	gle->cam.rot.x = diffy * 360.0f / SENSIBILITY;// diffy pour l'axe X !
+	diff[1] = gle->mouse_origin_y - gle->mouse_y;
+	diff[0] = gle->mouse_origin_x - gle->mouse_x;
+	gle->cam.rot.y = -DTOR(diff[0] * 360.0f / SENSIBILITY);
+	gle->cam.rot.x = diff[1] * 360.0f / SENSIBILITY;
 	gle->cam.rot.x = -DTOR(scale_d(gle->cam.rot.x, -90.0, 90.0));
-	update_cam_vector(&gle->cam);//doit etre fait avant les mouvement de cam.pos
+	update_cam_vector(&gle->cam);
 	mvt[0] = vector3_mult_coef(gle->cam.forward, POS_DELTA * gle->fps.tick);
 	mvt[1] = vector3_mult_coef(gle->cam.right, POS_DELTA * gle->fps.tick);
 	mvt[2] = vector3_mult_coef(gle->cam.up, POS_DELTA * gle->fps.tick);
@@ -148,8 +126,6 @@ static void		events_cam(t_glfw *glfw, t_gl *gle)
 		gle->cam.pos = vector3_sub(gle->cam.pos, mvt[2]);
 	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_R))
 		gle->cam.pos = vector3_add(gle->cam.pos, mvt[2]);
-	if (GLFW_PRESS == glfwGetMouseButton(glfw->win, GLFW_MOUSE_BUTTON_LEFT))
-		print_cam_properties(gle);
 }
 
 void			events(t_glfw *glfw, t_gl *gle, t_prog *prog)
@@ -174,7 +150,9 @@ void			events(t_glfw *glfw, t_gl *gle, t_prog *prog)
 	}
 	events_one_press(glfw, gle, prog);
 	events_obj_movements(glfw, &gle->fps, obj);
-	events_parameters(glfw, gle);
+	events_parameters(glfw, gle, obj);
 	events_cam(glfw, gle);
 	update_matrices(gle, prog->blueprints);
+	if (GLFW_PRESS == glfwGetMouseButton(glfw->win, GLFW_MOUSE_BUTTON_LEFT))
+		print_cam_properties(gle);
 }

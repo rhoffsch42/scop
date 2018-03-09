@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/26 16:25:11 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/03/01 14:30:42 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/03/07 09:31:58 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ typedef struct			s_obj3d_slots
 	GLint				plain_color;
 	GLint				vertex_position;
 	GLint				vertex_colour;
-	GLint				vertexUV;
+	GLint				vertexuv;
 }						t_obj3d_slots;
 
 typedef union			u_slots
@@ -93,6 +93,7 @@ typedef struct			s_gl
 	t_cam				cam;
 	t_fps				fps;
 	t_matrix4			matrix_zero;
+	t_matrix4			identity;
 	t_matrix4			view;
 	t_matrix4			projection;
 	GLuint				*textures_id;

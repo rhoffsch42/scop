@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/28 15:43:32 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/03/01 18:06:39 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/03/08 14:43:57 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static void		get_slots_obj3d(t_prog *prog)
 	fun = glGetAttribLocation;
 	slots->vertex_position = get_slot(prog->program, "vertex_position", fun);
 	slots->vertex_colour = get_slot(prog->program, "vertex_colour", fun);
-	slots->vertexUV = get_slot(prog->program, "vertexUV", fun);
+	slots->vertexuv = get_slot(prog->program, "vertexUV", fun);
 }
 
 static void		load_data_obj3d(t_blueprint_obj3d *blueprint, t_obj *obj)
@@ -62,11 +62,11 @@ static void		create_blueprints_obj3d(t_prog *prog, t_objfile **objf, int n)
 		obj = &prog->blueprints[n].obj3d;
 		glGenVertexArrays(1, &obj->vao);
 		glBindVertexArray(obj->vao);
-		glEnableVertexAttribArray(0);//usefull ?
+		glEnableVertexAttribArray(0);
 		obj->v_obj.slot = prog->slots.obj3d.vertex_position;
 		obj->v_blackwhite.slot = prog->slots.obj3d.vertex_colour;
-		obj->v_texture.slot = prog->slots.obj3d.vertexUV;
-		obj->v_tex_cylinder.slot = prog->slots.obj3d.vertexUV;
+		obj->v_texture.slot = prog->slots.obj3d.vertexuv;
+		obj->v_tex_cylinder.slot = prog->slots.obj3d.vertexuv;
 		create_buffer(&obj->v_obj, 3, GL_FLOAT);
 		create_buffer(&obj->v_blackwhite, 3, GL_FLOAT);
 		create_buffer(&obj->v_texture, 2, GL_FLOAT);
@@ -75,11 +75,15 @@ static void		create_blueprints_obj3d(t_prog *prog, t_objfile **objf, int n)
 	}
 }
 
-t_prog			create_program_obj3d(t_objfile **objf, int n, char *cwd)
+void			create_program_obj3d(t_prog *program, t_objfile **objf, int n, \
+									char *cwd)
 {
-	t_prog		prog;
+	char	*shaders[2];
 
-	prog = create_program(cwd, VSHADER_FILE, FSHADER_FILE, get_slots_obj3d);
-	create_blueprints_obj3d(&prog, objf, n);
-	return (prog);
+	shaders[0] = ft_strjoin(cwd, VSHADER_FILE);
+	shaders[1] = ft_strjoin(cwd, FSHADER_FILE);
+	create_program(program, shaders[0], shaders[1], get_slots_obj3d);
+	free(shaders[0]);
+	free(shaders[1]);
+	create_blueprints_obj3d(program, objf, n);
 }

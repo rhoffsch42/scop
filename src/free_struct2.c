@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 17:07:03 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/03/01 12:50:41 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/03/07 11:23:28 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,14 +63,18 @@ t_void	*free_t_obj(t_void *list)
 	ptr->next = NULL;
 	ft_strdel(&ptr->id_char);
 	ft_strdel(&ptr->name);
-	ft_strdel(&ptr->mtllib);
-	ft_strdel(&ptr->mat_name);
-	free_t_mtlfile((t_void*)ptr->mtlfile);
-	free_t_mat((t_void*)ptr->mat);
+	if (ptr->mtllib)
+		ft_strdel(&ptr->mtllib);
+	if (ptr->mat_name)
+		ft_strdel(&ptr->mat_name);
+	if (ptr->mtlfile)
+		free_t_mtlfile((t_void*)ptr->mtlfile);
+	if (ptr->mat)
+		free_t_mat((t_void*)ptr->mat);
 	ft_free_list(ptr->v, free_t_vertix);
 	ft_free_list(ptr->f, free_t_face);
 	ft_bzero(list, sizeof(t_obj));
-	free(list);
+	free(ptr);
 	ptr = NULL;
 	list = NULL;
 	return (next);

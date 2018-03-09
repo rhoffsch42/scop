@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/24 14:01:02 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/02/25 15:43:20 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/03/07 09:43:20 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,12 +74,12 @@ t_vector3		vector3_add(t_vector3 v1, const t_vector3 v2);
 t_vector3		vector3_sub(t_vector3 v1, const t_vector3 v2);
 t_vector3		vector3_mult_coef(t_vector3 v, float coef);
 float			vector3_magnitude(const t_vector3 v);
-t_vector3 		vector3_normalize(t_vector3 v);
+t_vector3		vector3_normalize(t_vector3 v);
 float			vector3_dot(const t_vector3 v1, const t_vector3 v2);
 t_vector3		vector3_cross(const t_vector3 v1, const t_vector3 v2);
 t_vector3		vector3_rot(const t_vector3 src, t_vector3 rad, float rot_way);
-t_vector3		vector3_rotXYZ(const t_vector3 v, t_vector3 rad, float rot_way);
-t_vector3		vector3_rotZYX(const t_vector3 v, t_vector3 rad, float rot_way);
+t_vector3		vector3_rotxyz(const t_vector3 v, t_vector3 rad, float rot_way);
+t_vector3		vector3_rotzyx(const t_vector3 v, t_vector3 rad, float rot_way);
 
 t_matrix4		matrix4(uint8_t is_identity, uint8_t order);
 t_matrix4		matrix4_set_order(t_matrix4 m, uint8_t order);

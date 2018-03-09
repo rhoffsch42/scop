@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/28 15:54:15 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/03/01 13:27:12 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/03/09 18:32:45 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,6 @@ void	init_t_gl(t_gl *gle, t_xpm **xpm, int *len)
 
 	if (len[1] > 0)
 		gle->textures_id = (GLuint*)safe_malloc(sizeof(GLuint) * len[1]);
-	// rajouter +1 au texture_id et le terminer par '0' car opengl renvoie 1 pour la 1ere tex generee
-	// -> plus de variable xpm_len necessaire
 	i = -1;
 	while (++i < len[1])
 		gle->textures_id[i] = xpm_to_glid(xpm[i]);
@@ -52,7 +50,8 @@ void	init_t_gl(t_gl *gle, t_xpm **xpm, int *len)
 	gle->cam = init_cam((t_vector3){0.0f, 0.0f, 5.0f}, \
 						(t_vector3){DTOR(0), DTOR(0), DTOR(0)});
 	gle->matrix_zero = matrix4(0, MATRIX_ROW_MAJOR);
-	gle->view = view_matrix(&gle->cam, gle->matrix_zero);
+	gle->identity = matrix4(IDENTITY, MATRIX_ROW_MAJOR);
+	gle->view = view_matrix(&gle->cam, gle->identity);
 	gle->projection = pro_matrix(DTOR(gle->fov), FAR, NEAR);
 	if (DATA && DATA_MATRIX)
 	{
@@ -61,7 +60,7 @@ void	init_t_gl(t_gl *gle, t_xpm **xpm, int *len)
 		printf("Projection Matrix:\n");
 		matrix4_print(gle->projection);
 	}
-	gle->fps = *init_t_fps();
+	init_t_fps(&gle->fps);
 	gle->obj_i = 0;
 	gle->obj_max = len[0];
 	gle->tex_max = len[1];

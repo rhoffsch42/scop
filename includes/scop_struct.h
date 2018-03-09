@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/24 14:01:02 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/03/07 06:50:19 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/03/07 09:28:52 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,6 +153,7 @@ typedef struct			s_env
 typedef struct			s_fps
 {
 	double				fps;
+	double				old_fps;
 	double				tick;
 	double				ellapsed_time;
 	double				last_time;

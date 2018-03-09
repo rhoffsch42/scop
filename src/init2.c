@@ -6,22 +6,19 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 17:07:41 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/03/07 06:49:42 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/03/09 18:32:29 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "scop.h"
 
-t_fps		*init_t_fps(void)
+void		init_t_fps(t_fps *fps)
 {
-	t_fps	*fps;
-
-	fps = (t_fps*)ft_strnew(sizeof(t_fps));
 	fps->fps = FPS;
+	fps->old_fps = FPS;
 	fps->tick = 1.0 / fps->fps;
 	fps->last_time = glfwGetTime();
 	fps->ellapsed_time = 0.0;
-	return (fps);
 }
 
 void		error_callback(int error, const char *description)

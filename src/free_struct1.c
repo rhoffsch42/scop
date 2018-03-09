@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 17:06:58 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/03/01 12:50:48 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/03/07 11:20:03 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,10 +98,6 @@ t_void	*free_t_face(t_void *list)
 	next = list->next;
 	ptr = (t_face*)list;
 	ptr->next = NULL;
-	free_t_vertix((t_void*)ptr->v1);
-	free_t_vertix((t_void*)ptr->v2);
-	free_t_vertix((t_void*)ptr->v3);
-	free_t_vertix((t_void*)ptr->v4);
 	ft_bzero(list, sizeof(t_face));
 	free(list);
 	ptr = NULL;
