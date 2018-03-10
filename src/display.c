@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/26 16:45:04 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/03/09 21:09:36 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/03/10 13:38:48 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ static void		load_obj3d_attributes(t_prog *prog, t_blueprint_obj3d *obj3d_bp)
 
 	s = &prog->slots.obj3d;
 	glUniform1i(s->dismod, obj3d_bp->display_mod);
+	glUniform1f(s->tex_coef, obj3d_bp->tex_coef);
 	glUniformMatrix4fv(s->mat4_m, 1, GL_FALSE, obj3d_bp->model_matrix.m.e);
 	glUniform3f(s->plain_color, obj3d_bp->plain_color.x, \
 								obj3d_bp->plain_color.y, \

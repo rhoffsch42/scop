@@ -8,13 +8,12 @@ uniform sampler2D myTextureSampler;
 in vec3 colour;
 uniform int dismod;
 uniform vec3 plain_color;
+uniform float tex_coef;
 
 void main()
 {
 	if (dismod == 0)
-		color = texture(myTextureSampler, UV);
-	else if (dismod == 1)
-		color = vec4(colour, 1.0);
+		color = (1.0 - tex_coef) * vec4(colour, 1.0) + tex_coef * texture(myTextureSampler, UV);
 	else
-		color = vec4(plain_color, 1.0);
+		color = (1.0 - tex_coef) * vec4(plain_color, 1.0) + tex_coef * texture(myTextureSampler, UV);;
 }

@@ -6,28 +6,11 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/28 23:06:50 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/03/07 08:50:17 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/03/10 13:51:37 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "scop.h"
-
-void		print_mvp_matrix2(t_gl *gle, t_blueprint_obj3d *obj)
-{
-	if (DATA && DATA_MATRIX)
-	{
-		printf("Current object Model Matrix:\n");
-		matrix4_print(obj->model_matrix);
-		printf("View Matrix:\n");
-		matrix4_print(gle->view);
-		printf("Projection Matrix:\n");
-		matrix4_print(gle->projection);
-		printf("Current object Properties:\n");
-		vector3_print(obj->pos);
-		vector3_print(obj->rot);
-		printf("================\n");
-	}
-}
 
 void		print_cam_properties(t_gl *gle)
 {

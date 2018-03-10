@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/28 15:43:32 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/03/09 21:12:04 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/03/10 13:24:31 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ static void		get_slots_obj3d(t_prog *prog)
 	slots->mat4_p = get_slot(prog->program, "P", fun);
 	slots->dismod = get_slot(prog->program, "dismod", fun);
 	slots->plain_color = get_slot(prog->program, "plain_color", fun);
+	slots->tex_coef = get_slot(prog->program, "tex_coef", fun);
 	fun = glGetAttribLocation;
 	slots->vertex_position = get_slot(prog->program, "vertex_position", fun);
 	slots->vertex_colour = get_slot(prog->program, "vertex_colour", fun);
@@ -47,7 +48,9 @@ static void		load_data_obj3d(t_blueprint_obj3d *blueprint, t_obj *obj)
 											obj->mat->kd[2]};
 	else
 		blueprint->plain_color = (t_vector3){0, 0, 0};
-	blueprint->display_mod = DISPLAY_TEXTURE;
+	blueprint->tex_coef = 0.0f;
+	blueprint->show_texture = 0;
+	blueprint->display_mod = DISPLAY_COLOR;
 	blueprint->draw_mod = GL_TRIANGLES;
 	blueprint->cyl_mapping = 0;
 	blueprint->tex = 1;

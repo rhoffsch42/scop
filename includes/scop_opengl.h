@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/26 16:25:11 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/03/07 09:31:58 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/03/10 13:24:05 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ typedef struct			s_blueprint_obj3d
 	int					current_faces;
 	int					max_faces;
 	t_vector3			plain_color;
+	float				tex_coef;
+	uint8_t				show_texture;
 	uint8_t				display_mod;
 	uint8_t				draw_mod;
 	uint8_t				cyl_mapping;
@@ -67,6 +69,7 @@ typedef struct			s_obj3d_slots
 	GLint				mat4_p;
 	GLint				dismod;
 	GLint				plain_color;
+	GLint				tex_coef;
 	GLint				vertex_position;
 	GLint				vertex_colour;
 	GLint				vertexuv;

@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/27 18:38:52 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/03/07 09:30:23 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/03/10 13:49:10 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static void		events_one_press(t_glfw *glfw, t_gl *gle, t_prog *prog)
 		obj->current_faces = 1;
 	if (is_first_press(glfw, GLFW_KEY_RIGHT_BRACKET, gle))
 		obj->current_faces = obj->max_faces;
-	if (is_first_press(glfw, GLFW_KEY_T, gle))
+	if (is_first_press(glfw, GLFW_KEY_Y, gle))
 		obj->cyl_mapping = !obj->cyl_mapping;
 	if (is_first_press(glfw, GLFW_KEY_PAGE_DOWN, gle))
 		gle->obj_i = (gle->obj_i + 1) % gle->obj_max;
@@ -131,9 +131,7 @@ static void		events_cam(t_glfw *glfw, t_gl *gle)
 void			events(t_glfw *glfw, t_gl *gle, t_prog *prog)
 {
 	int					val;
-	t_blueprint_obj3d	*obj;
 
-	obj = &prog->blueprints[gle->obj_i].obj3d;
 	if (GLFW_PRESS == glfwGetKey(glfw->win, GLFW_KEY_ESCAPE))
 		exit(0);
 	if ((val = glfwGetKey(glfw->win, GLFW_KEY_C)) == GLFW_PRESS \
@@ -149,9 +147,10 @@ void			events(t_glfw *glfw, t_gl *gle, t_prog *prog)
 		glDisable(GL_CULL_FACE);
 	}
 	events_one_press(glfw, gle, prog);
-	events_obj_movements(glfw, &gle->fps, obj);
-	events_parameters(glfw, gle, obj);
+	events_obj_movements(glfw, &gle->fps, &prog->blueprints[gle->obj_i].obj3d);
+	events_parameters(glfw, gle, &prog->blueprints[gle->obj_i].obj3d);
 	events_cam(glfw, gle);
+	update_texture(glfw, gle, prog->blueprints);
 	update_matrices(gle, prog->blueprints);
 	if (GLFW_PRESS == glfwGetMouseButton(glfw->win, GLFW_MOUSE_BUTTON_LEFT))
 		print_cam_properties(gle);

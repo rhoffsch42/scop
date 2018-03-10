@@ -6,7 +6,7 @@
 /*   By: rhoffsch <rhoffsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/24 14:01:02 by rhoffsch          #+#    #+#             */
-/*   Updated: 2018/03/09 18:32:16 by rhoffsch         ###   ########.fr       */
+/*   Updated: 2018/03/10 13:44:41 by rhoffsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,10 +169,9 @@
 # define COS_C	val[4]
 # define SIN_C	val[5]
 
-# define MODS				3
-# define DISPLAY_TEXTURE	0
-# define DISPLAY_COLOR		1
-# define DISPLAY_MATERIAL	2
+# define MODS				2
+# define DISPLAY_COLOR		0
+# define DISPLAY_MATERIAL	1
 
 # define SKYBOX				0
 # define OBJ3D				1
@@ -351,5 +350,6 @@ void		gl_compile_error(GLuint shader, char *intro);
 int			is_first_press(t_glfw *glfw, int key, t_gl *gle);
 void		events(t_glfw *glfw, t_gl *gle, t_prog *prog);
 void		update_matrices(t_gl *gle, t_blueprint *blueprints);
+void		update_texture(t_glfw *glfw, t_gl *gle, t_blueprint *blueprints);
 
 #endif
