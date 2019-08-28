@@ -1,4 +1,4 @@
 # scop
 Utilisation openGL
 
-[Video](https://youtu.be/pqTejezGYrQ?t=7)
+[Watch video](https://www.youtube.com/watch?v=Wstww3IZjQs)
